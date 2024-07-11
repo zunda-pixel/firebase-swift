@@ -3,7 +3,7 @@ import HTTPTypes
 import HTTPTypesFoundation
 
 extension Auth {
-  public func sendEmailToResetPassword(email: String, locale: String? = nil) async throws -> ResetPasswordResponse {
+  public func sendEmailToResetPassword(email: String, locale: String? = nil) async throws -> SendEmailToResetPasswordResponse {
     let path = "accounts:sendOobCode"
     let endpoint = baseURL
       .appending(path: path)
@@ -28,12 +28,12 @@ extension Auth {
     
     let (data, _) = try await URLSession.shared.upload(for: request, from: bodyData)
     
-    let response = try JSONDecoder().decode(ResetPasswordResponse.self, from: data)
+    let response = try JSONDecoder().decode(SendEmailToResetPasswordResponse.self, from: data)
     
     return response
   }
   
-  public struct ResetPasswordResponse: Sendable, Hashable, Codable {
+  public struct SendEmailToResetPasswordResponse: Sendable, Hashable, Codable {
     public var kind: String
     public var email: String
   }

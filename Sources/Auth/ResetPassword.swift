@@ -3,17 +3,18 @@ import HTTPTypes
 import HTTPTypesFoundation
 
 extension Auth {
-  public func verifyResetPasswordCode(oobCode: String) async throws -> VerifyResetPasswordCodeResponse {
+  public func resetPassword(oobCode: String, newPassword password: String) async throws -> ResetPasswordResponse {
     let path = "accounts:resetPassword"
     let endpoint = baseURL
       .appending(path: path)
       .appending(queryItems: [.init(name: "key", value: apiKey)])
-
+    
     struct Body: Sendable, Hashable, Codable {
       var oobCode: String
+      var password: String
     }
     
-    let body = Body(oobCode: oobCode)
+    let body = Body(oobCode: oobCode, password: password)
     let bodyData = try! JSONEncoder().encode(body)
     
     let request = HTTPRequest(
@@ -24,12 +25,13 @@ extension Auth {
     
     let (data, _) = try await URLSession.shared.upload(for: request, from: bodyData)
     
-    let response = try JSONDecoder().decode(VerifyResetPasswordCodeResponse.self, from: data)
+    let response = try JSONDecoder().decode(ResetPasswordResponse.self, from: data)
     
     return response
   }
   
-  public struct VerifyResetPasswordCodeResponse: Sendable, Hashable, Codable {
+  public struct ResetPasswordResponse: Sendable, Hashable, Codable {
+    public var kind: String
     public var requestType: String
     public var email: String
   }
