@@ -3,16 +3,16 @@ import HTTPTypes
 import HTTPTypesFoundation
 
 extension Auth {
+  private struct Body: Sendable, Hashable, Codable {
+    var returnSecureToken: Bool = true
+  }
+
   public func signUpAnonymous() async throws -> SignUpAnonymousResponse {
     let path = "accounts:signUp"
     let endpoint = baseURL
       .appending(path: path)
       .appending(queryItems: [.init(name: "key", value: apiKey)])
-    
-    struct Body: Sendable, Hashable, Codable {
-      var returnSecureToken: Bool = true
-    }
-    
+
     let body = Body()
     let bodyData = try! JSONEncoder().encode(body)
     
@@ -22,7 +22,7 @@ extension Auth {
       headerFields: [.contentType: "application/json"]
     )
     
-    let (data, _) = try await URLSession.shared.upload(for: request, from: bodyData)
+    let (data, _) = try await self.httpClient.execute(for: request, from: bodyData)
     
     let response = try JSONDecoder().decode(SignUpAnonymousResponse.self, from: data)
     

@@ -3,16 +3,16 @@ import HTTPTypes
 import HTTPTypesFoundation
 
 extension Auth {
+  private struct Body: Sendable, Hashable, Codable {
+    var oobCode: String
+    var password: String
+  }
+
   public func resetPassword(oobCode: String, newPassword password: String) async throws -> ResetPasswordResponse {
     let path = "accounts:resetPassword"
     let endpoint = baseURL
       .appending(path: path)
       .appending(queryItems: [.init(name: "key", value: apiKey)])
-    
-    struct Body: Sendable, Hashable, Codable {
-      var oobCode: String
-      var password: String
-    }
     
     let body = Body(oobCode: oobCode, password: password)
     let bodyData = try! JSONEncoder().encode(body)
@@ -23,7 +23,7 @@ extension Auth {
       headerFields: [.contentType: "application/json"]
     )
     
-    let (data, _) = try await URLSession.shared.upload(for: request, from: bodyData)
+    let (data, _) = try await self.httpClient.execute(for: request, from: bodyData)
     
     let response = try JSONDecoder().decode(ResetPasswordResponse.self, from: data)
     

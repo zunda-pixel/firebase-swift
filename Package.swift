@@ -21,6 +21,7 @@ let package = Package(
     .target(
       name: "Auth",
       dependencies: [
+        .target(name: "HTTPClient"),
         .product(name: "HTTPTypes", package: "swift-http-types"),
         .product(name: "HTTPTypesFoundation", package: "swift-http-types"),
       ]
@@ -28,6 +29,13 @@ let package = Package(
     .testTarget(
       name: "AuthTests",
       dependencies: ["Auth"]
+    ),
+    .target(
+      name: "HTTPClient",
+      dependencies: [
+        .product(name: "HTTPTypes", package: "swift-http-types"),
+        .product(name: "HTTPTypesFoundation", package: "swift-http-types"),
+      ]
     ),
   ]
 )

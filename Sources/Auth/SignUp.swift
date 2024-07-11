@@ -3,28 +3,28 @@ import HTTPTypes
 import HTTPTypesFoundation
 
 extension Auth {
+  private struct Body: Sendable, Hashable, Codable {
+    var email: String
+    var password: String
+    var returnSecureToken: Bool = true
+  }
+  
   public func signUp(email: String, password: String) async throws -> SignUpResponse {
     let path = "accounts:signUp"
     let endpoint = baseURL
       .appending(path: path)
       .appending(queryItems: [.init(name: "key", value: apiKey)])
-    
-    struct Body: Sendable, Hashable, Codable {
-      var email: String
-      var password: String
-      var returnSecureToken: Bool = true
-    }
-    
+
     let body = Body(email: email, password: password)
     let bodyData = try! JSONEncoder().encode(body)
-    
+
     let request = HTTPRequest(
       method: .post,
       url: endpoint,
       headerFields: [.contentType: "application/json"]
     )
     
-    let (data, _) = try await URLSession.shared.upload(for: request, from: bodyData)
+    let (data, _) = try await self.httpClient.execute(for: request, from: bodyData)
     
     let response = try JSONDecoder().decode(SignUpResponse.self, from: data)
     
