@@ -20,7 +20,6 @@ extension Auth {
     let endpoint = baseURL
       .appending(path: path)
       .appending(queryItems: [.init(name: "key", value: apiKey)])
-
     
     let body = Body(idToken: idToken)
     let bodyData = try! JSONEncoder().encode(body)
