@@ -32,9 +32,9 @@ extension Auth {
     
     return response
   }
-  
-  public struct VerifyResetPasswordCodeResponse: Sendable, Hashable, Codable {
-    public var requestType: String
-    public var email: String
-  }
+}
+
+public struct VerifyResetPasswordCodeResponse: Sendable, Hashable, Codable {
+  public var requestType: String
+  public var email: String
 }

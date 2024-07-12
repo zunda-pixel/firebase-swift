@@ -34,8 +34,8 @@ extension Auth {
     
     return response
   }
-  
-  public struct DeleteAccountResponse: Sendable, Hashable, Codable {
-    public var kind: String
-  }
+}
+
+public struct DeleteAccountResponse: Sendable, Hashable, Codable {
+  public var kind: String
 }

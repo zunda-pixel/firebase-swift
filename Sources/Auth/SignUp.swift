@@ -37,24 +37,24 @@ extension Auth {
     
     return response
   }
+}
+
+public struct SignUpResponse: Sendable, Hashable, Codable {
+  public var kind: String
+  public var idToken: String
+  public var email: String
+  public var expiresIn: Int
+  public var refreshToken: String
+  public var localId: String
   
-  public struct SignUpResponse: Sendable, Hashable, Codable {
-    public var kind: String
-    public var idToken: String
-    public var email: String
-    public var expiresIn: Int
-    public var refreshToken: String
-    public var localId: String
-    
-    public init(from decoder: any Decoder) throws {
-      let container: KeyedDecodingContainer<Auth.SignUpResponse.CodingKeys> = try decoder.container(keyedBy: Auth.SignUpResponse.CodingKeys.self)
-      self.kind = try container.decode(String.self, forKey: .kind)
-      self.idToken = try container.decode(String.self, forKey: .idToken)
-      self.email = try container.decode(String.self, forKey: .email)
-      let expiresInString = try container.decode(String.self, forKey: .expiresIn)
-      self.expiresIn = Int(expiresInString)!
-      self.refreshToken = try container.decode(String.self, forKey: .refreshToken)
-      self.localId = try container.decode(String.self, forKey: .localId)
-    }
+  public init(from decoder: any Decoder) throws {
+    let container = try decoder.container(keyedBy: SignUpResponse.CodingKeys.self)
+    self.kind = try container.decode(String.self, forKey: .kind)
+    self.idToken = try container.decode(String.self, forKey: .idToken)
+    self.email = try container.decode(String.self, forKey: .email)
+    let expiresInString = try container.decode(String.self, forKey: .expiresIn)
+    self.expiresIn = Int(expiresInString)!
+    self.refreshToken = try container.decode(String.self, forKey: .refreshToken)
+    self.localId = try container.decode(String.self, forKey: .localId)
   }
 }

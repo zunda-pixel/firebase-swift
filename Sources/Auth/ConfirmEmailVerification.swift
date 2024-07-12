@@ -33,15 +33,14 @@ extension Auth {
     
     return response
   }
-  
-  public struct ConfirmEmailVerificationResponse: Sendable, Hashable, Codable {
-    public var kind: String
-    public var email: String
-    public var displayName: String?
-    public var photoUrl: String?
-    public var passwordHash: String
-    public var providerUserInfo: [ProviderUserInfo]
-    public var emailVerified: Bool
-  }
 }
 
+public struct ConfirmEmailVerificationResponse: Sendable, Hashable, Codable {
+  public var kind: String
+  public var email: String
+  public var displayName: String?
+  public var photoUrl: String?
+  public var passwordHash: String
+  public var providerUserInfo: [ProviderUserInfo]
+  public var emailVerified: Bool
+}

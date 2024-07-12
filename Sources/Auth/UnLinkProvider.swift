@@ -36,25 +36,25 @@ extension Auth {
     
     return response
   }
+}
 
-  public struct UnLinkProviderResponse: Sendable, Hashable, Codable {
-    public var localId: String
-    public var email: String
-    public var displayName: String?
-    public var photoUrl: URL?
-    public var passwordHash: String?
-    public var providerUserInfo: [ProviderUserInfo]
-    public var emailVerified: Bool
-    
-    public init(from decoder: any Decoder) throws {
-      let container = try decoder.container(keyedBy: Auth<HTTPClient>.UnLinkProviderResponse.CodingKeys.self)
-      self.localId = try container.decode(String.self, forKey: .localId)
-      self.email = try container.decode(String.self, forKey: .email)
-      self.displayName = try container.decodeIfPresent(String.self, forKey: .displayName)
-      self.photoUrl = try container.decodeIfPresent(URL.self, forKey: .photoUrl)
-      self.passwordHash = try container.decodeIfPresent(String.self, forKey: .passwordHash)
-      self.providerUserInfo = try container.decodeIfPresent([ProviderUserInfo].self, forKey: .providerUserInfo) ?? []
-      self.emailVerified = try container.decode(Bool.self, forKey: .emailVerified)
-    }
+public struct UnLinkProviderResponse: Sendable, Hashable, Codable {
+  public var localId: String
+  public var email: String
+  public var displayName: String?
+  public var photoUrl: URL?
+  public var passwordHash: String?
+  public var providerUserInfo: [ProviderUserInfo]
+  public var emailVerified: Bool
+  
+  public init(from decoder: any Decoder) throws {
+    let container = try decoder.container(keyedBy: UnLinkProviderResponse.CodingKeys.self)
+    self.localId = try container.decode(String.self, forKey: .localId)
+    self.email = try container.decode(String.self, forKey: .email)
+    self.displayName = try container.decodeIfPresent(String.self, forKey: .displayName)
+    self.photoUrl = try container.decodeIfPresent(URL.self, forKey: .photoUrl)
+    self.passwordHash = try container.decodeIfPresent(String.self, forKey: .passwordHash)
+    self.providerUserInfo = try container.decodeIfPresent([ProviderUserInfo].self, forKey: .providerUserInfo) ?? []
+    self.emailVerified = try container.decode(Bool.self, forKey: .emailVerified)
   }
 }

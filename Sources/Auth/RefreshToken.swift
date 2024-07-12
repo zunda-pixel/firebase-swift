@@ -39,33 +39,33 @@ extension Auth {
     
     return response
   }
+}
+
+public struct RefreshTokenResponse: Sendable, Hashable, Codable {
+  public var expiresIn: Int
+  public var tokenType: String
+  public var refreshToken: String
+  public var idToken: String
+  public var userId: String
+  public var projectId: String
   
-  public struct RefreshTokenResponse: Sendable, Hashable, Codable {
-    public var expiresIn: Int
-    public var tokenType: String
-    public var refreshToken: String
-    public var idToken: String
-    public var userId: String
-    public var projectId: String
-    
-    private enum CodingKeys: String, CodingKey {
-      case expiresIn = "expires_in"
-      case tokenType = "token_type"
-      case refreshToken = "refresh_token"
-      case idToken = "id_token"
-      case userId = "user_id"
-      case projectId = "project_id"
-    }
-    
-    public init(from decoder: any Decoder) throws {
-      let container = try decoder.container(keyedBy: Auth<HTTPClient>.RefreshTokenResponse.CodingKeys.self)
-      let expiresInString = try container.decode(String.self, forKey: .expiresIn)
-      self.expiresIn = Int(expiresInString)!
-      self.tokenType = try container.decode(String.self, forKey: .tokenType)
-      self.refreshToken = try container.decode(String.self, forKey: .refreshToken)
-      self.idToken = try container.decode(String.self, forKey: .idToken)
-      self.userId = try container.decode(String.self, forKey: .userId)
-      self.projectId = try container.decode(String.self, forKey: .projectId)
-    }
+  private enum CodingKeys: String, CodingKey {
+    case expiresIn = "expires_in"
+    case tokenType = "token_type"
+    case refreshToken = "refresh_token"
+    case idToken = "id_token"
+    case userId = "user_id"
+    case projectId = "project_id"
+  }
+  
+  public init(from decoder: any Decoder) throws {
+    let container = try decoder.container(keyedBy: RefreshTokenResponse.CodingKeys.self)
+    let expiresInString = try container.decode(String.self, forKey: .expiresIn)
+    self.expiresIn = Int(expiresInString)!
+    self.tokenType = try container.decode(String.self, forKey: .tokenType)
+    self.refreshToken = try container.decode(String.self, forKey: .refreshToken)
+    self.idToken = try container.decode(String.self, forKey: .idToken)
+    self.userId = try container.decode(String.self, forKey: .userId)
+    self.projectId = try container.decode(String.self, forKey: .projectId)
   }
 }

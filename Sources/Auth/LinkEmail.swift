@@ -39,32 +39,32 @@ extension Auth {
     
     return response
   }
+}
 
-  public struct LinkEmailResponse: Sendable, Hashable, Codable {
-    public var localId: String
-    public var email: String
-    public var displayName: String?
-    public var photoUrl: URL?
-    public var passwordHash: String
-    public var providerUserInfo: [ProviderUserInfo]
-    public var emailVerified: Bool
-    public var idToken: String
-    public var refreshToken: String
-    public var expiresIn: Int
-    
-    public init(from decoder: any Decoder) throws {
-      let container = try decoder.container(keyedBy: Auth<HTTPClient>.LinkEmailResponse.CodingKeys.self)
-      self.localId = try container.decode(String.self, forKey: .localId)
-      self.email = try container.decode(String.self, forKey: .email)
-      self.displayName = try container.decodeIfPresent(String.self, forKey: .displayName)
-      self.photoUrl = try container.decodeIfPresent(URL.self, forKey: .photoUrl)
-      self.passwordHash = try container.decode(String.self, forKey: .passwordHash)
-      self.providerUserInfo = try container.decode([ProviderUserInfo].self, forKey: .providerUserInfo)
-      self.emailVerified = try container.decode(Bool.self, forKey: .emailVerified)
-      self.idToken = try container.decode(String.self, forKey: .idToken)
-      self.refreshToken = try container.decode(String.self, forKey: .refreshToken)
-      let expiresInString = try container.decode(String.self, forKey: .expiresIn)
-      self.expiresIn = Int(expiresInString)!
-    }
+public struct LinkEmailResponse: Sendable, Hashable, Codable {
+  public var localId: String
+  public var email: String
+  public var displayName: String?
+  public var photoUrl: URL?
+  public var passwordHash: String
+  public var providerUserInfo: [ProviderUserInfo]
+  public var emailVerified: Bool
+  public var idToken: String
+  public var refreshToken: String
+  public var expiresIn: Int
+  
+  public init(from decoder: any Decoder) throws {
+    let container = try decoder.container(keyedBy: LinkEmailResponse.CodingKeys.self)
+    self.localId = try container.decode(String.self, forKey: .localId)
+    self.email = try container.decode(String.self, forKey: .email)
+    self.displayName = try container.decodeIfPresent(String.self, forKey: .displayName)
+    self.photoUrl = try container.decodeIfPresent(URL.self, forKey: .photoUrl)
+    self.passwordHash = try container.decode(String.self, forKey: .passwordHash)
+    self.providerUserInfo = try container.decode([ProviderUserInfo].self, forKey: .providerUserInfo)
+    self.emailVerified = try container.decode(Bool.self, forKey: .emailVerified)
+    self.idToken = try container.decode(String.self, forKey: .idToken)
+    self.refreshToken = try container.decode(String.self, forKey: .refreshToken)
+    let expiresInString = try container.decode(String.self, forKey: .expiresIn)
+    self.expiresIn = Int(expiresInString)!
   }
 }

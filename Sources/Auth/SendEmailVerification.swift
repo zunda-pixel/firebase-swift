@@ -39,9 +39,9 @@ extension Auth {
     
     return response
   }
-  
-  public struct SendEmailVerificationResponse: Sendable, Hashable, Codable {
-    public var kind: String
-    public var email: String
-  }
+}
+
+public struct SendEmailVerificationResponse: Sendable, Hashable, Codable {
+  public var kind: String
+  public var email: String
 }
