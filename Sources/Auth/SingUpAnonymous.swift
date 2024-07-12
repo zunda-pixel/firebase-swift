@@ -41,7 +41,7 @@ extension Auth {
     public var localId: String
     
     public init(from decoder: any Decoder) throws {
-      let container: KeyedDecodingContainer<Auth.SignUpAnonymousResponse.CodingKeys> = try decoder.container(keyedBy: Auth.SignUpAnonymousResponse.CodingKeys.self)
+      let container = try decoder.container(keyedBy: Auth.SignUpAnonymousResponse.CodingKeys.self)
       self.kind = try container.decode(String.self, forKey: .kind)
       self.idToken = try container.decode(String.self, forKey: .idToken)
       let expiresInString = try container.decode(String.self, forKey: .expiresIn)

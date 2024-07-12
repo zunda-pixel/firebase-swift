@@ -59,13 +59,13 @@ extension Auth {
     
     public init(from decoder: any Decoder) throws {
       let container = try decoder.container(keyedBy: Auth<HTTPClient>.RefreshTokenResponse.CodingKeys.self)
-      let expiresInString = try container.decode(String.self, forKey: Auth<HTTPClient>.RefreshTokenResponse.CodingKeys.expiresIn)
+      let expiresInString = try container.decode(String.self, forKey: .expiresIn)
       self.expiresIn = Int(expiresInString)!
-      self.tokenType = try container.decode(String.self, forKey: Auth<HTTPClient>.RefreshTokenResponse.CodingKeys.tokenType)
-      self.refreshToken = try container.decode(String.self, forKey: Auth<HTTPClient>.RefreshTokenResponse.CodingKeys.refreshToken)
-      self.idToken = try container.decode(String.self, forKey: Auth<HTTPClient>.RefreshTokenResponse.CodingKeys.idToken)
-      self.userId = try container.decode(String.self, forKey: Auth<HTTPClient>.RefreshTokenResponse.CodingKeys.userId)
-      self.projectId = try container.decode(String.self, forKey: Auth<HTTPClient>.RefreshTokenResponse.CodingKeys.projectId)
+      self.tokenType = try container.decode(String.self, forKey: .tokenType)
+      self.refreshToken = try container.decode(String.self, forKey: .refreshToken)
+      self.idToken = try container.decode(String.self, forKey: .idToken)
+      self.userId = try container.decode(String.self, forKey: .userId)
+      self.projectId = try container.decode(String.self, forKey: .projectId)
     }
   }
 }
