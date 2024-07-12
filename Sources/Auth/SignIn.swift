@@ -41,7 +41,6 @@ extension Auth {
 }
 
 public struct SignInResponse: Sendable, Hashable, Codable {
-  public var kind: String
   public var idToken: String
   public var email: String
   public var expiresIn: Int
@@ -52,7 +51,6 @@ public struct SignInResponse: Sendable, Hashable, Codable {
   
   public init(from decoder: any Decoder) throws {
     let container = try decoder.container(keyedBy: SignInResponse.CodingKeys.self)
-    self.kind = try container.decode(String.self, forKey: .kind)
     self.idToken = try container.decode(String.self, forKey: .idToken)
     self.email = try container.decode(String.self, forKey: .email)
     let expiresInString = try container.decode(String.self, forKey: .expiresIn)

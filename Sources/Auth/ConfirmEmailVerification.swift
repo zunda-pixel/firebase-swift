@@ -36,7 +36,6 @@ extension Auth {
 }
 
 public struct ConfirmEmailVerificationResponse: Sendable, Hashable, Codable {
-  public var kind: String
   public var email: String
   public var displayName: String?
   public var photoUrl: String?

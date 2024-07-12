@@ -36,7 +36,6 @@ extension Auth {
 }
 
 public struct UsersResponse: Sendable, Hashable, Codable {
-  public var kind: String
   public var users: [UserResponse]
 }
 

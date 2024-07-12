@@ -39,7 +39,6 @@ extension Auth {
 }
 
 public struct ResetPasswordResponse: Sendable, Hashable, Codable {
-  public var kind: String
   public var requestType: String
   public var email: String
 }

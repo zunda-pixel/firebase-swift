@@ -35,7 +35,6 @@ extension Auth {
 }
 
 public struct SignUpAnonymousResponse: Sendable, Hashable, Codable {
-  public var kind: String
   public var idToken: String
   public var expiresIn: Int
   public var refreshToken: String
@@ -43,7 +42,6 @@ public struct SignUpAnonymousResponse: Sendable, Hashable, Codable {
   
   public init(from decoder: any Decoder) throws {
     let container = try decoder.container(keyedBy: SignUpAnonymousResponse.CodingKeys.self)
-    self.kind = try container.decode(String.self, forKey: .kind)
     self.idToken = try container.decode(String.self, forKey: .idToken)
     let expiresInString = try container.decode(String.self, forKey: .expiresIn)
     self.expiresIn = Int(expiresInString)!
