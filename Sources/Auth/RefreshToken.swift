@@ -12,7 +12,12 @@ extension Auth {
       case refreshToken = "refresh_token"
     }
   }
-
+  
+  /// Exchange a refresh token for an ID token
+  /// You can refresh a Firebase ID token by issuing an HTTP POST request to the securetoken.googleapis.com endpoint.
+  /// https://firebase.google.com/docs/reference/rest/auth#section-refresh-token
+  /// - Parameter refreshToken: A Firebase Auth refresh token.
+  /// - Returns: ``RefreshTokenResponse``
   public func refreshToken(refreshToken: String) async throws -> RefreshTokenResponse {
     let path = "token"
     let endpoint = baseURL

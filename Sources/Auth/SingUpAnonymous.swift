@@ -6,7 +6,11 @@ extension Auth {
   private struct Body: Sendable, Hashable, Codable {
     var returnSecureToken: Bool = true
   }
-
+  
+  /// Sign in anonymously
+  /// You can sign in a user anonymously by issuing an HTTP POST request to the Auth signupNewUser endpoint.
+  /// https://firebase.google.com/docs/reference/rest/auth#section-sign-in-anonymously
+  /// - Returns: ``SignUpAnonymousResponse``
   public func signUpAnonymous() async throws -> SignUpAnonymousResponse {
     let path = "accounts:signUp"
     let endpoint = baseURL

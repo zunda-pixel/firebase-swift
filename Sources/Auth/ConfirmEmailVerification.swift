@@ -6,7 +6,12 @@ extension Auth {
   private struct Body: Sendable, Hashable, Codable {
     var oobCode: String
   }
-
+  
+  /// Confirm email verification
+  /// You can confirm an email verification code by issuing an HTTP POST request to the Auth setAccountInfo endpoint.
+  /// https://firebase.google.com/docs/reference/rest/auth#section-confirm-email-verification
+  /// - Parameter oobCode: The action code sent to user's email for email verification.
+  /// - Returns: ``ConfirmEmailVerificationResponse``
   public func confirmEmailVerification(oobCode: String) async throws -> ConfirmEmailVerificationResponse {
     let path = "accounts:update"
     let endpoint = baseURL

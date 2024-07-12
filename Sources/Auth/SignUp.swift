@@ -9,6 +9,13 @@ extension Auth {
     var returnSecureToken: Bool = true
   }
   
+  /// Sign up with email / password
+  /// You can create a new email and password user by issuing an HTTP POST request to the Auth signupNewUser endpoint.
+  /// https://firebase.google.com/docs/reference/rest/auth#section-create-email-password
+  /// - Parameters:
+  ///   - email: The email for the user to create.
+  ///   - password: The password for the user to create.
+  /// - Returns: ``SignUpResponse``
   public func signUp(email: String, password: String) async throws -> SignUpResponse {
     let path = "accounts:signUp"
     let endpoint = baseURL

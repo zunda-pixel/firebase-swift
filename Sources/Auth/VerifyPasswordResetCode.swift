@@ -6,6 +6,11 @@ extension Auth {
   private struct Body: Sendable, Hashable, Codable {
     var oobCode: String
   }
+  /// Verify password reset code
+  /// You can verify a password reset code by issuing an HTTP POST request to the Auth resetPassword endpoint.
+  /// https://firebase.google.com/docs/reference/rest/auth#section-verify-password-reset-code
+  /// - Parameter oobCode: The email action code sent to the user's email for resetting the password.
+  /// - Returns: ``VerifyResetPasswordCodeResponse``
   public func verifyResetPasswordCode(oobCode: String) async throws -> VerifyResetPasswordCodeResponse {
     let path = "accounts:resetPassword"
     let endpoint = baseURL

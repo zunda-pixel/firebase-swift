@@ -7,7 +7,14 @@ extension Auth {
     var requestType = "PASSWORD_RESET"
     var email: String
   }
-
+  
+  /// Send password reset email
+  /// You can send a password reset email by issuing an HTTP POST request to the Auth getOobConfirmationCode endpoint.
+  /// https://firebase.google.com/docs/reference/rest/auth#section-send-password-reset-email
+  /// - Parameters:
+  ///   - email: User's email address.
+  ///   - locale: The language code corresponding to the user's locale. Passing this will localize the password reset email sent to the user.
+  /// - Returns: ``SendEmailToResetPasswordResponse``
   public func sendEmailToResetPassword(email: String, locale: String? = nil) async throws -> SendEmailToResetPasswordResponse {
     let path = "accounts:sendOobCode"
     let endpoint = baseURL

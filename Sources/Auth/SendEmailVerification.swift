@@ -7,7 +7,14 @@ extension Auth {
     var requestType = "VERIFY_EMAIL"
     var idToken: String
   }
-
+  
+  /// Send email verification
+  /// You can send an email verification for the current user by issuing an HTTP POST request to the Auth getOobConfirmationCode endpoint.
+  /// https://firebase.google.com/docs/reference/rest/auth#section-send-email-verification
+  /// - Parameters:
+  ///   - idToken: The Firebase ID token of the user to verify.
+  ///   - locale: The language code corresponding to the user's locale. Passing this will localize the email verification sent to the user.
+  /// - Returns: ``SendEmailVerificationResponse``
   public func sendEmailVerification(idToken: String, locale: String? = nil) async throws -> SendEmailVerificationResponse {
     let path = "accounts:sendOobCode"
     let endpoint = baseURL
