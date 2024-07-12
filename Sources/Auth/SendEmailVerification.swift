@@ -25,7 +25,7 @@ extension Auth {
     let body = Body(idToken: idToken)
     let bodyData = try! JSONEncoder().encode(body)
     
-    var headerFields = HTTPFields([.init(name: .contentType, value: "application/json")])
+    var headerFields: HTTPFields = [.contentType: "application/json"]
     locale.map { headerFields.append(.init(name: .init("X-Firebase-Locale")!, value: $0)) }
 
     let request = HTTPRequest(
