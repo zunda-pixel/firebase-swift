@@ -44,7 +44,7 @@ extension Auth {
   /// https://firebase.google.com/docs/reference/rest/auth#section-update-profile
   /// - Parameter profile: ``UpdateProfile``
   /// - Returns: ``UpdateProfileResponse``
-  public func updateProfile(idToken: String, _ profile: UpdateProfile) async throws -> UpdateProfileResponse {
+  public func updateProfile(idToken: String, profile: UpdateProfile) async throws -> UpdateProfileResponse {
     let path = "accounts:update"
     let endpoint = baseURL
       .appending(path: path)
