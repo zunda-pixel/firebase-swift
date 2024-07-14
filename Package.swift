@@ -5,17 +5,18 @@ import PackageDescription
 let package = Package(
   name: "firebase-swift",
   platforms: [
-    .macOS(.v15),
-    .iOS(.v18),
+    .macOS(.v14),
+    .iOS(.v17),
   ],
   products: [
     .library(
       name: "Auth",
       targets: ["Auth"]
-    ),
+    )
   ],
   dependencies: [
-    .package(url: "https://github.com/apple/swift-http-types", from: "1.2.0"),
+    .package(url: "https://github.com/zunda-pixel/swift-http-types", branch: "fix-swift-6"),
+    .package(url: "https://github.com/apple/swift-testing", from: "0.10.0"),
   ],
   targets: [
     .target(
@@ -30,6 +31,7 @@ let package = Package(
       name: "AuthTests",
       dependencies: [
         .target(name: "Auth"),
+        .product(name: "Testing", package: "swift-testing"),
       ]
     ),
     .target(

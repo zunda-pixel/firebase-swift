@@ -1,13 +1,31 @@
 {
-  "originHash" : "19ecdf48e8ce159bc6db3b46aca5683f5a83f8f3d637b9cf87f244f56e076d7f",
+  "originHash" : "674b8690cdb48dcfdfaa3f5068df2393c8e4e86328172c8dac42f9f1f667155d",
   "pins" : [
     {
       "identity" : "swift-http-types",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/apple/swift-http-types",
+      "location" : "https://github.com/zunda-pixel/swift-http-types",
       "state" : {
-        "revision" : "1ddbea1ee34354a6a2532c60f98501c35ae8edfa",
-        "version" : "1.2.0"
+        "branch" : "fix-swift-6",
+        "revision" : "c8e8a8c733723f0b9f4d56873649b718b0c005bc"
+      }
+    },
+    {
+      "identity" : "swift-syntax",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/apple/swift-syntax.git",
+      "state" : {
+        "revision" : "4c6cc0a3b9e8f14b3ae2307c5ccae4de6167ac2c",
+        "version" : "600.0.0-prerelease-2024-06-12"
+      }
+    },
+    {
+      "identity" : "swift-testing",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/apple/swift-testing",
+      "state" : {
+        "revision" : "69d59cfc76e5daf498ca61f5af409f594768eef9",
+        "version" : "0.10.0"
       }
     }
   ],

@@ -6,7 +6,7 @@ extension Auth {
   private struct Body: Sendable, Hashable, Codable {
     var idToken: String
   }
-  
+
   /// Get user data
   /// You can get a user's data by issuing an HTTP POST request to the Auth getAccountInfo endpoint.
   /// https://firebase.google.com/docs/reference/rest/auth#section-get-account-info
@@ -14,23 +14,24 @@ extension Auth {
   /// - Returns: ``UserResponse``
   public func user(idToken: String) async throws -> UserResponse {
     let path = "accounts:lookup"
-    let endpoint = baseURL
+    let endpoint =
+      baseURL
       .appending(path: path)
       .appending(queryItems: [.init(name: "key", value: apiKey)])
-    
+
     let body = Body(idToken: idToken)
     let bodyData = try! JSONEncoder().encode(body)
-    
+
     let request = HTTPRequest(
       method: .post,
       url: endpoint,
       headerFields: [.contentType: "application/json"]
     )
-    
+
     let (data, _) = try await self.httpClient.execute(for: request, from: bodyData)
-    
+
     let response = try self.decode(UsersResponse.self, from: data)
-    
+
     return response.users.first!
   }
 }
@@ -54,7 +55,7 @@ public struct UserResponse: Sendable, Hashable, Codable {
   public var createdAt: Date
   public var customAuth: Bool?
   public var lastRefreshAt: Date
-  
+
   public init(from decoder: any Decoder) throws {
     let container = try decoder.container(keyedBy: UserResponse.CodingKeys.self)
     self.localId = try container.decode(String.self, forKey: .localId)

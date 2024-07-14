@@ -9,7 +9,7 @@ extension Auth {
     var password: String
     var returnSecureToken = true
   }
-  
+
   /// Link with email/password
   /// You can link an email/password to a current user by issuing an HTTP POST request to the Auth setAccountInfo endpoint.
   /// https://firebase.google.com/docs/reference/rest/auth#section-link-with-email-password
@@ -18,25 +18,30 @@ extension Auth {
   ///   - email: The email to link to the account.
   ///   - password: The new password of the account.
   /// - Returns: ``LinkEmailResponse``
-  public func linkEmail(idToken: String, email: String, password: String) async throws -> LinkEmailResponse {
+  public func linkEmail(
+    idToken: String,
+    email: String,
+    password: String
+  ) async throws -> LinkEmailResponse {
     let path = "accounts:update"
-    let endpoint = baseURL
+    let endpoint =
+      baseURL
       .appending(path: path)
       .appending(queryItems: [.init(name: "key", value: apiKey)])
-    
+
     let body = Body(idToken: idToken, email: email, password: password)
     let bodyData = try! JSONEncoder().encode(body)
-    
+
     let request = HTTPRequest(
       method: .post,
       url: endpoint,
       headerFields: [.contentType: "application/json"]
     )
-    
+
     let (data, _) = try await self.httpClient.execute(for: request, from: bodyData)
-    
+
     let response = try self.decode(LinkEmailResponse.self, from: data)
-    
+
     return response
   }
 }
@@ -52,7 +57,7 @@ public struct LinkEmailResponse: Sendable, Hashable, Codable {
   public var idToken: String
   public var refreshToken: String
   public var expiresIn: Int
-  
+
   public init(from decoder: any Decoder) throws {
     let container = try decoder.container(keyedBy: LinkEmailResponse.CodingKeys.self)
     self.localId = try container.decode(String.self, forKey: .localId)

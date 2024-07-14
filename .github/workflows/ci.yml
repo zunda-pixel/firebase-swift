@@ -1,0 +1,21 @@
+name: CI
+
+on: pull_request
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    container: swiftlang/swift:nightly-6.0-jammy
+    steps:
+    - uses: actions/checkout@v4
+    - run: swift build --build-tests --disable-xctest --enable-code-coverage
+    - run: swift test --skip-build --disable-xctest --parallel --enable-code-coverage
+      env:
+        FIREBASE_API_TOKEN: ${{ secrets.FIREBASE_API_TOKEN }}
+        GOOGLE_USER_ID: ${{ secrets.GOOGLE_USER_ID }}
+  lint:
+    runs-on: ubuntu-latest
+    container: swiftlang/swift:nightly-6.0-jammy
+    steps:
+      - uses: actions/checkout@v4
+      - run: swift format lint -r -p -s .
