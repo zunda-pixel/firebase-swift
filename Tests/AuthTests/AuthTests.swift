@@ -181,8 +181,8 @@ struct AuthTests {
     )
 
     #expect(user.email.lowercased() == email.lowercased())
-    #expect(#require(user.displayName) == #require(updateProfile.displayName))
-    #expect(#require(user.photoUrl) == #require(updateProfile.photoUrl))
+    #expect(user.displayName! == updateProfile.displayName!)
+    #expect(user.photoUrl! == updateProfile.photoUrl!)
   }
 
   @Test
@@ -207,8 +207,8 @@ struct AuthTests {
       profile: updateProfile
     )
 
-    #expect(#require(updateProfile.displayName) == #require(updateProfileResponse.displayName))
-    #expect(#require(updateProfile.photoUrl) == #require(updateProfileResponse.photoUrl))
+    #expect(updateProfile.displayName! == updateProfileResponse.displayName!)
+    #expect(updateProfile.photoUrl! == updateProfileResponse.photoUrl!)
   }
 
   @Test
