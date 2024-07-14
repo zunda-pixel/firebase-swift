@@ -28,7 +28,9 @@ let package = Package(
     ),
     .testTarget(
       name: "AuthTests",
-      dependencies: ["Auth"]
+      dependencies: [
+        .target(name: "Auth"),
+      ]
     ),
     .target(
       name: "HTTPClient",
