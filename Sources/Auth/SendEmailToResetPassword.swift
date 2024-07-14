@@ -35,7 +35,7 @@ extension Auth {
     
     let (data, _) = try await self.httpClient.execute(for: request, from: bodyData)
     
-    let response = try JSONDecoder().decode(SendEmailToResetPasswordResponse.self, from: data)
+    let response = try self.decode(SendEmailToResetPasswordResponse.self, from: data)
     
     return response
   }

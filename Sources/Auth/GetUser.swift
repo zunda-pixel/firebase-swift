@@ -29,7 +29,7 @@ extension Auth {
     
     let (data, _) = try await self.httpClient.execute(for: request, from: bodyData)
     
-    let response = try JSONDecoder().decode(UsersResponse.self, from: data)
+    let response = try self.decode(UsersResponse.self, from: data)
     
     return response.users.first!
   }

@@ -68,7 +68,7 @@ extension Auth {
     
     let (data, _) = try await self.httpClient.execute(for: request, from: bodyData)
     
-    let response = try JSONDecoder().decode(UpdateProfileResponse.self, from: data)
+    let response = try self.decode(UpdateProfileResponse.self, from: data)
     
     return response
   }

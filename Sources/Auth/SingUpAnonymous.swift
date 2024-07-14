@@ -28,7 +28,7 @@ extension Auth {
     
     let (data, _) = try await self.httpClient.execute(for: request, from: bodyData)
     
-    let response = try JSONDecoder().decode(SignUpAnonymousResponse.self, from: data)
+    let response = try self.decode(SignUpAnonymousResponse.self, from: data)
     
     return response
   }

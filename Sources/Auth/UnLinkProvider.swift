@@ -32,7 +32,7 @@ extension Auth {
     
     let (data, _) = try await self.httpClient.execute(for: request, from: bodyData)
     
-    let response = try JSONDecoder().decode(UnLinkProviderResponse.self, from: data)
+    let response = try self.decode(UnLinkProviderResponse.self, from: data)
     
     return response
   }
