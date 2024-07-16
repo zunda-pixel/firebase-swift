@@ -7,13 +7,13 @@
       "location" : "https://github.com/zunda-pixel/swift-http-types",
       "state" : {
         "branch" : "fix-swift-6",
-        "revision" : "052257dbd2a20e26e1e8a10703955770b6946afb"
+        "revision" : "03eab5b69c0fc6d65c945caecc5a69f9f028e88f"
       }
     },
     {
       "identity" : "swift-syntax",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/apple/swift-syntax.git",
+      "location" : "https://github.com/swiftlang/swift-syntax.git",
       "state" : {
         "revision" : "4c6cc0a3b9e8f14b3ae2307c5ccae4de6167ac2c",
         "version" : "600.0.0-prerelease-2024-06-12"
@@ -24,8 +24,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-testing",
       "state" : {
-        "revision" : "69d59cfc76e5daf498ca61f5af409f594768eef9",
-        "version" : "0.10.0"
+        "revision" : "6155e83dbaa2696d13bcd0079665b6a6daaf6dc8",
+        "version" : "0.11.0"
       }
     }
   ],
