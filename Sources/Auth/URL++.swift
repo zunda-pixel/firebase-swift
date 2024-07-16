@@ -1,7 +1,6 @@
 import Foundation
 
-#if os(Linux) || os(Windows) || os(macOS)
-
+#if os(Linux) || os(Windows)
   extension URL: @retroactive @unchecked Sendable {}
 
   extension URL {
@@ -21,5 +20,4 @@ import Foundation
       return components.url!
     }
   }
-
 #endif
