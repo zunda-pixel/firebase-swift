@@ -1,7 +1,7 @@
 import Foundation
+import HTTPClient
 import HTTPTypes
 import HTTPTypesFoundation
-import HTTPClient
 
 public struct Auth<HTTPClient: HTTPClientProtocol>: Sendable, Hashable {
   public var apiKey: String

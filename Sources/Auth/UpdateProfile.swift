@@ -16,7 +16,7 @@ public struct UpdateProfile: Sendable, Hashable, Codable {
   public var deleteAttribute: [DeleteAttribute]
   /// Whether or not to return an ID and refresh token.
   public var returnSecureToken: Bool?
-  
+
   public init(
     displayName: String? = nil,
     photoUrl: URL? = nil,
@@ -38,18 +38,22 @@ extension Auth {
     var deleteAttribute: [DeleteAttribute]
     var returnSecureToken: Bool?
   }
-  
+
   /// Update profile
   /// You can update a user's profile (display name / photo URL) by issuing an HTTP POST request to the Auth setAccountInfo endpoint.
   /// https://firebase.google.com/docs/reference/rest/auth#section-update-profile
   /// - Parameter profile: ``UpdateProfile``
   /// - Returns: ``UpdateProfileResponse``
-  public func updateProfile(idToken: String, profile: UpdateProfile) async throws -> UpdateProfileResponse {
+  public func updateProfile(
+    idToken: String,
+    profile: UpdateProfile
+  ) async throws -> UpdateProfileResponse {
     let path = "accounts:update"
-    let endpoint = baseURL
+    let endpoint =
+      baseURL
       .appending(path: path)
       .appending(queryItems: [.init(name: "key", value: apiKey)])
-    
+
     let body = Body(
       idToken: idToken,
       displayName: profile.displayName,
@@ -57,19 +61,19 @@ extension Auth {
       deleteAttribute: profile.deleteAttribute,
       returnSecureToken: profile.returnSecureToken
     )
-    
+
     let bodyData = try! JSONEncoder().encode(body)
-    
+
     let request = HTTPRequest(
       method: .post,
       url: endpoint,
       headerFields: [.contentType: "application/json"]
     )
-    
+
     let (data, _) = try await self.httpClient.execute(for: request, from: bodyData)
-    
+
     let response = try self.decode(UpdateProfileResponse.self, from: data)
-    
+
     return response
   }
 }

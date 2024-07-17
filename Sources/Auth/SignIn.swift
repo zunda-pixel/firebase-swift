@@ -8,7 +8,7 @@ extension Auth {
     var password: String
     var returnSecureToken: Bool = true
   }
-  
+
   /// Sign in with email / password
   /// You can sign in a user with an email and password by issuing an HTTP POST request to the Auth verifyPassword endpoint.
   /// https://firebase.google.com/docs/reference/rest/auth#section-sign-in-email-password
@@ -18,24 +18,24 @@ extension Auth {
   /// - Returns: ``SignInResponse``
   public func signIn(email: String, password: String) async throws -> SignInResponse {
     let path = "accounts:signInWithPassword"
-    let endpoint = baseURL
+    let endpoint =
+      baseURL
       .appending(path: path)
       .appending(queryItems: [.init(name: "key", value: apiKey)])
 
-    
     let body = Body(email: email, password: password)
     let bodyData = try! JSONEncoder().encode(body)
-    
+
     let request = HTTPRequest(
       method: .post,
       url: endpoint,
       headerFields: [.contentType: "application/json"]
     )
-    
+
     let (data, _) = try await self.httpClient.execute(for: request, from: bodyData)
-    
+
     let response = try self.decode(SignInResponse.self, from: data)
-    
+
     return response
   }
 }
@@ -48,7 +48,7 @@ public struct SignInResponse: Sendable, Hashable, Codable {
   public var localId: String
   public var registered: Bool
   public var displayName: String
-  
+
   public init(from decoder: any Decoder) throws {
     let container = try decoder.container(keyedBy: SignInResponse.CodingKeys.self)
     self.idToken = try container.decode(String.self, forKey: .idToken)

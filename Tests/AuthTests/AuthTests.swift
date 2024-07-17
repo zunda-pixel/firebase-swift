@@ -1,45 +1,48 @@
-import Testing
 import Auth
 import Foundation
+import HTTPClient
+import HTTPTypes
+import Testing
+
+#if canImport(FoundationNetworking)
+  import FoundationNetworking
+#endif
 
 extension Tag {
   @Tag static var emailRequired: Self
 }
 
 struct AuthTests {
-  let apiKey = ProcessInfo().environment["API_KEY"]!
-  let gmailUserID = ProcessInfo().environment["GMAIL_USER_ID"]!
+  static let apiKey = ProcessInfo.processInfo.environment["FIREBASE_API_TOKEN"]!
+  static let googleUserID = ProcessInfo.processInfo.environment["GOOGLE_USER_ID"]!
+  static let emailRequired: Bool = ProcessInfo.processInfo.environment["EMAIL_REQUIRED"] != nil
 
   var client: Auth<URLSession> {
     Auth(
-      apiKey: apiKey,
+      apiKey: Self.apiKey,
       httpClient: .urlSession(.shared)
     )
   }
-  
+
   @Test
   func signUpAnonymous() async throws {
-    let response = try await client.signUpAnonymous()
-    
-    print(response)
+    _ = try await client.signUpAnonymous()
   }
-  
+
   @Test
   func signUp() async throws {
-    let email = "\(gmailUserID)+\(UUID())@gmail.com"
+    let email = "\(Self.googleUserID)+\(UUID())@gmail.com"
     let password = "password123"
 
-    let response = try await client.signUp(
+    _ = try await client.signUp(
       email: email,
       password: password
     )
-    
-    print(response)
   }
-  
+
   @Test
   func signIn() async throws {
-    let email = "\(gmailUserID)+\(UUID())@gmail.com"
+    let email = "\(Self.googleUserID)+\(UUID())@gmail.com"
     let password = "password123"
 
     _ = try await client.signUp(
@@ -52,10 +55,10 @@ struct AuthTests {
       password: password
     )
   }
-  
+
   @Test
   func sendEmailToResetPassword() async throws {
-    let email = "\(gmailUserID)+\(UUID())@gmail.com"
+    let email = "\(Self.googleUserID)+\(UUID())@gmail.com"
     let password = "password123"
 
     let response = try await client.signUp(
@@ -67,25 +70,25 @@ struct AuthTests {
       email: response.email
     )
   }
-  
+
   @Test
   func refreshToken() async throws {
-    let email = "\(self.gmailUserID)+\(UUID())@gmail.com"
+    let email = "\(Self.googleUserID)+\(UUID())@gmail.com"
     let password = "password123"
 
     let response = try await client.signUp(
       email: email,
       password: password
     )
-    
+
     _ = try await client.refreshToken(
       refreshToken: response.refreshToken
     )
   }
-  
+
   @Test
   func sendEmailVerification() async throws {
-    let email = "\(gmailUserID)+\(UUID())@gmail.com"
+    let email = "\(Self.googleUserID)+\(UUID())@gmail.com"
     let password = "password123"
 
     let response = try await client.signUp(
@@ -97,32 +100,32 @@ struct AuthTests {
       idToken: response.idToken
     )
   }
-  
+
   @Test
   func deleteAccount() async throws {
-    let email = "\(self.gmailUserID)+\(UUID())@gmail.com"
+    let email = "\(Self.googleUserID)+\(UUID())@gmail.com"
     let password = "password123"
-    
+
     let response1 = try await client.signUp(
       email: email,
       password: password
     )
-    
+
     _ = try await client.deleteAccount(
       idToken: response1.idToken
     )
   }
-  
+
   @Test
   func unLinkProvider() async throws {
-    let email = "\(self.gmailUserID)+\(UUID())@gmail.com"
+    let email = "\(Self.googleUserID)+\(UUID())@gmail.com"
     let password = "password123"
-    
+
     let response1 = try await client.signUp(
       email: email,
       password: password
     )
-    
+
     _ = try await client.unLinkEmail(
       idToken: response1.idToken,
       deleteProviders: ["password"]
@@ -131,31 +134,31 @@ struct AuthTests {
 
   @Test
   func linkAndUnLinkProvider() async throws {
-    let email = "\(self.gmailUserID)+\(UUID())@gmail.com"
+    let email = "\(Self.googleUserID)+\(UUID())@gmail.com"
     let password = "password123"
-    
+
     let response1 = try await client.signUp(
       email: email,
       password: password
     )
-    
+
     _ = try await client.unLinkEmail(
       idToken: response1.idToken,
       deleteProviders: ["password"]
     )
-    
+
     _ = try await client.linkEmail(
       idToken: response1.idToken,
       email: email,
       password: password
     )
   }
-  
+
   @Test
   func user() async throws {
-    let email = "\(self.gmailUserID)+\(UUID())@gmail.com"
+    let email = "\(Self.googleUserID)+\(UUID())@gmail.com"
     let password = "password123"
-    
+
     let response = try await client.signUp(
       email: email,
       password: password
@@ -172,21 +175,21 @@ struct AuthTests {
       idToken: response.idToken,
       profile: updateProfile
     )
-    
+
     let user = try await client.user(
       idToken: response.idToken
     )
-    
+
     #expect(user.email.lowercased() == email.lowercased())
     #expect(user.displayName! == updateProfile.displayName!)
     #expect(user.photoUrl! == updateProfile.photoUrl!)
   }
-  
+
   @Test
   func updateProfile() async throws {
-    let email = "\(self.gmailUserID)+\(UUID())@gmail.com"
+    let email = "\(Self.googleUserID)+\(UUID())@gmail.com"
     let password = "password123"
-    
+
     let response = try await client.signUp(
       email: email,
       password: password
@@ -207,12 +210,12 @@ struct AuthTests {
     #expect(updateProfile.displayName! == updateProfileResponse.displayName!)
     #expect(updateProfile.photoUrl! == updateProfileResponse.photoUrl!)
   }
-  
+
   @Test
   func deleteDisplayName() async throws {
-    let email = "\(self.gmailUserID)+\(UUID())@gmail.com"
+    let email = "\(Self.googleUserID)+\(UUID())@gmail.com"
     let password = "password123"
-    
+
     let response = try await client.signUp(
       email: email,
       password: password
@@ -229,10 +232,10 @@ struct AuthTests {
 
     #expect(response2.displayName == nil)
   }
-  
+
   @Test
   func deletePhotoUrl() async throws {
-    let email = "\(self.gmailUserID)+\(UUID())@gmail.com"
+    let email = "\(Self.googleUserID)+\(UUID())@gmail.com"
     let password = "password123"
 
     let response1 = try await client.signUp(
@@ -251,31 +254,31 @@ struct AuthTests {
 
     #expect(response2.photoUrl == nil)
   }
-  
-  @Test(.tags(.emailRequired))
+
+  @Test(.enabled(if: Self.emailRequired), .tags(.emailRequired))
   func resetPassword() async throws {
     let oobCode = "ywigG2AIRYIKQD6umz8mhWF1luMmjr33ykz_m-DITmsAAAGQsk4TNQ"
     let newPassword = "password123"
-    
+
     let response = try await client.verifyResetPasswordCode(
       oobCode: oobCode
     )
-    
+
     _ = try await client.resetPassword(
       oobCode: oobCode,
       newPassword: newPassword
     )
-    
+
     _ = try await client.signIn(
       email: response.email,
       password: newPassword
     )
   }
-  
-  @Test(.tags(.emailRequired))
+
+  @Test(.enabled(if: Self.emailRequired), .tags(.emailRequired))
   func confirmEmailVerification() async throws {
     let oobCode = "l_0qVS_wyHVK_mhY2qbQZSB3Te-Bzm4tWXN0cg1lrdcAAAGQsk4q_w"
-    
+
     _ = try await client.confirmEmailVerification(
       oobCode: oobCode
     )
