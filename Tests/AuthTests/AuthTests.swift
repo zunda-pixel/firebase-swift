@@ -271,7 +271,7 @@ struct AuthTests {
     let email = "\(Self.googleUserID)+\(UUID())@gmail.com"
     let password = "password123"
 
-    let response = try await client.signUp(
+    _ = try await client.signUp(
       email: email,
       password: password
     )
