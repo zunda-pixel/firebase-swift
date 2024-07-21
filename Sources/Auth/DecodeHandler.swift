@@ -13,7 +13,6 @@ extension Auth {
   }
 }
 
-
 private struct RawErrorResponse: Sendable, Hashable, Codable {
   var error: ErrorsResponse
 }

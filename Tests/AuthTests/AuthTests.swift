@@ -23,7 +23,7 @@ struct AuthTests {
       httpClient: .urlSession(.shared)
     )
   }
-  
+
   @Test
   func sendSignUpLinkForURL() async throws {
     let email = "\(Self.googleUserID)+\(UUID())@gmail.com"
@@ -33,7 +33,7 @@ struct AuthTests {
       continueUrl: continueUrl
     )
   }
-  
+
   @Test(.enabled(if: Self.emailRequired), .tags(.emailRequired))
   func signUpFromEmailLink() async throws {
     let oobCode = "REOxFT0P8iTcBsnZIYT7fE4n0K8u53kidBKq3Q7PYggAAAGQ01XEQA"

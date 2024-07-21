@@ -13,7 +13,8 @@ extension Auth {
     email: String,
     continueUrl: URL
   ) async throws {
-    let endpoint = URL(string: "https://www.googleapis.com/identitytoolkit/v3/relyingparty/getOobConfirmationCode")!
+    let endpoint = URL(
+      string: "https://www.googleapis.com/identitytoolkit/v3/relyingparty/getOobConfirmationCode")!
       .appending(queryItems: [.init(name: "key", value: apiKey)])
 
     let body = Body(email: email, continueUrl: continueUrl)
