@@ -39,5 +39,5 @@ extension Auth {
 
 public struct VerifyResetPasswordCodeResponse: Sendable, Hashable, Codable {
   public var requestType: String
-  public var email: String
+  public var email: String?
 }
