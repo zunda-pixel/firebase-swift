@@ -7,8 +7,12 @@ extension Auth {
     do {
       return try decoder.decode(T.self, from: data)
     } catch {
-      let errorsResponse = try decoder.decode(ErrorsResponse.self, from: data)
-      throw errorsResponse
+      let errorsResponse = try decoder.decode(RawErrorResponse.self, from: data)
+      throw errorsResponse.error
     }
   }
+}
+
+private struct RawErrorResponse: Sendable, Hashable, Codable {
+  var error: ErrorsResponse
 }

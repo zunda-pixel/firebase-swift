@@ -25,6 +25,32 @@ struct AuthTests {
   }
 
   @Test
+  func sendSignUpLinkForURL() async throws {
+    let email = "\(Self.googleUserID)+\(UUID())@gmail.com"
+    let continueUrl = URL(string: "http://localhost")!
+    _ = try await client.sendSignUpLink(
+      email: email,
+      continueUrl: continueUrl
+    )
+  }
+
+  @Test(.enabled(if: Self.emailRequired), .tags(.emailRequired))
+  func signUpFromEmailLink() async throws {
+    let oobCode = "REOxFT0P8iTcBsnZIYT7fE4n0K8u53kidBKq3Q7PYggAAAGQ01XEQA"
+    let email = "\(Self.googleUserID)+\(UUID())@gmail.com"
+    let newPassword = "password123"
+
+    _ = try await client.verifyResetPasswordCode(
+      oobCode: oobCode
+    )
+
+    _ = try await client.signUp(
+      email: email,
+      password: newPassword
+    )
+  }
+
+  @Test
   func signUpAnonymous() async throws {
     _ = try await client.signUpAnonymous()
   }
@@ -53,21 +79,6 @@ struct AuthTests {
     _ = try await client.signIn(
       email: email,
       password: password
-    )
-  }
-
-  @Test
-  func sendEmailToResetPassword() async throws {
-    let email = "\(Self.googleUserID)+\(UUID())@gmail.com"
-    let password = "password123"
-
-    let response = try await client.signUp(
-      email: email,
-      password: password
-    )
-
-    _ = try await client.sendEmailToResetPassword(
-      email: response.email
     )
   }
 
@@ -255,16 +266,31 @@ struct AuthTests {
     #expect(response2.photoUrl == nil)
   }
 
+  @Test
+  func sendEmailToResetPassword() async throws {
+    let email = "\(Self.googleUserID)+\(UUID())@gmail.com"
+    let password = "password123"
+
+    _ = try await client.signUp(
+      email: email,
+      password: password
+    )
+
+    _ = try await client.sendEmailToResetPassword(
+      email: email
+    )
+  }
+
   @Test(.enabled(if: Self.emailRequired), .tags(.emailRequired))
   func resetPassword() async throws {
     let oobCode = "ywigG2AIRYIKQD6umz8mhWF1luMmjr33ykz_m-DITmsAAAGQsk4TNQ"
     let newPassword = "password123"
 
-    let response = try await client.verifyResetPasswordCode(
+    _ = try await client.verifyResetPasswordCode(
       oobCode: oobCode
     )
 
-    _ = try await client.resetPassword(
+    let response = try await client.resetPassword(
       oobCode: oobCode,
       newPassword: newPassword
     )

@@ -21,7 +21,7 @@ extension Auth {
   ) async throws -> SendEmailToResetPasswordResponse {
     let path = "accounts:sendOobCode"
     let endpoint =
-      baseURL
+      baseUrlV1
       .appending(path: path)
       .appending(queryItems: [.init(name: "key", value: apiKey)])
 

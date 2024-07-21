@@ -16,7 +16,7 @@ extension Auth {
   ) async throws -> VerifyResetPasswordCodeResponse {
     let path = "accounts:resetPassword"
     let endpoint =
-      baseURL
+      baseUrlV1
       .appending(path: path)
       .appending(queryItems: [.init(name: "key", value: apiKey)])
 
@@ -39,5 +39,5 @@ extension Auth {
 
 public struct VerifyResetPasswordCodeResponse: Sendable, Hashable, Codable {
   public var requestType: String
-  public var email: String
+  public var email: String?
 }

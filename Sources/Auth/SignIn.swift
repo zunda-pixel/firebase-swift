@@ -19,7 +19,7 @@ extension Auth {
   public func signIn(email: String, password: String) async throws -> SignInResponse {
     let path = "accounts:signInWithPassword"
     let endpoint =
-      baseURL
+      baseUrlV1
       .appending(path: path)
       .appending(queryItems: [.init(name: "key", value: apiKey)])
 

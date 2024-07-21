@@ -21,7 +21,7 @@ extension Auth {
   ) async throws -> UnLinkProviderResponse {
     let path = "accounts:update"
     let endpoint =
-      baseURL
+      baseUrlV1
       .appending(path: path)
       .appending(queryItems: [.init(name: "key", value: apiKey)])
 

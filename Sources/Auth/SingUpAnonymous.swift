@@ -14,7 +14,7 @@ extension Auth {
   public func signUpAnonymous() async throws -> SignUpAnonymousResponse {
     let path = "accounts:signUp"
     let endpoint =
-      baseURL
+      baseUrlV1
       .appending(path: path)
       .appending(queryItems: [.init(name: "key", value: apiKey)])
 
