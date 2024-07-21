@@ -37,7 +37,7 @@ struct AuthTests {
   @Test(.enabled(if: Self.emailRequired), .tags(.emailRequired))
   func signUpFromEmailLink() async throws {
     let oobCode = "REOxFT0P8iTcBsnZIYT7fE4n0K8u53kidBKq3Q7PYggAAAGQ01XEQA"
-    let email = "rokki.hiroki+4eb7a529-5c57-4627-9a2c-e26df01438ac@gmail.com"
+    let email = "\(Self.googleUserID)+\(UUID())@gmail.com"
     let newPassword = "password123"
 
     _ = try await client.verifyResetPasswordCode(
