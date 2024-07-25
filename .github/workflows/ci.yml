@@ -8,8 +8,8 @@ jobs:
     container: swiftlang/swift:nightly-6.0-jammy
     steps:
     - uses: actions/checkout@v4
-    - run: swift build --build-tests --enable-code-coverage
-    - run: swift test --skip-build --disable-xctest --parallel --enable-code-coverage
+    - run: swift build --build-tests
+    - run: swift test --skip-build --disable-xctest --parallel
       env:
         FIREBASE_API_TOKEN: ${{ secrets.FIREBASE_API_TOKEN }}
         GOOGLE_USER_ID: ${{ secrets.GOOGLE_USER_ID }}
