@@ -1,8 +1,6 @@
 import Foundation
 
 #if os(Linux) || os(Windows)
-  extension URL: @retroactive @unchecked Sendable {}
-
   extension URL {
     public func appending(path: String, isDirectory: Bool? = nil) -> URL {
       if let isDirectory {
