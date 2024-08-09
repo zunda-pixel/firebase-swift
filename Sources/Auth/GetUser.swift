@@ -67,16 +67,44 @@ public struct UserResponse: Sendable, Hashable, Codable {
     self.passwordHash = try container.decodeIfPresent(String.self, forKey: .passwordHash)
     self.passwordUpdatedAt = try container.decodeIfPresent(Date.self, forKey: .passwordUpdatedAt)
     let validSinceString = try container.decode(String.self, forKey: .validSince)
-    self.validSince = .init(timeIntervalSinceReferenceDate: TimeInterval(validSinceString)!)
+    if let validSinceInterval = TimeInterval(validSinceString) {
+      self.validSince = .init(timeIntervalSinceReferenceDate: validSinceInterval)
+    } else {
+      throw DecodingError.dataCorrupted(.init(
+        codingPath: [UserResponse.CodingKeys.validSince],
+        debugDescription: "\(validSinceString) is not TimeInterval format"
+      ))
+    }
     self.disabled = try container.decodeIfPresent(Bool.self, forKey: .disabled)
     let lastLoginAtString = try container.decode(String.self, forKey: .lastLoginAt)
-    self.lastLoginAt = .init(timeIntervalSinceReferenceDate: TimeInterval(lastLoginAtString)!)
+    if let lastLoginInterval = TimeInterval(lastLoginAtString) {
+      self.lastLoginAt = .init(timeIntervalSince1970: lastLoginInterval / 1000)
+    } else {
+      throw DecodingError.dataCorrupted(.init(
+        codingPath: [UserResponse.CodingKeys.lastLoginAt],
+        debugDescription: "\(lastLoginAtString) is not TimeInterval format"
+      ))
+    }
     let createdAtString = try container.decode(String.self, forKey: .createdAt)
-    self.createdAt = .init(timeIntervalSinceReferenceDate: TimeInterval(createdAtString)!)
+    if let createdAtInterval = TimeInterval(createdAtString) {
+      self.createdAt = .init(timeIntervalSince1970: createdAtInterval / 1000)
+    } else {
+      throw DecodingError.dataCorrupted(.init(
+        codingPath: [UserResponse.CodingKeys.createdAt],
+        debugDescription: "\(createdAtString) is not TimeInterval format"
+      ))
+    }
     self.customAuth = try container.decodeIfPresent(Bool.self, forKey: .customAuth)
     let lastRefreshAtString = try container.decode(String.self, forKey: .lastRefreshAt)
     let formatter = ISO8601DateFormatter()
     formatter.formatOptions.insert(.withFractionalSeconds)
-    self.lastRefreshAt = formatter.date(from: lastRefreshAtString)!
+    if let lastRefreshAt = formatter.date(from: lastRefreshAtString) {
+      self.lastRefreshAt = lastRefreshAt
+    } else {
+      throw DecodingError.dataCorrupted(.init(
+        codingPath: [UserResponse.CodingKeys.lastRefreshAt],
+        debugDescription: "\(lastRefreshAtString) is not ISO8601Date format"
+      ))
+    }
   }
 }
