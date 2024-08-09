@@ -43,7 +43,7 @@ public struct UsersResponse: Sendable, Hashable, Codable {
 public struct UserResponse: Sendable, Hashable, Codable {
   public var localId: String
   public var email: String?
-  public var emailVerified: Bool
+  public var emailVerified: Bool?
   public var displayName: String?
   public var providerUserInfo: [ProviderUserInfo]
   public var photoUrl: URL?
@@ -60,7 +60,7 @@ public struct UserResponse: Sendable, Hashable, Codable {
     let container = try decoder.container(keyedBy: UserResponse.CodingKeys.self)
     self.localId = try container.decode(String.self, forKey: .localId)
     self.email = try container.decodeIfPresent(String.self, forKey: .email)
-    self.emailVerified = try container.decode(Bool.self, forKey: .emailVerified)
+    self.emailVerified = try container.decodeIfPresent(Bool.self, forKey: .emailVerified)
     self.displayName = try container.decodeIfPresent(String.self, forKey: .displayName)
     self.providerUserInfo = try container.decode([ProviderUserInfo].self, forKey: .providerUserInfo)
     self.photoUrl = try container.decodeIfPresent(URL.self, forKey: .photoUrl)
