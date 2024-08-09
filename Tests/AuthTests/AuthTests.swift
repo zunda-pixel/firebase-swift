@@ -15,6 +15,7 @@ extension Tag {
 struct AuthTests {
   static let apiKey = ProcessInfo.processInfo.environment["FIREBASE_API_TOKEN"]!
   static let googleUserID = ProcessInfo.processInfo.environment["GOOGLE_USER_ID"]!
+  static let githubToken = ProcessInfo.processInfo.environment["GITHUB_TOKEN"]!
   static let emailRequired: Bool = ProcessInfo.processInfo.environment["EMAIL_REQUIRED"] != nil
 
   var client: Auth<URLSession> {
@@ -143,25 +144,23 @@ struct AuthTests {
     )
   }
 
-  @Test
-  func linkAndUnLinkProvider() async throws {
+  @Test(.enabled(if: Self.emailRequired), .tags(.emailRequired))
+  func linkEmail() async throws {
     let email = "\(Self.googleUserID)+\(UUID())@gmail.com"
-    let password = "password123"
-
-    let response1 = try await client.signUp(
-      email: email,
-      password: password
+    let response = try await client.signInWithOAuth(
+      requestUri: URL(string: "http://localhost")!,
+      provider: .github(accessToken: Self.githubToken)
     )
 
-    _ = try await client.unLinkEmail(
-      idToken: response1.idToken,
-      deleteProviders: ["password"]
+    _ = try await client.sendEmailVerification(
+      idToken: response.idToken
     )
-
+    _ = try await client.confirmEmailVerification(oobCode: "code")
+    
     _ = try await client.linkEmail(
-      idToken: response1.idToken,
+      idToken: response.idToken,
       email: email,
-      password: password
+      password: "password123"
     )
   }
 
@@ -264,6 +263,14 @@ struct AuthTests {
     )
 
     #expect(response2.photoUrl == nil)
+  }
+    
+  @Test(.enabled(if: Self.emailRequired), .tags(.emailRequired))
+  func signInWithOAuthGitHub() async throws {
+    _ = try await client.signInWithOAuth(
+      requestUri: URL(string: "http://localhost")!,
+      provider: .github(accessToken: Self.githubToken)
+    )
   }
 
   @Test
