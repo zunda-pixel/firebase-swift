@@ -48,7 +48,7 @@ public struct UserResponse: Sendable, Hashable, Codable {
   public var providerUserInfo: [ProviderUserInfo]
   public var photoUrl: URL?
   public var passwordHash: String?
-  public var passwordUpdatedAt: Date
+  public var passwordUpdatedAt: Date?
   public var validSince: Date
   public var disabled: Bool?
   public var lastLoginAt: Date
@@ -66,7 +66,7 @@ public struct UserResponse: Sendable, Hashable, Codable {
     self.providerUserInfo = try container.decode([ProviderUserInfo].self, forKey: .providerUserInfo)
     self.emailVerified = try container.decode(Bool.self, forKey: .emailVerified)
     self.passwordHash = try container.decodeIfPresent(String.self, forKey: .passwordHash)
-    self.passwordUpdatedAt = try container.decode(Date.self, forKey: .passwordUpdatedAt)
+    self.passwordUpdatedAt = try container.decodeIfPresent(Date.self, forKey: .passwordUpdatedAt)
     let validSinceString = try container.decode(String.self, forKey: .validSince)
     self.validSince = .init(timeIntervalSinceReferenceDate: TimeInterval(validSinceString)!)
     self.disabled = try container.decodeIfPresent(Bool.self, forKey: .disabled)
