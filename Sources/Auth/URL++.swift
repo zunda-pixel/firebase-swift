@@ -1,6 +1,6 @@
 import Foundation
 
-#if os(Linux) || os(Windows)
+#if canImport(FoundationNetworking)
   extension URL {
     public func appending(path: String, isDirectory: Bool? = nil) -> URL {
       if let isDirectory {
