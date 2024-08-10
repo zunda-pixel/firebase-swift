@@ -191,8 +191,8 @@ struct AuthTests {
     let user = try await client.user(
       idToken: response.idToken
     )
-    let userEmail = #require(user.email)
-    #expect(userEmail.lowercased() == #require(email.lowercased()))
+    let userEmail = try #require(user.email)
+    #expect(userEmail.lowercased() == email.lowercased())
     #expect(user.displayName! == updateProfile.displayName!)
     #expect(user.photoUrl! == updateProfile.photoUrl!)
   }
