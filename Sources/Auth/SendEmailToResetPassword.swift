@@ -15,6 +15,7 @@ extension Auth {
   ///   - email: User's email address.
   ///   - locale: The language code corresponding to the user's locale. Passing this will localize the password reset email sent to the user.
   /// - Returns: ``SendEmailToResetPasswordResponse``
+  @discardableResult
   public func sendEmailToResetPassword(
     email: String,
     locale: String? = nil

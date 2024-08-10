@@ -47,6 +47,7 @@ extension Auth {
   ///   - provider: The Provider ID which issues the credential.
   ///   - accessToken: Access Token
   /// - Returns: ``SignInWithOAuth``
+  @discardableResult
   public func signInWithOAuth(
     requestUri: URL,
     provider: OAuth2Provider

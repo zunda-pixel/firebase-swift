@@ -18,6 +18,7 @@ extension Auth {
   ///   - email: The email to link to the account.
   ///   - password: The new password of the account.
   /// - Returns: ``LinkEmailResponse``
+  @discardableResult
   public func linkEmail(
     idToken: String,
     email: String,

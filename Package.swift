@@ -32,6 +32,7 @@ let package = Package(
       name: "AuthTests",
       dependencies: [
         .target(name: "Auth"),
+        .product(name: "HTTPClientFoundation", package: "http-client"),
         .product(name: "Testing", package: "swift-testing"),
       ]
     ),
