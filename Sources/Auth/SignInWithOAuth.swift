@@ -15,21 +15,21 @@ extension Auth {
         "id_token=\(idToken)&providerId=\(provider.identifider)"
       }
     }
-    
+
     var provider: OAuth2Provider
     /// Whether or not to return an ID and refresh token. Should always be true.
     var returnSecureToken = true
-    
+
     /// Whether to force the return of the OAuth credential on the following errors: FEDERATED_USER_ID_ALREADY_LINKED and EMAIL_EXISTS.
     var returnIdpCredential: Bool
-    
+
     private enum CodingKeys: CodingKey {
       case requestUri
       case postBody
       case returnSecureToken
       case returnIdpCredential
     }
-    
+
     func encode(to encoder: any Encoder) throws {
       var container = encoder.container(keyedBy: Body.CodingKeys.self)
       try container.encode(self.requestUri, forKey: .requestUri)
@@ -82,7 +82,7 @@ extension Auth {
 public enum OAuth2Provider: Sendable, Hashable, Codable {
   case github(accessToken: String)
   case google(id_token: String)
-  
+
   public var identifider: String {
     switch self {
     case .github: "github.com"

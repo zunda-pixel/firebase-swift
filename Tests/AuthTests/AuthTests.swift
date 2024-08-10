@@ -156,7 +156,7 @@ struct AuthTests {
       idToken: response.idToken
     )
     _ = try await client.confirmEmailVerification(oobCode: "code")
-    
+
     _ = try await client.linkEmail(
       idToken: response.idToken,
       email: email,
@@ -264,7 +264,7 @@ struct AuthTests {
 
     #expect(response2.photoUrl == nil)
   }
-    
+
   @Test(.enabled(if: Self.emailRequired), .tags(.emailRequired))
   func signInWithOAuthGitHub() async throws {
     _ = try await client.signInWithOAuth(
