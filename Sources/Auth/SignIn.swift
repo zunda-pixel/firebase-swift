@@ -16,6 +16,7 @@ extension Auth {
   ///   - email: The email the user is signing in with.
   ///   - password: The password for the account.
   /// - Returns: ``SignInResponse``
+  @discardableResult
   public func signIn(email: String, password: String) async throws -> SignInResponse {
     let path = "accounts:signInWithPassword"
     let endpoint =

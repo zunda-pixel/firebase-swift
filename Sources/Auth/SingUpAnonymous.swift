@@ -11,6 +11,7 @@ extension Auth {
   /// You can sign in a user anonymously by issuing an HTTP POST request to the Auth signupNewUser endpoint.
   /// https://firebase.google.com/docs/reference/rest/auth#section-sign-in-anonymously
   /// - Returns: ``SignUpAnonymousResponse``
+  @discardableResult
   public func signUpAnonymous() async throws -> SignUpAnonymousResponse {
     let path = "accounts:signUp"
     let endpoint =
@@ -45,7 +46,16 @@ public struct SignUpAnonymousResponse: Sendable, Hashable, Codable {
     let container = try decoder.container(keyedBy: SignUpAnonymousResponse.CodingKeys.self)
     self.idToken = try container.decode(String.self, forKey: .idToken)
     let expiresInString = try container.decode(String.self, forKey: .expiresIn)
-    self.expiresIn = Int(expiresInString)!
+    if let expiresIn = Int(expiresInString) {
+      self.expiresIn = expiresIn
+    } else {
+      throw DecodingError.dataCorrupted(
+        .init(
+          codingPath: [SignUpAnonymousResponse.CodingKeys.expiresIn],
+          debugDescription: "\(expiresInString) is not a valid Int."
+        ))
+    }
+
     self.refreshToken = try container.decode(String.self, forKey: .refreshToken)
     self.localId = try container.decode(String.self, forKey: .localId)
   }

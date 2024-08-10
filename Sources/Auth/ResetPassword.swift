@@ -15,6 +15,7 @@ extension Auth {
   ///   - oobCode: The email action code sent to the user's email for resetting the password.
   ///   - password: The user's new password.
   /// - Returns: ``ResetPasswordResponse``
+  @discardableResult
   public func resetPassword(
     oobCode: String,
     newPassword password: String

@@ -11,6 +11,7 @@ jobs:
     - run: swift build --build-tests
     - run: swift test --skip-build --enable-swift-testing --parallel
       env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         FIREBASE_API_TOKEN: ${{ secrets.FIREBASE_API_TOKEN }}
         GOOGLE_USER_ID: ${{ secrets.GOOGLE_USER_ID }}
   lint:

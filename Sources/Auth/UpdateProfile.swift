@@ -44,6 +44,7 @@ extension Auth {
   /// https://firebase.google.com/docs/reference/rest/auth#section-update-profile
   /// - Parameter profile: ``UpdateProfile``
   /// - Returns: ``UpdateProfileResponse``
+  @discardableResult
   public func updateProfile(
     idToken: String,
     profile: UpdateProfile

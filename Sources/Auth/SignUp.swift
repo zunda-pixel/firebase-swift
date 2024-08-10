@@ -16,6 +16,7 @@ extension Auth {
   ///   - email: The email for the user to create.
   ///   - password: The password for the user to create.
   /// - Returns: ``SignUpResponse``
+  @discardableResult
   public func signUp(email: String, password: String) async throws -> SignUpResponse {
     let path = "accounts:signUp"
     let endpoint =

@@ -15,6 +15,7 @@ extension Auth {
   ///   - idToken: The Firebase ID token of the user to verify.
   ///   - locale: The language code corresponding to the user's locale. Passing this will localize the email verification sent to the user.
   /// - Returns: ``SendEmailVerificationResponse``
+  @discardableResult
   public func sendEmailVerification(
     idToken: String,
     locale: String? = nil

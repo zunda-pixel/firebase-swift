@@ -12,6 +12,7 @@ extension Auth {
   /// https://firebase.google.com/docs/reference/rest/auth#section-confirm-email-verification
   /// - Parameter oobCode: The action code sent to user's email for email verification.
   /// - Returns: ``ConfirmEmailVerificationResponse``
+  @discardableResult
   public func confirmEmailVerification(
     oobCode: String
   ) async throws -> ConfirmEmailVerificationResponse {

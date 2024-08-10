@@ -13,6 +13,7 @@ extension Auth {
   /// - Parameters:
   ///   - idToken: The Firebase ID token of the user to delete.
   /// - Returns: ``DeleteAccountResponse``
+  @discardableResult
   public func deleteAccount(idToken: String) async throws -> DeleteAccountResponse {
     let path = "accounts:delete"
     let endpoint =

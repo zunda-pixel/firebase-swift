@@ -1,6 +1,15 @@
 {
-  "originHash" : "044564e300fc660e0ac3fa71806d03a453cd98c1f6529073114520cfa2b57dbe",
+  "originHash" : "302b0b7853fbe1ae9e610cb7e0c0e9d5f1239ad6f235eb913cb69d067b47a26d",
   "pins" : [
+    {
+      "identity" : "http-client",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/zunda-pixel/http-client",
+      "state" : {
+        "revision" : "a3213b123b41b3a3c4c5d897c74d0b45b3e9dcda",
+        "version" : "0.1.3"
+      }
+    },
     {
       "identity" : "swift-http-types",
       "kind" : "remoteSourceControl",
@@ -22,7 +31,7 @@
     {
       "identity" : "swift-testing",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/apple/swift-testing",
+      "location" : "https://github.com/swiftlang/swift-testing",
       "state" : {
         "revision" : "6155e83dbaa2696d13bcd0079665b6a6daaf6dc8",
         "version" : "0.11.0"

@@ -15,6 +15,7 @@ extension Auth {
   ///   - idToken: The Firebase ID token of the account.
   ///   - deleteProviders: The list of provider IDs to unlink, eg: 'google.com', 'password', etc.
   /// - Returns: ``UnLinkProviderResponse``
+  @discardableResult
   public func unLinkEmail(
     idToken: String,
     deleteProviders: [String]

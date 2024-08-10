@@ -1,6 +1,7 @@
 import Auth
 import Foundation
 import HTTPClient
+import HTTPClientFoundation
 import HTTPTypes
 import Testing
 
@@ -15,6 +16,7 @@ extension Tag {
 struct AuthTests {
   static let apiKey = ProcessInfo.processInfo.environment["FIREBASE_API_TOKEN"]!
   static let googleUserID = ProcessInfo.processInfo.environment["GOOGLE_USER_ID"]!
+  static let githubToken = ProcessInfo.processInfo.environment["GITHUB_TOKEN"]!
   static let emailRequired: Bool = ProcessInfo.processInfo.environment["EMAIL_REQUIRED"] != nil
 
   var client: Auth<URLSession> {
@@ -28,7 +30,7 @@ struct AuthTests {
   func sendSignUpLinkForURL() async throws {
     let email = "\(Self.googleUserID)+\(UUID())@gmail.com"
     let continueUrl = URL(string: "http://localhost")!
-    _ = try await client.sendSignUpLink(
+    try await client.sendSignUpLink(
       email: email,
       continueUrl: continueUrl
     )
@@ -40,11 +42,11 @@ struct AuthTests {
     let email = "\(Self.googleUserID)+\(UUID())@gmail.com"
     let newPassword = "password123"
 
-    _ = try await client.verifyResetPasswordCode(
+    try await client.verifyResetPasswordCode(
       oobCode: oobCode
     )
 
-    _ = try await client.signUp(
+    try await client.signUp(
       email: email,
       password: newPassword
     )
@@ -52,7 +54,7 @@ struct AuthTests {
 
   @Test
   func signUpAnonymous() async throws {
-    _ = try await client.signUpAnonymous()
+    try await client.signUpAnonymous()
   }
 
   @Test
@@ -60,7 +62,7 @@ struct AuthTests {
     let email = "\(Self.googleUserID)+\(UUID())@gmail.com"
     let password = "password123"
 
-    _ = try await client.signUp(
+    try await client.signUp(
       email: email,
       password: password
     )
@@ -71,12 +73,12 @@ struct AuthTests {
     let email = "\(Self.googleUserID)+\(UUID())@gmail.com"
     let password = "password123"
 
-    _ = try await client.signUp(
+    try await client.signUp(
       email: email,
       password: password
     )
 
-    _ = try await client.signIn(
+    try await client.signIn(
       email: email,
       password: password
     )
@@ -107,7 +109,7 @@ struct AuthTests {
       password: password
     )
 
-    _ = try await client.sendEmailVerification(
+    try await client.sendEmailVerification(
       idToken: response.idToken
     )
   }
@@ -122,7 +124,7 @@ struct AuthTests {
       password: password
     )
 
-    _ = try await client.deleteAccount(
+    try await client.deleteAccount(
       idToken: response1.idToken
     )
   }
@@ -137,31 +139,30 @@ struct AuthTests {
       password: password
     )
 
-    _ = try await client.unLinkEmail(
+    try await client.unLinkEmail(
       idToken: response1.idToken,
       deleteProviders: ["password"]
     )
   }
 
-  @Test
-  func linkAndUnLinkProvider() async throws {
+  @Test(.enabled(if: Self.emailRequired), .tags(.emailRequired))
+  func linkEmail() async throws {
     let email = "\(Self.googleUserID)+\(UUID())@gmail.com"
-    let password = "password123"
-
-    let response1 = try await client.signUp(
-      email: email,
-      password: password
+    let response = try await client.signInWithOAuth(
+      requestUri: URL(string: "http://localhost")!,
+      provider: .github(accessToken: Self.githubToken)
     )
 
-    _ = try await client.unLinkEmail(
-      idToken: response1.idToken,
-      deleteProviders: ["password"]
+    try await client.sendEmailVerification(
+      idToken: response.idToken
     )
+    
+    try await client.confirmEmailVerification(oobCode: "code")
 
-    _ = try await client.linkEmail(
-      idToken: response1.idToken,
+    try await client.linkEmail(
+      idToken: response.idToken,
       email: email,
-      password: password
+      password: "password123"
     )
   }
 
@@ -182,7 +183,7 @@ struct AuthTests {
       returnSecureToken: false
     )
 
-    _ = try await client.updateProfile(
+    try await client.updateProfile(
       idToken: response.idToken,
       profile: updateProfile
     )
@@ -190,8 +191,8 @@ struct AuthTests {
     let user = try await client.user(
       idToken: response.idToken
     )
-
-    #expect(user.email.lowercased() == email.lowercased())
+    let userEmail = try #require(user.email)
+    #expect(userEmail.lowercased() == email.lowercased())
     #expect(user.displayName! == updateProfile.displayName!)
     #expect(user.photoUrl! == updateProfile.photoUrl!)
   }
@@ -266,17 +267,25 @@ struct AuthTests {
     #expect(response2.photoUrl == nil)
   }
 
+  @Test(.enabled(if: Self.emailRequired), .tags(.emailRequired))
+  func signInWithOAuthGitHub() async throws {
+    try await client.signInWithOAuth(
+      requestUri: URL(string: "http://localhost")!,
+      provider: .github(accessToken: Self.githubToken)
+    )
+  }
+
   @Test
   func sendEmailToResetPassword() async throws {
     let email = "\(Self.googleUserID)+\(UUID())@gmail.com"
     let password = "password123"
 
-    _ = try await client.signUp(
+    try await client.signUp(
       email: email,
       password: password
     )
 
-    _ = try await client.sendEmailToResetPassword(
+    try await client.sendEmailToResetPassword(
       email: email
     )
   }
@@ -286,7 +295,7 @@ struct AuthTests {
     let oobCode = "ywigG2AIRYIKQD6umz8mhWF1luMmjr33ykz_m-DITmsAAAGQsk4TNQ"
     let newPassword = "password123"
 
-    _ = try await client.verifyResetPasswordCode(
+    try await client.verifyResetPasswordCode(
       oobCode: oobCode
     )
 
@@ -295,7 +304,7 @@ struct AuthTests {
       newPassword: newPassword
     )
 
-    _ = try await client.signIn(
+    try await client.signIn(
       email: response.email,
       password: newPassword
     )
@@ -305,7 +314,7 @@ struct AuthTests {
   func confirmEmailVerification() async throws {
     let oobCode = "l_0qVS_wyHVK_mhY2qbQZSB3Te-Bzm4tWXN0cg1lrdcAAAGQsk4q_w"
 
-    _ = try await client.confirmEmailVerification(
+    try await client.confirmEmailVerification(
       oobCode: oobCode
     )
   }
