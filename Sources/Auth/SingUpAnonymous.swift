@@ -45,7 +45,15 @@ public struct SignUpAnonymousResponse: Sendable, Hashable, Codable {
     let container = try decoder.container(keyedBy: SignUpAnonymousResponse.CodingKeys.self)
     self.idToken = try container.decode(String.self, forKey: .idToken)
     let expiresInString = try container.decode(String.self, forKey: .expiresIn)
-    self.expiresIn = Int(expiresInString)!
+    if let expiresIn = Int(expiresInString) {
+      self.expiresIn = expiresIn
+    } else {
+      throw DecodingError.dataCorrupted(.init(
+        codingPath: [SignUpAnonymousResponse.CodingKeys.expiresIn],
+        debugDescription: "\(expiresInString) is not a valid Int."
+      ))
+    }
+    
     self.refreshToken = try container.decode(String.self, forKey: .refreshToken)
     self.localId = try container.decode(String.self, forKey: .localId)
   }
