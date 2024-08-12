@@ -1,4 +1,3 @@
-// https://firebaseremoteconfigrealtime.googleapis.com/v1/projects/211171649289/namespaces/firebase:streamFetchInvalidations?key=AIzaSyAqomU63-8m6_LE6KQkT56-mYuI_tyYfF4
 import Foundation
 import HTTPTypes
 import HTTPTypesFoundation
