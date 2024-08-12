@@ -12,6 +12,10 @@ let package = Package(
     .library(
       name: "Auth",
       targets: ["Auth"]
+    ),
+    .library(
+      name: "RemoteConfig",
+      targets: ["RemoteConfig"]
     )
   ],
   dependencies: [
@@ -25,13 +29,27 @@ let package = Package(
       dependencies: [
         .product(name: "HTTPClient", package: "http-client"),
         .product(name: "HTTPTypes", package: "swift-http-types"),
-        .product(name: "HTTPTypesFoundation", package: "swift-http-types"),
       ]
     ),
     .testTarget(
       name: "AuthTests",
       dependencies: [
         .target(name: "Auth"),
+        .product(name: "HTTPClientFoundation", package: "http-client"),
+        .product(name: "Testing", package: "swift-testing"),
+      ]
+    ),
+    .target(
+      name: "RemoteConfig",
+      dependencies: [
+        .product(name: "HTTPClient", package: "http-client"),
+        .product(name: "HTTPTypes", package: "swift-http-types"),
+      ]
+    ),
+    .testTarget(
+      name: "RemoteConfigTests",
+      dependencies: [
+        .target(name: "RemoteConfig"),
         .product(name: "HTTPClientFoundation", package: "http-client"),
         .product(name: "Testing", package: "swift-testing"),
       ]
