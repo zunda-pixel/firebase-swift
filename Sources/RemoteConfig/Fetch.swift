@@ -46,6 +46,16 @@ public struct FetchResponse: Sendable, Hashable, Codable {
   public var state: State
   public var templateVersion: Int
   
+  public init(
+    entries: [String: String],
+    state: State,
+    templateVersion: Int
+  ) {
+    self.entries = entries
+    self.state = state
+    self.templateVersion = templateVersion
+  }
+  
   public init(from decoder: any Decoder) throws {
     let container = try decoder.container(keyedBy: CodingKeys.self)
     self.entries = try container.decode([String : String].self, forKey: .entries)
