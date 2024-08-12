@@ -4,8 +4,6 @@ import HTTPTypesFoundation
 
 extension RemoteConfig {
   public func fetch(
-    appInstanceId: String,
-    appId: String,
     country: String? = nil,
     language: String? = nil,
     timezone: String? = nil
@@ -22,8 +20,8 @@ extension RemoteConfig {
     )
 
     let body = [
-      "app_instance_id": appInstanceId,
-      "app_id": appId,
+      "app_instance_id": self.appInstanceId,
+      "app_id": self.appId,
       "country_code": country,
       "language_code": language,
       "time_zone": timezone,
