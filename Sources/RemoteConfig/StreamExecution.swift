@@ -28,10 +28,13 @@ actor StreamExecution: NSObject, URLSessionDataDelegate {
       delegate: self,
       delegateQueue: nil
     )
+
+    let request = URLRequest(httpRequest: request)!
+
     if let body {
-      self.task = session.uploadTask(with: .init(httpRequest: request)!, from: body)
+      self.task = session.uploadTask(with: request, from: body)
     } else {
-      self.task = session.dataTask(with: .init(httpRequest: request)!)
+      self.task = session.dataTask(with: request)
     }
   }
 
