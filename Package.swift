@@ -12,12 +12,16 @@ let package = Package(
     .library(
       name: "Auth",
       targets: ["Auth"]
+    ),
+    .library(
+      name: "RemoteConfig",
+      targets: ["RemoteConfig"]
     )
   ],
   dependencies: [
     .package(url: "https://github.com/apple/swift-http-types", from: "1.3.0"),
     .package(url: "https://github.com/swiftlang/swift-testing", from: "0.11.0"),
-    .package(url: "https://github.com/zunda-pixel/http-client", from: "0.1.3"),
+    .package(url: "https://github.com/zunda-pixel/http-client", from: "0.2.0"),
   ],
   targets: [
     .target(
@@ -25,13 +29,27 @@ let package = Package(
       dependencies: [
         .product(name: "HTTPClient", package: "http-client"),
         .product(name: "HTTPTypes", package: "swift-http-types"),
-        .product(name: "HTTPTypesFoundation", package: "swift-http-types"),
       ]
     ),
     .testTarget(
       name: "AuthTests",
       dependencies: [
         .target(name: "Auth"),
+        .product(name: "HTTPClientFoundation", package: "http-client"),
+        .product(name: "Testing", package: "swift-testing"),
+      ]
+    ),
+    .target(
+      name: "RemoteConfig",
+      dependencies: [
+        .product(name: "HTTPClient", package: "http-client"),
+        .product(name: "HTTPTypes", package: "swift-http-types"),
+      ]
+    ),
+    .testTarget(
+      name: "RemoteConfigTests",
+      dependencies: [
+        .target(name: "RemoteConfig"),
         .product(name: "HTTPClientFoundation", package: "http-client"),
         .product(name: "Testing", package: "swift-testing"),
       ]
