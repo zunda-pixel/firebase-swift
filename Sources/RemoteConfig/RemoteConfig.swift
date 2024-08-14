@@ -4,22 +4,23 @@ import HTTPTypes
 import HTTPTypesFoundation
 
 public struct RemoteConfig<HTTPClient: HTTPClientProtocol>: Sendable, Hashable
-where HTTPClient.Body == Foundation.Data, HTTPClient.Data == Foundation.Data, HTTPClient: Hashable {
+where HTTPClient.Data == Foundation.Data, HTTPClient: Sendable & Hashable {
   public var apiKey: String
   public var baseUrl = URL(string: "https://firebaseremoteconfig.googleapis.com/v1")!
   public var realtimeBaseUrl = URL(string: "https://firebaseremoteconfigrealtime.googleapis.com/v1")!
   public var projectId: String
   public var projectName: String
-  public var appInstanceId: String
   public var appId: String
+  /// Uniequ User(Device) ID
+  public var appInstanceId: String
   public var httpClient: HTTPClient
   
   public init(
     apiKey: String,
     projectId: String,
     projectName: String,
-    appInstanceId: String,
     appId: String,
+    appInstanceId: String,
     httpClient: HTTPClient
   ) {
     self.apiKey = apiKey
