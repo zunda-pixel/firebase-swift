@@ -13,7 +13,6 @@ extension Firestore {
     let endpoint =
     baseUrl
       .appending(path: path)
-      .appending(queryItems: [.init(name: "key", value: self.apiKey)])
     
     let request = HTTPRequest(
       method: .get,

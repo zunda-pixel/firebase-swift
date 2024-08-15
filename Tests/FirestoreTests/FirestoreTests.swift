@@ -5,12 +5,10 @@ import HTTPClientFoundation
 import HTTPTypes
 import Testing
 
-let apiKey = ProcessInfo.processInfo.environment["FIREBASE_API_TOKEN"]!
 let oauthApiKey = ProcessInfo.processInfo.environment["FIREBASE_OAUTH_TOKEN"]!
 let projectName = ProcessInfo.processInfo.environment["FIREBASE_PROJECT_NAME"]!
 
 let client = Firestore(
-  apiKey: apiKey,
   oauthApiKey: oauthApiKey,
   projectName: projectName,
   httpClient: .urlSession(.shared)
