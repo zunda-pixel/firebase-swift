@@ -29,7 +29,7 @@ func fetch() async throws {
 @Test
 func realtimeStream() async throws {
   for try await result in client.realtimeStream() {
-    let realtimeResponse = try result.get()
+    _ = try result.get()
     let remoteConfig = try await client.fetch()
     #expect(remoteConfig.entries.keys.contains("parameterBool"))
     #expect(remoteConfig.entries.keys.contains("parameterInt"))
