@@ -85,7 +85,9 @@ private struct InternalDocument: Decodable {
 
   init(from decoder: any Decoder) throws {
     let container = try decoder.container(keyedBy: CodingKeys.self)
-    self.name = try container.decode(String.self, forKey: .name)
+    let name = try container.decode(URL.self, forKey: .name)
+    self.name = name.lastPathComponent
+
     let formatter = ISO8601DateFormatter()
     formatter.formatOptions.insert(.withFractionalSeconds)
     let createTime = try container.decode(String.self, forKey: .createTime)
