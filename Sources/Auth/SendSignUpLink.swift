@@ -15,7 +15,7 @@ extension Auth {
   ) async throws {
     let endpoint =
       baseUrlV3
-      .appending(path: "relyingparty/getOobConfirmationCode")
+      .appending(path: "v3/relyingparty/getOobConfirmationCode")
       .appending(queryItems: [.init(name: "key", value: apiKey)])
 
     let body = Body(email: email, continueUrl: continueUrl)
