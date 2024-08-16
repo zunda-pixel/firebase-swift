@@ -24,38 +24,40 @@ extension Firestore {
     )
 
     let (data, _) = try await self.httpClient.execute(for: request, from: nil)
-
-    guard let keyValues = try JSONSerialization.jsonObject(with: data) as? [String: [AnyHashable]]
-    else {
+    let object = try JSONSerialization.jsonObject(with: data)
+    guard let keyValueObject = object as? [String: Any] else {
       throw FirestoreDecodingError.dataCorrupted(
-        [String: [AnyHashable]].self,
-        debugDescription: "\(data) Value type dataCorrupted"
+        [String: Any].self,
+        debugDescription: "\(object) Value type dataCorrupted"
       )
     }
-    guard let documents = keyValues["documents"] else {
-      throw FirestoreDecodingError.missingKey(key: "documents")
+    guard let documents = keyValueObject["documents"] as? [Any]  else {
+      throw FirestoreDecodingError.dataCorrupted(
+        [String: Any].self,
+        debugDescription: "\(keyValueObject) Value type dataCorrupted"
+      )
     }
 
     return try documents.map { document in
-      guard let valuesData = document as? [String: AnyHashable] else {
+      guard let keyValues = document as? [String: Any] else {
         throw FirestoreDecodingError.dataCorrupted(
-          [String: AnyHashable].self,
+          [String: Any].self,
           debugDescription: "\(document) Value type dataCorrupted"
         )
       }
-      guard let fields = valuesData["fields"] else {
+      guard let fields = keyValues["fields"] else {
         throw FirestoreDecodingError.missingKey(key: "fields")
       }
-      guard let fieldsKeyValue = fields as? [String: [String: AnyHashable]] else {
+      guard let fieldsKeyValue = fields as? [String: Any] else {
         throw FirestoreDecodingError.dataCorrupted(
-          [String: [String: AnyHashable]].self,
+          [String: Any].self,
           debugDescription: "\(fields) Value type dataCorrupted"
         )
       }
       let fieldsData = try FirestoreDataConverter.removeNestedValueKey(keyValues: fieldsKeyValue)
       let internalDocument = try self.decode(
         InternalDocument.self,
-        from: try JSONSerialization.data(withJSONObject: document)
+        from: try JSONSerialization.data(withJSONObject: keyValues)
       )
       let model = try decoder.decode(Model.self, from: fieldsData)
       return Document<Model>(
