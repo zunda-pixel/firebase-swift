@@ -9,7 +9,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - run: swift build --build-tests
-    - run: swift test --skip-build --enable-swift-testing --parallel --specifier RemoteConfigTests
+    - run: swift test --skip-build --enable-swift-testing
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         GOOGLE_USER_ID: ${{ secrets.GOOGLE_USER_ID }}
