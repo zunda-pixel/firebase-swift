@@ -14,7 +14,7 @@ actor StreamExecution: NSObject, URLSessionDataDelegate {
   init(
     for request: HTTPRequest,
     from body: Data? = nil,
-    urlSessionConfiguration: URLSessionConfiguration = .default,
+    sessionConfiguration: URLSessionConfiguration = .default,
     handler: @escaping @Sendable (Data) -> Void,
     errorHandler: @escaping @Sendable (any Error) -> Void
   ) {
@@ -24,7 +24,7 @@ actor StreamExecution: NSObject, URLSessionDataDelegate {
     super.init()
 
     let session = URLSession(
-      configuration: urlSessionConfiguration,
+      configuration: sessionConfiguration,
       delegate: self,
       delegateQueue: nil
     )

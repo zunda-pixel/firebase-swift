@@ -33,14 +33,15 @@ extension RemoteConfig {
   }
   
   public func realtimeStream(
-    lastKnownVersionNumber: Int? = nil
+    lastKnownVersionNumber: Int? = nil,
+    sessionConfiguration: URLSessionConfiguration = .default
   ) ->  AsyncThrowingStream<Result<RealtimeRemoteConfigResponse, any Error>, any Error> {
     let (request, body) = self.realtimeRequest(
       lastKnownVersionNumber: lastKnownVersionNumber
     )
     
     return AsyncThrowingStream { continuation in
-      let stream = StreamExecution(for: request, from: body) { data in
+      let stream = StreamExecution(for: request, from: body, sessionConfiguration: sessionConfiguration) { data in
         do {
           var stringData = String(decoding: data, as: UTF8.self)
           stringData.removeFirst() // remove "[" as first
