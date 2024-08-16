@@ -35,6 +35,14 @@ let package = Package(
         .product(name: "HTTPTypes", package: "swift-http-types"),
       ]
     ),
+    .testTarget(
+      name: "AuthTests",
+      dependencies: [
+        .target(name: "Auth"),
+        .product(name: "HTTPClientFoundation", package: "http-client"),
+        .product(name: "Testing", package: "swift-testing"),
+      ]
+    ),
     .target(
       name: "RemoteConfig",
       dependencies: [
