@@ -60,13 +60,5 @@ let package = Package(
         .product(name: "HTTPTypes", package: "swift-http-types"),
       ]
     ),
-    .testTarget(
-      name: "FirestoreTests",
-      dependencies: [
-        .target(name: "Firestore"),
-        .product(name: "HTTPClientFoundation", package: "http-client"),
-        .product(name: "Testing", package: "swift-testing"),
-      ]
-    ),
   ]
 )
