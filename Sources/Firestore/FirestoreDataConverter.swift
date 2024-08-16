@@ -1,7 +1,7 @@
 import Foundation
 
 enum FirestoreDataConverter {
-  static func extractionValue(valueType: ValueType, value: AnyHashable) throws -> AnyHashable {
+  static func extractionValue(valueType: ValueType, value: Any) throws -> AnyHashable {
     switch valueType {
     case .stringValue:
       guard let value = value as? String else {
@@ -58,30 +58,35 @@ enum FirestoreDataConverter {
       }
       return value
     case .arrayValue:
-      guard let keyValues: [AnyHashable] = (value as? [String: [AnyHashable]])?.first?.value else {
+      guard let keyValues: Array<[String: Any]> = ((value as? [String: Any])?["values"] as? Array<[String: Any]>) else {
         throw FirestoreDecodingError.typeMismatch(
-          Array<AnyHashable>.self,
+          Array<[String: Any]>.self,
           debugDescription: "\(value) Value type mismatch"
         )
       }
       return try keyValues.map { keyValues in
-        guard let keyValues = (keyValues as? [String: AnyHashable])?.first else {
-          throw FirestoreDecodingError.dataCorrupted(
-            [String: AnyHashable].self,
-            debugDescription: "\(value) Value type dataCorrupted"
+        guard let keyValue = keyValues.first else {
+          throw FirestoreDecodingError.missingData(
+            debugDescription: "\(keyValues) missing data"
           )
         }
+
         return try extractionValue(
-          valueType: ValueType(rawValue: keyValues.key)!,
-          value: keyValues.value
+          valueType: ValueType(rawValue: keyValue.key)!,
+          value: keyValue.value
         )
       }
     }
   }
 
-  static func removeNestedValueKey(keyValues: [String: [String: AnyHashable]]) throws -> Data {
+  static func removeNestedValueKey(keyValues: [String: Any]) throws -> Data {
     let objects: [(String, AnyHashable)] = try keyValues.map { key, objects in
-      let object = objects.first!
+      guard let object = (objects as? [String: Any])?.first else {
+        throw FirestoreDecodingError.dataCorrupted(
+          [String: Any].self,
+          debugDescription: "\(keyValues) missing data"
+        )
+      }
       return try (
         key,
         extractionValue(
