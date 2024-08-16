@@ -93,8 +93,9 @@ func decodeNestModel() async throws {
     }
     """
 
-  let keyValues =
-    try JSONSerialization.jsonObject(with: Data(json.utf8)) as! [String: [String: AnyHashable]]
+  let keyValues = try JSONSerialization.jsonObject(
+    with: Data(json.utf8)
+  ) as! [String: [String: AnyHashable]]
   let data = try FirestoreDataConverter.removeNestedValueKey(keyValues: keyValues)
 
   let book = try JSONDecoder().decode(Book.self, from: data)
