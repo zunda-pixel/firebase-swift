@@ -1,7 +1,7 @@
-import Testing
-import RemoteConfig
 import Foundation
 import HTTPClientFoundation
+import RemoteConfig
+import Testing
 
 let apiKey = ProcessInfo.processInfo.environment["FIREBASE_API_TOKEN"]!
 let projectId = ProcessInfo.processInfo.environment["FIREBASE_PROJECT_ID"]!
@@ -26,14 +26,16 @@ func fetch() async throws {
   #expect(response.entries.keys.contains("parameterJson"))
 }
 
-@Test
-func realtimeStream() async throws {
-  for try await result in client.realtimeStream() {
-    _ = try result.get()
-    let remoteConfig = try await client.fetch()
-    #expect(remoteConfig.entries.keys.contains("parameterBool"))
-    #expect(remoteConfig.entries.keys.contains("parameterInt"))
-    #expect(remoteConfig.entries.keys.contains("parameterString"))
-    #expect(remoteConfig.entries.keys.contains("parameterJson"))
+#if canImport(ObjectiveC)
+  @Test
+  func realtimeStream() async throws {
+    for try await result in client.realtimeStream() {
+      _ = try result.get()
+      let remoteConfig = try await client.fetch()
+      #expect(remoteConfig.entries.keys.contains("parameterBool"))
+      #expect(remoteConfig.entries.keys.contains("parameterInt"))
+      #expect(remoteConfig.entries.keys.contains("parameterString"))
+      #expect(remoteConfig.entries.keys.contains("parameterJson"))
+    }
   }
-}
+#endif

@@ -10,20 +10,20 @@ extension Firestore {
     let endpoint =
       baseUrl
       .appending(path: path)
-    
+
     let request = HTTPRequest(
       method: .get,
       url: endpoint,
       headerFields: [
         .contentType: "application/json",
-        .authorization: "Bearer \(self.oauthApiKey)"
+        .authorization: "Bearer \(self.oauthApiKey)",
       ]
     )
-    
+
     let (data, _) = try await self.httpClient.execute(for: request, from: nil)
 
     let response = try self.decode(Database.self, from: data)
-    
+
     return response
   }
 }
@@ -53,19 +53,21 @@ public struct Database: Sendable, Hashable, Codable {
     if let createTime = formatter.date(from: createTime) {
       self.createTime = createTime
     } else {
-      throw DecodingError.dataCorrupted(.init(
-        codingPath: [CodingKeys.createTime],
-        debugDescription: "Invalid date format: \(createTime)"
-      ))
+      throw DecodingError.dataCorrupted(
+        .init(
+          codingPath: [CodingKeys.createTime],
+          debugDescription: "Invalid date format: \(createTime)"
+        ))
     }
     let updateTime = try container.decode(String.self, forKey: .updateTime)
     if let updateTime = formatter.date(from: updateTime) {
       self.updateTime = updateTime
     } else {
-      throw DecodingError.dataCorrupted(.init(
-        codingPath: [CodingKeys.updateTime],
-        debugDescription: "Invalid date format: \(updateTime)"
-      ))
+      throw DecodingError.dataCorrupted(
+        .init(
+          codingPath: [CodingKeys.updateTime],
+          debugDescription: "Invalid date format: \(updateTime)"
+        ))
     }
     self.locationId = try container.decode(String.self, forKey: .locationId)
     self.type = try container.decode(String.self, forKey: .type)
@@ -75,14 +77,24 @@ public struct Database: Sendable, Hashable, Codable {
     if let earliestVersionTime = formatter.date(from: earliestVersionTime) {
       self.earliestVersionTime = earliestVersionTime
     } else {
-      throw DecodingError.dataCorrupted(.init(
-        codingPath: [CodingKeys.earliestVersionTime],
-        debugDescription: "Invalid date format: \(earliestVersionTime)"
-      ))
+      throw DecodingError.dataCorrupted(
+        .init(
+          codingPath: [CodingKeys.earliestVersionTime],
+          debugDescription: "Invalid date format: \(earliestVersionTime)"
+        ))
     }
-    self.appEngineIntegrationMode = try container.decode(String.self, forKey: .appEngineIntegrationMode)
-    self.pointInTimeRecoveryEnablement = try container.decode(String.self, forKey: .pointInTimeRecoveryEnablement)
-    self.deleteProtectionState = try container.decode(String.self, forKey: .deleteProtectionState)
+    self.appEngineIntegrationMode = try container.decode(
+      String.self,
+      forKey: .appEngineIntegrationMode
+    )
+    self.pointInTimeRecoveryEnablement = try container.decode(
+      String.self,
+      forKey: .pointInTimeRecoveryEnablement
+    )
+    self.deleteProtectionState = try container.decode(
+      String.self,
+      forKey: .deleteProtectionState
+    )
     self.etag = try container.decode(String.self, forKey: .etag)
   }
 }

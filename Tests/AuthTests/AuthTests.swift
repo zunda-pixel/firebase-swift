@@ -153,7 +153,7 @@ func linkEmail() async throws {
   try await client.sendEmailVerification(
     idToken: response.idToken
   )
-  
+
   try await client.confirmEmailVerification(oobCode: "code")
 
   try await client.linkEmail(
