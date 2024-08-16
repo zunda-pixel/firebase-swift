@@ -48,6 +48,9 @@ let package = Package(
       dependencies: [
         .product(name: "HTTPClient", package: "http-client"),
         .product(name: "HTTPTypes", package: "swift-http-types"),
+      ],
+      exclude: [
+        "README.md",
       ]
     ),
     .testTarget(
