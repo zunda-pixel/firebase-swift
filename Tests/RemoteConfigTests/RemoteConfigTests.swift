@@ -1,7 +1,7 @@
-import Testing
-import RemoteConfig
 import Foundation
 import HTTPClientFoundation
+import RemoteConfig
+import Testing
 
 let apiKey = ProcessInfo.processInfo.environment["FIREBASE_API_TOKEN"]!
 let projectId = ProcessInfo.processInfo.environment["FIREBASE_PROJECT_ID"]!

@@ -11,21 +11,22 @@ extension Firestore {
   ) async throws -> [Document<Model>] {
     let path = "v1/projects/\(self.projectName)/databases/\(databaseId)/documents/\(documentId)"
     let endpoint =
-    baseUrl
+      baseUrl
       .appending(path: path)
-    
+
     let request = HTTPRequest(
       method: .get,
       url: endpoint,
       headerFields: [
         .contentType: "application/json",
-        .authorization: "Bearer \(self.oauthApiKey)"
+        .authorization: "Bearer \(self.oauthApiKey)",
       ]
     )
-    
+
     let (data, _) = try await self.httpClient.execute(for: request, from: nil)
 
-    guard let keyValues =  try JSONSerialization.jsonObject(with: data) as? [String: [AnyHashable]] else {
+    guard let keyValues = try JSONSerialization.jsonObject(with: data) as? [String: [AnyHashable]]
+    else {
       throw FirestoreDecodingError.dataCorrupted(
         [String: [AnyHashable]].self,
         debugDescription: "\(data) Value type dataCorrupted"
@@ -75,7 +76,7 @@ private struct InternalDocument: Decodable {
   var name: String
   var createTime: Date
   var updateTime: Date
-  
+
   enum CodingKeys: CodingKey {
     case name
     case createTime
@@ -93,19 +94,21 @@ private struct InternalDocument: Decodable {
     if let createTime = formatter.date(from: createTime) {
       self.createTime = createTime
     } else {
-      throw DecodingError.dataCorrupted(.init(
-        codingPath: [CodingKeys.createTime],
-        debugDescription: "Invalid date format: \(createTime)"
-      ))
+      throw DecodingError.dataCorrupted(
+        .init(
+          codingPath: [CodingKeys.createTime],
+          debugDescription: "Invalid date format: \(createTime)"
+        ))
     }
     let updateTime = try container.decode(String.self, forKey: .updateTime)
     if let updateTime = formatter.date(from: updateTime) {
       self.updateTime = updateTime
     } else {
-      throw DecodingError.dataCorrupted(.init(
-        codingPath: [CodingKeys.updateTime],
-        debugDescription: "Invalid date format: \(updateTime)"
-      ))
+      throw DecodingError.dataCorrupted(
+        .init(
+          codingPath: [CodingKeys.updateTime],
+          debugDescription: "Invalid date format: \(updateTime)"
+        ))
     }
   }
 }

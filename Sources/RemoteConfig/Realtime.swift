@@ -7,7 +7,8 @@ extension RemoteConfig {
     lastKnownVersionNumber: Int? = nil
   ) -> (request: HTTPRequest, body: Data) {
     let path = "/projects/\(self.projectId)/namespaces/firebase:streamFetchInvalidations"
-    let endpoint = realtimeBaseUrl
+    let endpoint =
+      realtimeBaseUrl
       .appending(path: path)
       .appending(queryItems: [.init(name: "key", value: self.apiKey)])
 
@@ -24,11 +25,11 @@ extension RemoteConfig {
       "project": self.projectId,
       "namespace": "firebase",
       "lastKnownVersionNumber": lastKnownVersionNumber.map { String($0) },
-      "appId": self.appId
+      "appId": self.appId,
     ].compactMapValues { $0 }
-    
+
     let bodyData = try! JSONEncoder().encode(body)
-    
+
     return (request, bodyData)
   }
 }
@@ -38,16 +39,18 @@ extension RemoteConfig {
     public func realtimeStream(
       lastKnownVersionNumber: Int? = nil,
       sessionConfiguration: URLSessionConfiguration = .default
-    ) ->  AsyncThrowingStream<Result<RealtimeRemoteConfigResponse, any Error>, any Error> {
+    ) -> AsyncThrowingStream<Result<RealtimeRemoteConfigResponse, any Error>, any Error> {
       let (request, body) = self.realtimeRequest(
         lastKnownVersionNumber: lastKnownVersionNumber
       )
-      
+
       return AsyncThrowingStream { continuation in
-        let stream = StreamExecution(for: request, from: body, sessionConfiguration: sessionConfiguration) { data in
+        let stream = StreamExecution(
+          for: request, from: body, sessionConfiguration: sessionConfiguration
+        ) { data in
           do {
             var stringData = String(decoding: data, as: UTF8.self)
-            stringData.removeFirst() // Firebase Bug: remove "[" as first
+            stringData.removeFirst()  // Firebase Bug: remove "[" as first
             let response = try self.decode(
               RealtimeRemoteConfigResponse.self,
               from: Data(stringData.utf8)

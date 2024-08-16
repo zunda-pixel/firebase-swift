@@ -78,8 +78,8 @@ enum FirestoreDataConverter {
       }
     }
   }
-  
-  static func removeNestedValueKey(keyValues: [String: [String: AnyHashable]]) throws -> Data {    
+
+  static func removeNestedValueKey(keyValues: [String: [String: AnyHashable]]) throws -> Data {
     let objects: [(String, AnyHashable)] = try keyValues.map { key, objects in
       let object = objects.first!
       return try (
@@ -90,11 +90,12 @@ enum FirestoreDataConverter {
         )
       )
     }
-    
-    let result: [String: AnyHashable] = objects.reduce(into: [String: AnyHashable]()) { partialResult, keyValue in
+
+    let result: [String: AnyHashable] = objects.reduce(into: [String: AnyHashable]()) {
+      partialResult, keyValue in
       partialResult[keyValue.0] = keyValue.1
     }
-    
+
     return try JSONSerialization.data(withJSONObject: result)
   }
 }

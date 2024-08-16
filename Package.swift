@@ -20,7 +20,7 @@ let package = Package(
     .library(
       name: "Firestore",
       targets: ["Firestore"]
-    )
+    ),
   ],
   dependencies: [
     .package(url: "https://github.com/apple/swift-http-types", from: "1.3.0"),
@@ -50,7 +50,7 @@ let package = Package(
         .product(name: "HTTPTypes", package: "swift-http-types"),
       ],
       exclude: [
-        "README.md",
+        "README.md"
       ]
     ),
     .testTarget(

@@ -2,7 +2,7 @@ import Foundation
 import HTTPTypes
 
 #if canImport(FoundationNetworking)
-import FoundationNetworking
+  import FoundationNetworking
 #endif
 
 #if canImport(ObjectiveC)
@@ -43,11 +43,19 @@ import FoundationNetworking
       task.resume()
     }
 
-    nonisolated func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive data: Data) {
+    nonisolated func urlSession(
+      _ session: URLSession,
+      dataTask: URLSessionDataTask,
+      didReceive data: Data
+    ) {
       handler(data)
     }
 
-    nonisolated public func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: (any Error)?) {
+    nonisolated public func urlSession(
+      _ session: URLSession,
+      task: URLSessionTask,
+      didCompleteWithError error: (any Error)?
+    ) {
       guard let error else { return }
       errorHandle(error)
     }

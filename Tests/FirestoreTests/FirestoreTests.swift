@@ -1,9 +1,10 @@
-@testable import Firestore
 import Foundation
 import HTTPClient
 import HTTPClientFoundation
 import HTTPTypes
 import Testing
+
+@testable import Firestore
 
 let oauthApiKey = ProcessInfo.processInfo.environment["FIREBASE_OAUTH_TOKEN"]!
 let projectName = ProcessInfo.processInfo.environment["FIREBASE_PROJECT_NAME"]!
@@ -15,18 +16,18 @@ let client = Firestore(
 )
 
 @Test
-func database() async throws{
+func database() async throws {
   _ = try await client.database(databaseId: "tekitou123")
 }
 
 @Test
-func documents() async throws{
+func documents() async throws {
   let documents = try await client.documents(
     databaseId: "tekitou123",
     documentId: "books",
     as: Book.self
   )
-  
+
   let document = try #require(documents.first)
   let book = document.model
 
@@ -58,45 +59,46 @@ struct Location: Codable, Hashable {
 @Test
 func decodeNestModel() async throws {
   let json = """
-{
-  "fruits": {
-    "arrayValue": {
-      "values": [
-        {
-          "stringValue": "mikan"
-        },
-        {
-          "stringValue": "orange"
+    {
+      "fruits": {
+        "arrayValue": {
+          "values": [
+            {
+              "stringValue": "mikan"
+            },
+            {
+              "stringValue": "orange"
+            }
+          ]
         }
-      ]
+      },
+      "location": {
+        "geoPointValue": {
+          "latitude": 33,
+          "longitude": 44
+        }
+      },
+      "age": {
+        "integerValue": "123"
+      },
+      "name": {
+        "stringValue": "Book1"
+      },
+      "disabled": {
+        "booleanValue": false
+      },
+      "birthday": {
+        "timestampValue": "2024-08-20T15:00:00.409Z"
+      }
     }
-  },
-  "location": {
-    "geoPointValue": {
-      "latitude": 33,
-      "longitude": 44
-    }
-  },
-  "age": {
-    "integerValue": "123"
-  },
-  "name": {
-    "stringValue": "Book1"
-  },
-  "disabled": {
-    "booleanValue": false
-  },
-  "birthday": {
-    "timestampValue": "2024-08-20T15:00:00.409Z"
-  }
-}
-"""
-  
-  let keyValues = try JSONSerialization.jsonObject(with: Data(json.utf8)) as! [String: [String: AnyHashable]]
+    """
+
+  let keyValues =
+    try JSONSerialization.jsonObject(with: Data(json.utf8)) as! [String: [String: AnyHashable]]
   let data = try FirestoreDataConverter.removeNestedValueKey(keyValues: keyValues)
-    
+
   let book = try JSONDecoder().decode(Book.self, from: data)
-  
+
   #expect(book.name == "Book1")
   #expect(book.age == 123)
   #expect(book.disabled == false)
