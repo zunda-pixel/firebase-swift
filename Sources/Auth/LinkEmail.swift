@@ -24,7 +24,7 @@ extension Auth {
     email: String,
     password: String
   ) async throws -> LinkEmailResponse {
-    let path = "accounts:update"
+    let path = "v1/accounts:update"
     let endpoint =
       baseUrlV1
       .appending(path: path)

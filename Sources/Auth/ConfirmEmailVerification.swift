@@ -16,7 +16,7 @@ extension Auth {
   public func confirmEmailVerification(
     oobCode: String
   ) async throws -> ConfirmEmailVerificationResponse {
-    let path = "accounts:update"
+    let path = "v1/accounts:update"
     let endpoint =
       baseUrlV1
       .appending(path: path)

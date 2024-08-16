@@ -20,7 +20,7 @@ extension Auth {
     email: String,
     locale: String? = nil
   ) async throws -> SendEmailToResetPasswordResponse {
-    let path = "accounts:sendOobCode"
+    let path = "v1/accounts:sendOobCode"
     let endpoint =
       baseUrlV1
       .appending(path: path)

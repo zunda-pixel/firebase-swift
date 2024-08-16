@@ -13,7 +13,7 @@ extension Auth {
   /// - Parameter idToken: The Firebase ID token of the account.
   /// - Returns: ``UserResponse``
   public func user(idToken: String) async throws -> UserResponse {
-    let path = "accounts:lookup"
+    let path = "v1/accounts:lookup"
     let endpoint =
       baseUrlV1
       .appending(path: path)

@@ -20,7 +20,7 @@ extension Auth {
     oobCode: String,
     newPassword password: String
   ) async throws -> ResetPasswordResponse {
-    let path = "accounts:resetPassword"
+    let path = "v1/accounts:resetPassword"
     let endpoint =
       baseUrlV1
       .appending(path: path)

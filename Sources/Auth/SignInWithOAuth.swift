@@ -52,7 +52,7 @@ extension Auth {
     requestUri: URL,
     provider: OAuth2Provider
   ) async throws -> SignInWithOAuth {
-    let path = "accounts:signInWithIdp"
+    let path = "v1/accounts:signInWithIdp"
     let endpoint =
       baseUrlV1
       .appending(path: path)

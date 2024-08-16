@@ -13,7 +13,7 @@ extension Auth {
   /// - Returns: ``SignUpAnonymousResponse``
   @discardableResult
   public func signUpAnonymous() async throws -> SignUpAnonymousResponse {
-    let path = "accounts:signUp"
+    let path = "v1/accounts:signUp"
     let endpoint =
       baseUrlV1
       .appending(path: path)

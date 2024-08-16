@@ -15,7 +15,7 @@ extension Auth {
   /// - Returns: ``DeleteAccountResponse``
   @discardableResult
   public func deleteAccount(idToken: String) async throws -> DeleteAccountResponse {
-    let path = "accounts:delete"
+    let path = "v1/accounts:delete"
     let endpoint =
       baseUrlV1
       .appending(path: path)

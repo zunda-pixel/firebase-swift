@@ -20,7 +20,7 @@ extension Auth {
     idToken: String,
     locale: String? = nil
   ) async throws -> SendEmailVerificationResponse {
-    let path = "accounts:sendOobCode"
+    let path = "v1/accounts:sendOobCode"
     let endpoint =
       baseUrlV1
       .appending(path: path)

@@ -20,7 +20,7 @@ extension Auth {
     idToken: String,
     deleteProviders: [String]
   ) async throws -> UnLinkProviderResponse {
-    let path = "accounts:update"
+    let path = "v1/accounts:update"
     let endpoint =
       baseUrlV1
       .appending(path: path)

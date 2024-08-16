@@ -18,7 +18,7 @@ extension Auth {
   /// - Returns: ``SignUpResponse``
   @discardableResult
   public func signUp(email: String, password: String) async throws -> SignUpResponse {
-    let path = "accounts:signUp"
+    let path = "v1/accounts:signUp"
     let endpoint =
       baseUrlV1
       .appending(path: path)

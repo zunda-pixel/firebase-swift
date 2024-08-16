@@ -19,7 +19,7 @@ extension Auth {
   /// - Parameter refreshToken: A Firebase Auth refresh token.
   /// - Returns: ``RefreshTokenResponse``
   public func refreshToken(refreshToken: String) async throws -> RefreshTokenResponse {
-    let path = "token"
+    let path = "v1/token"
     let endpoint =
       baseUrlV1
       .appending(path: path)

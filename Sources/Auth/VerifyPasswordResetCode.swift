@@ -15,7 +15,7 @@ extension Auth {
   public func verifyResetPasswordCode(
     oobCode: String
   ) async throws -> VerifyResetPasswordCodeResponse {
-    let path = "accounts:resetPassword"
+    let path = "v1/accounts:resetPassword"
     let endpoint =
       baseUrlV1
       .appending(path: path)

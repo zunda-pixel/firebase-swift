@@ -49,7 +49,7 @@ extension Auth {
     idToken: String,
     profile: UpdateProfile
   ) async throws -> UpdateProfileResponse {
-    let path = "accounts:update"
+    let path = "v1/accounts:update"
     let endpoint =
       baseUrlV1
       .appending(path: path)
