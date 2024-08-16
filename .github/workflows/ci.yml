@@ -12,8 +12,12 @@ jobs:
     - run: swift test --skip-build --enable-swift-testing --parallel
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        FIREBASE_API_TOKEN: ${{ secrets.FIREBASE_API_TOKEN }}
         GOOGLE_USER_ID: ${{ secrets.GOOGLE_USER_ID }}
+        FIREBASE_API_TOKEN: ${{ secrets.FIREBASE_API_TOKEN }}
+        FIREBASE_OAUTH_TOKEN: ${{ secrets.FIREBASE_OAUTH_TOKEN }}
+        FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
+        FIREBASE_PROJECT_NAME: ${{ secrets.FIREBASE_PROJECT_NAME }}
+        FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID }}
   lint:
     runs-on: ubuntu-latest
     container: swiftlang/swift:nightly-6.0-jammy
