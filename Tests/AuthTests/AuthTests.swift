@@ -66,7 +66,7 @@ func signUp() async throws {
 }
 
 @Test
-func signIn() async throws {
+func verifyPassword() async throws {
   let email = "\(googleUserID)+\(UUID())@gmail.com"
   let password = "password123"
 
@@ -75,7 +75,7 @@ func signIn() async throws {
     password: password
   )
 
-  try await client.signIn(
+  try await client.verifyPassword(
     email: email,
     password: password
   )
@@ -101,7 +101,7 @@ func sendEmailVerification() async throws {
   let email = "\(googleUserID)+\(UUID())@gmail.com"
   let password = "password123"
 
-  let response = try await client.signUp(
+  let response = try await client.verifyPassword(
     email: email,
     password: password
   )
@@ -301,7 +301,7 @@ func resetPassword() async throws {
     newPassword: newPassword
   )
 
-  try await client.signIn(
+  try await client.verifyPassword(
     email: response.email,
     password: newPassword
   )

@@ -6,25 +6,34 @@ extension Auth {
   private struct Body: Sendable, Hashable, Codable {
     var email: String
     var password: String
-    var returnSecureToken: Bool = true
+    var returnSecureToken: Bool
   }
-
-  /// Sign in with email / password
-  /// You can sign in a user with an email and password by issuing an HTTP POST request to the Auth verifyPassword endpoint.
-  /// https://firebase.google.com/docs/reference/rest/auth#section-sign-in-email-password
+  
+  /// Change email
+  /// You can change a user's email by issuing an HTTP POST request to the Auth setAccountInfo endpoint.
   /// - Parameters:
   ///   - email: The email the user is signing in with.
   ///   - password: The password for the account.
-  /// - Returns: ``SignInResponse``
+  ///   - returnSecureToken: Whether or not to return an ID and refresh token.
+  /// - Returns: ``UpdateEmailResponse``
   @discardableResult
-  public func signIn(email: String, password: String) async throws -> SignInResponse {
-    let path = "v1/accounts:signInWithPassword"
+  public func verifyPassword(
+    email: String,
+    password: String,
+    returnSecureToken: Bool = true
+  ) async throws -> VerifyPasswordResponse {
+    let path = "v3/relyingparty/verifyPassword"
     let endpoint =
-      baseUrlV1
+    baseUrlV3
       .appending(path: path)
       .appending(queryItems: [.init(name: "key", value: apiKey)])
 
-    let body = Body(email: email, password: password)
+    let body = Body(
+      email: email,
+      password: password,
+      returnSecureToken: returnSecureToken
+    )
+
     let bodyData = try! JSONEncoder().encode(body)
 
     let request = HTTPRequest(
@@ -35,13 +44,13 @@ extension Auth {
 
     let (data, _) = try await self.httpClient.execute(for: request, from: bodyData)
 
-    let response = try self.decode(SignInResponse.self, from: data)
+    let response = try self.decode(VerifyPasswordResponse.self, from: data)
 
     return response
   }
 }
 
-public struct SignInResponse: Sendable, Hashable, Codable {
+public struct VerifyPasswordResponse: Sendable, Hashable, Codable {
   public var idToken: String
   public var email: String
   public var expiresIn: Int
@@ -51,7 +60,7 @@ public struct SignInResponse: Sendable, Hashable, Codable {
   public var displayName: String
 
   public init(from decoder: any Decoder) throws {
-    let container = try decoder.container(keyedBy: SignInResponse.CodingKeys.self)
+    let container = try decoder.container(keyedBy: CodingKeys.self)
     self.idToken = try container.decode(String.self, forKey: .idToken)
     self.email = try container.decode(String.self, forKey: .email)
     let expiresInString = try container.decode(String.self, forKey: .expiresIn)
