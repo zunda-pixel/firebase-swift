@@ -6,11 +6,6 @@ extension Auth {
   private struct Body: Sendable, Hashable, Codable {
     var grantType: String = "refresh_token"
     var refreshToken: String
-
-    private enum CodingKeys: String, CodingKey {
-      case grantType = "grant_type"
-      case refreshToken = "refresh_token"
-    }
   }
 
   /// Exchange a refresh token for an ID token
@@ -21,7 +16,7 @@ extension Auth {
   public func refreshToken(refreshToken: String) async throws -> RefreshTokenResponse {
     let path = "v1/token"
     let endpoint =
-      baseUrlV1
+    baseUrlSecure
       .appending(path: path)
       .appending(queryItems: [.init(name: "key", value: apiKey)])
 
