@@ -50,8 +50,8 @@ func signUpFromEmailLink() async throws {
 }
 
 @Test
-func signUpAnonymous() async throws {
-  try await client.signUpAnonymous()
+func createAnonymousUser() async throws {
+  try await client.createAnonymousUser()
 }
 
 @Test
