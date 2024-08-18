@@ -101,7 +101,7 @@ func sendEmailVerification() async throws {
   let email = "\(googleUserID)+\(UUID())@gmail.com"
   let password = "password123"
 
-  let response = try await client.verifyPassword(
+  let response = try await client.createUser(
     email: email,
     password: password
   )
