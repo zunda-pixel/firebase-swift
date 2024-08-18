@@ -43,7 +43,7 @@ func signUpFromEmailLink() async throws {
     oobCode: oobCode
   )
 
-  try await client.signUp(
+  try await client.createUser(
     email: email,
     password: newPassword
   )
@@ -55,11 +55,11 @@ func createAnonymousUser() async throws {
 }
 
 @Test
-func signUp() async throws {
+func createUser() async throws {
   let email = "\(googleUserID)+\(UUID())@gmail.com"
   let password = "password123"
 
-  try await client.signUp(
+  try await client.createUser(
     email: email,
     password: password
   )
@@ -70,7 +70,7 @@ func verifyPassword() async throws {
   let email = "\(googleUserID)+\(UUID())@gmail.com"
   let password = "password123"
 
-  try await client.signUp(
+  try await client.createUser(
     email: email,
     password: password
   )
@@ -86,7 +86,7 @@ func refreshToken() async throws {
   let email = "\(googleUserID)+\(UUID())@gmail.com"
   let password = "password123"
 
-  let response = try await client.signUp(
+  let response = try await client.createUser(
     email: email,
     password: password
   )
@@ -116,7 +116,7 @@ func deleteAccount() async throws {
   let email = "\(googleUserID)+\(UUID())@gmail.com"
   let password = "password123"
 
-  let response1 = try await client.signUp(
+  let response1 = try await client.createUser(
     email: email,
     password: password
   )
@@ -131,7 +131,7 @@ func unLinkProvider() async throws {
   let email = "\(googleUserID)+\(UUID())@gmail.com"
   let password = "password123"
 
-  let response1 = try await client.signUp(
+  let response1 = try await client.createUser(
     email: email,
     password: password
   )
@@ -168,7 +168,7 @@ func user() async throws {
   let email = "\(googleUserID)+\(UUID())@gmail.com"
   let password = "password123"
 
-  let response = try await client.signUp(
+  let response = try await client.createUser(
     email: email,
     password: password
   )
@@ -199,7 +199,7 @@ func updateProfile() async throws {
   let email = "\(googleUserID)+\(UUID())@gmail.com"
   let password = "password123"
 
-  let response = try await client.signUp(
+  let response = try await client.createUser(
     email: email,
     password: password
   )
@@ -225,7 +225,7 @@ func deleteDisplayName() async throws {
   let email = "\(googleUserID)+\(UUID())@gmail.com"
   let password = "password123"
 
-  let response = try await client.signUp(
+  let response = try await client.createUser(
     email: email,
     password: password
   )
@@ -247,7 +247,7 @@ func deletePhotoUrl() async throws {
   let email = "\(googleUserID)+\(UUID())@gmail.com"
   let password = "password123"
 
-  let response1 = try await client.signUp(
+  let response1 = try await client.createUser(
     email: email,
     password: password
   )
@@ -277,7 +277,7 @@ func sendEmailToResetPassword() async throws {
   let email = "\(googleUserID)+\(UUID())@gmail.com"
   let password = "password123"
 
-  try await client.signUp(
+  try await client.createUser(
     email: email,
     password: password
   )

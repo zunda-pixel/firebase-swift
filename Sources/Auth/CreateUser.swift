@@ -17,10 +17,13 @@ extension Auth {
   ///   - password: The password for the user to create.
   /// - Returns: ``SignUpResponse``
   @discardableResult
-  public func signUp(email: String, password: String) async throws -> SignUpResponse {
-    let path = "v1/accounts:signUp"
+  public func createUser(
+    email: String,
+    password: String
+  ) async throws -> CreateUserResponse {
+    let path = "v3/relyingparty/signupNewUser"
     let endpoint =
-      baseUrlV1
+    baseUrlV3
       .appending(path: path)
       .appending(queryItems: [.init(name: "key", value: apiKey)])
 
@@ -35,13 +38,13 @@ extension Auth {
 
     let (data, _) = try await self.httpClient.execute(for: request, from: bodyData)
 
-    let response = try self.decode(SignUpResponse.self, from: data)
+    let response = try self.decode(CreateUserResponse.self, from: data)
 
     return response
   }
 }
 
-public struct SignUpResponse: Sendable, Hashable, Codable {
+public struct CreateUserResponse: Sendable, Hashable, Codable {
   public var idToken: String
   public var email: String
   public var expiresIn: Int
@@ -49,7 +52,7 @@ public struct SignUpResponse: Sendable, Hashable, Codable {
   public var localId: String
 
   public init(from decoder: any Decoder) throws {
-    let container = try decoder.container(keyedBy: SignUpResponse.CodingKeys.self)
+    let container = try decoder.container(keyedBy: CodingKeys.self)
     self.idToken = try container.decode(String.self, forKey: .idToken)
     self.email = try container.decode(String.self, forKey: .email)
     let expiresInString = try container.decode(String.self, forKey: .expiresIn)
