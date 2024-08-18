@@ -24,6 +24,23 @@ let client = Auth(
 )
 
 @Test
+func sendEmailToUpdateEmail() async throws {
+  let oldEmail = "\(googleUserID)+\(UUID())@gmail.com"
+  let newEmail = "\(googleUserID)+\(UUID())@gmail.com"
+  let password = "password123"
+  
+  let user = try await client.createUser(
+    email: oldEmail,
+    password: password
+  )
+
+  try await client.sendEmailToUpdateEmail(
+    idToken: user.idToken,
+    newEmail: newEmail
+  )
+}
+
+@Test
 func sendSignUpLinkForURL() async throws {
   let email = "\(googleUserID)+\(UUID())@gmail.com"
   let continueUrl = URL(string: "http://localhost")!
