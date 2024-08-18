@@ -16,12 +16,13 @@ extension Auth {
       }
     }
 
-    var provider: OAuth2Provider
+    var provider: OAuthProvider
     /// Whether or not to return an ID and refresh token. Should always be true.
     var returnSecureToken = true
 
     /// Whether to force the return of the OAuth credential on the following errors: FEDERATED_USER_ID_ALREADY_LINKED and EMAIL_EXISTS.
     var returnIdpCredential: Bool
+    // autoCreate: Bool = true
 
     private enum CodingKeys: CodingKey {
       case requestUri
@@ -46,15 +47,15 @@ extension Auth {
   ///   - requestUri: The URI to which the IDP redirects the user back.
   ///   - provider: The Provider ID which issues the credential.
   ///   - accessToken: Access Token
-  /// - Returns: ``SignInWithOAuth``
+  /// - Returns: ``OAuthResponse``
   @discardableResult
-  public func signInWithOAuth(
+  public func createUserOrGetOAuth(
     requestUri: URL,
-    provider: OAuth2Provider
-  ) async throws -> SignInWithOAuth {
-    let path = "v1/accounts:signInWithIdp"
+    provider: OAuthProvider
+  ) async throws -> OAuthResponse {
+    let path = "v3/relyingparty/verifyAssertion"
     let endpoint =
-      baseUrlV1
+      baseUrlV3
       .appending(path: path)
       .appending(queryItems: [.init(name: "key", value: apiKey)])
 
@@ -74,13 +75,13 @@ extension Auth {
 
     let (data, _) = try await self.httpClient.execute(for: request, from: bodyData)
 
-    let response = try self.decode(SignInWithOAuth.self, from: data)
+    let response = try self.decode(OAuthResponse.self, from: data)
 
     return response
   }
 }
 
-public enum OAuth2Provider: Sendable, Hashable, Codable {
+public enum OAuthProvider: Sendable, Hashable, Codable {
   case github(accessToken: String)
   case google(id_token: String)
 
@@ -92,7 +93,7 @@ public enum OAuth2Provider: Sendable, Hashable, Codable {
   }
 }
 
-public struct SignInWithOAuth: Sendable, Hashable, Codable {
+public struct OAuthResponse: Sendable, Hashable, Codable {
   public var federatedId: String
   public var providerId: String
   public var emailVerified: Bool
