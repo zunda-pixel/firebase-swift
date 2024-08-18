@@ -6,21 +6,20 @@ extension Auth {
   private struct Body: Sendable, Hashable, Codable {
     var email: String
     var password: String
-    var returnSecureToken: Bool
+    var returnSecureToken: Bool = true
   }
   
-  /// Change email
-  /// You can change a user's email by issuing an HTTP POST request to the Auth setAccountInfo endpoint.
+  /// Sign in with email / password
+  /// You can sign in a user with an email and password by issuing an HTTP POST request to the Auth verifyPassword endpoint.
+  /// https://firebase.google.com/docs/reference/rest/auth#section-sign-in-email-password
   /// - Parameters:
   ///   - email: The email the user is signing in with.
   ///   - password: The password for the account.
-  ///   - returnSecureToken: Whether or not to return an ID and refresh token.
-  /// - Returns: ``UpdateEmailResponse``
+  /// - Returns: ``VerifyPasswordResponse``
   @discardableResult
   public func verifyPassword(
     email: String,
-    password: String,
-    returnSecureToken: Bool = true
+    password: String
   ) async throws -> VerifyPasswordResponse {
     let path = "v3/relyingparty/verifyPassword"
     let endpoint =
@@ -30,8 +29,7 @@ extension Auth {
 
     let body = Body(
       email: email,
-      password: password,
-      returnSecureToken: returnSecureToken
+      password: password
     )
 
     let bodyData = try! JSONEncoder().encode(body)
