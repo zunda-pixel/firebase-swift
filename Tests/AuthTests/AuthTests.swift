@@ -135,18 +135,12 @@ func deleteAccount() async throws {
   )
 }
 
-@Test
+@Test(.enabled(if: emailRequired), .tags(.emailRequired))
 func unLinkProvider() async throws {
-  let email = "\(googleUserID)+\(UUID())@gmail.com"
-  let password = "password123"
-
-  let response1 = try await client.createUser(
-    email: email,
-    password: password
-  )
+  let idToken = "<#ID_TOKNE#>"
 
   try await client.unLinkEmail(
-    idToken: response1.idToken,
+    idToken: idToken,
     deleteProviders: ["password"]
   )
 }

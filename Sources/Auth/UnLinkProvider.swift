@@ -20,9 +20,9 @@ extension Auth {
     idToken: String,
     deleteProviders: [String]
   ) async throws -> UnLinkProviderResponse {
-    let path = "v1/accounts:update"
+    let path = "v3/relyingparty/setAccountInfo"
     let endpoint =
-      baseUrlV1
+      baseUrlV3
       .appending(path: path)
       .appending(queryItems: [.init(name: "key", value: apiKey)])
 
