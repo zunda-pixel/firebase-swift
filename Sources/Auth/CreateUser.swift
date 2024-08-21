@@ -4,12 +4,13 @@ import HTTPTypesFoundation
 
 extension Auth {
   private struct Body: Sendable, Hashable, Codable {
+    var idToken: String?
     var email: String
     var password: String
     var returnSecureToken: Bool = true
   }
 
-  /// Sign up with email / password
+  /// Create user with email / password
   /// You can create a new email and password user by issuing an HTTP POST request to the Auth signupNewUser endpoint.
   /// https://firebase.google.com/docs/reference/rest/auth#section-create-email-password
   /// - Parameters:
@@ -21,13 +22,38 @@ extension Auth {
     email: String,
     password: String
   ) async throws -> CreateUserResponse {
+    try await self.createUser(
+      idToken: nil,
+      email: email,
+      password: password
+    )
+  }
+
+  /// Create user with email / password
+  /// You can create a new email and password user by issuing an HTTP POST request to the Auth signupNewUser endpoint.
+  /// https://firebase.google.com/docs/reference/rest/auth#section-create-email-password
+  /// - Parameters:
+  ///   - idToken: The id token for linking existing user
+  ///   - email: The email for the user to create.
+  ///   - password: The password for the user to create.
+  /// - Returns: ``SignUpResponse``
+  @discardableResult
+  internal func createUser(
+    idToken: String?,
+    email: String,
+    password: String
+  ) async throws -> CreateUserResponse {
     let path = "v3/relyingparty/signupNewUser"
     let endpoint =
     baseUrlV3
       .appending(path: path)
       .appending(queryItems: [.init(name: "key", value: apiKey)])
 
-    let body = Body(email: email, password: password)
+    let body = Body(
+      idToken: idToken,
+      email: email,
+      password: password
+    )
     let bodyData = try! JSONEncoder().encode(body)
 
     let request = HTTPRequest(
