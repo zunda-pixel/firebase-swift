@@ -197,13 +197,20 @@ func linkGitHub() async throws {
   let email = "\(googleUserID)+\(UUID())@gmail.com"
   let password = "password123"
   
-  let oldUser = try await client.createUser(
+  let user = try await client.createUser(
     email: email,
     password: password
   )
+  
+  if let oldUser = try? await client.createUserOrGetOAuth(
+    requestUri: URL(string: "http://localhost")!,
+    provider: .github(accessToken: githubToken)
+  ) {
+    try await client.deleteAccount(idToken: oldUser.idToken)
+  }
 
   try await client.linkProvider(
-    idToken: oldUser.idToken,
+    idToken: user.idToken,
     requestUri: URL(string: "http://localhost")!,
     provider: .github(accessToken: githubToken)
   )
