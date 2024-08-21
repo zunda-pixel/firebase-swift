@@ -1,6 +1,5 @@
 import Foundation
 import HTTPClient
-import HTTPClientFoundation
 import HTTPTypes
 import Testing
 
