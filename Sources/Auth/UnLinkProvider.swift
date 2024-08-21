@@ -16,7 +16,7 @@ extension Auth {
   ///   - deleteProviders: The list of provider IDs to unlink, eg: 'google.com', 'password', etc.
   /// - Returns: ``UnLinkProviderResponse``
   @discardableResult
-  public func unLinkEmail(
+  public func unLink(
     idToken: String,
     deleteProviders: [String]
   ) async throws -> UnLinkProviderResponse {
