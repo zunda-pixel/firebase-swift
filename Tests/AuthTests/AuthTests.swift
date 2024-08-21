@@ -135,43 +135,99 @@ func deleteAccount() async throws {
   )
 }
 
-@Test(.enabled(if: emailRequired), .tags(.emailRequired))
-func unLinkProvider() async throws {
-  let idToken = "<#ID_TOKNE#>"
-
-  try await client.unLinkEmail(
-    idToken: idToken,
-    deleteProviders: ["password"]
+@Test
+func linkEmailForAnonymousUser() async throws {
+  let email = "\(googleUserID)+\(UUID())@gmail.com"
+  let password = "password123"
+  
+  let originalUser = try await client.createAnonymousUser()
+  
+  let newUser = try await client.linkEmail(
+    idToken: originalUser.idToken,
+    email: email,
+    password: password
   )
+  
+  #expect(originalUser.localId == newUser.localId)
 }
 
 @Test
-func sendEmailToLinkEmail() async throws {
+func unLinkEmailProvider() async throws {
   let email = "\(googleUserID)+\(UUID())@gmail.com"
-  let response = try await client.createUserOrGetOAuth(
-    requestUri: URL(string: "http://localhost")!,
-    provider: .github(accessToken: githubToken)
-  )
+  let password = "password123"
+
+  let response = try await client.createAnonymousUser()
 
   try await client.linkEmail(
     idToken: response.idToken,
     email: email,
-    password: "password123"
+    password: password
+  )
+  
+  let user = try await client.unLink(
+    idToken: response.idToken,
+    deleteProviders: ["password"]
+  )
+  
+  let containsPasswordProvider = user.providerUserInfo.contains(where: { $0.providerId == "password" })
+  #expect(containsPasswordProvider == false)
+}
+
+@Test
+func unLinkGitHubProvider() async throws {
+  let email = "\(googleUserID)+\(UUID())@gmail.com"
+  let password = "password123"
+  
+  let response = try await client.createUser(
+    email: email,
+    password: password
+  )
+  
+  let user = try await client.unLink(
+    idToken: response.idToken,
+    deleteProviders: ["github.com"]
+  )
+  
+  let containsPasswordProvider = user.providerUserInfo.contains(where: { $0.providerId == "github.com" })
+  #expect(containsPasswordProvider == false)
+}
+
+@Test
+func linkGitHub() async throws {
+  let email = "\(googleUserID)+\(UUID())@gmail.com"
+  let password = "password123"
+  
+  let oldUser = try await client.createUser(
+    email: email,
+    password: password
+  )
+
+  try await client.linkProvider(
+    idToken: oldUser.idToken,
+    requestUri: URL(string: "http://localhost")!,
+    provider: .github(accessToken: githubToken)
   )
 }
 
-@Test(.enabled(if: emailRequired), .tags(.emailRequired))
-func linkEmail() async throws {
-  let oobCode = ""
-  let email = ""
-  let idToken = ""
+@Test
+func linkEmailToGitHubAccount() async throws {
+  let githubAccount = try await client.createUserOrGetOAuth(
+    requestUri: URL(string: "http://localhost")!,
+    provider: .github(accessToken: githubToken)
+  )
   
-  try await client.verifyEmailOobCode(oobCode: oobCode)
+  try await client.unLink(
+    idToken: githubAccount.idToken,
+    deleteProviders: ["password"]
+  )
+
+  let email = "\(googleUserID)+\(UUID())@gmail.com"
+  let password = "password123"
 
   try await client.linkEmail(
-    idToken: idToken,
+    idToken: githubAccount.idToken,
     email: email,
-    password: "password123"
+    password: password
   )
 }
 
