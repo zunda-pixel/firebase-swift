@@ -58,7 +58,9 @@ enum FirestoreDataConverter {
       }
       return value
     case .arrayValue:
-      guard let keyValues: Array<[String: Any]> = ((value as? [String: Any])?["values"] as? Array<[String: Any]>) else {
+      guard
+        let keyValues: [[String: Any]] = ((value as? [String: Any])?["values"] as? [[String: Any]])
+      else {
         throw FirestoreDecodingError.typeMismatch(
           Array<[String: Any]>.self,
           debugDescription: "\(value) Value type mismatch"

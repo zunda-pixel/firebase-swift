@@ -27,7 +27,7 @@ func sendEmailToUpdateEmail() async throws {
   let oldEmail = "\(googleUserID)+\(UUID())@gmail.com"
   let newEmail = "\(googleUserID)+\(UUID())@gmail.com"
   let password = "password123"
-  
+
   let user = try await client.createUser(
     email: oldEmail,
     password: password
@@ -139,15 +139,15 @@ func deleteAccount() async throws {
 func linkEmailForAnonymousUser() async throws {
   let email = "\(googleUserID)+\(UUID())@gmail.com"
   let password = "password123"
-  
+
   let originalUser = try await client.createAnonymousUser()
-  
+
   let newUser = try await client.linkEmail(
     idToken: originalUser.idToken,
     email: email,
     password: password
   )
-  
+
   #expect(originalUser.localId == newUser.localId)
 }
 
@@ -163,13 +163,15 @@ func unLinkEmailProvider() async throws {
     email: email,
     password: password
   )
-  
+
   let user = try await client.unLink(
     idToken: response.idToken,
     deleteProviders: ["password"]
   )
-  
-  let containsPasswordProvider = user.providerUserInfo.contains(where: { $0.providerId == "password" })
+
+  let containsPasswordProvider = user.providerUserInfo.contains(where: {
+    $0.providerId == "password"
+  })
   #expect(containsPasswordProvider == false)
 }
 
@@ -177,18 +179,20 @@ func unLinkEmailProvider() async throws {
 func unLinkGitHubProvider() async throws {
   let email = "\(googleUserID)+\(UUID())@gmail.com"
   let password = "password123"
-  
+
   let response = try await client.createUser(
     email: email,
     password: password
   )
-  
+
   let user = try await client.unLink(
     idToken: response.idToken,
     deleteProviders: ["github.com"]
   )
-  
-  let containsPasswordProvider = user.providerUserInfo.contains(where: { $0.providerId == "github.com" })
+
+  let containsPasswordProvider = user.providerUserInfo.contains(where: {
+    $0.providerId == "github.com"
+  })
   #expect(containsPasswordProvider == false)
 }
 
@@ -196,12 +200,12 @@ func unLinkGitHubProvider() async throws {
 func linkGitHub() async throws {
   let email = "\(googleUserID)+\(UUID())@gmail.com"
   let password = "password123"
-  
+
   let user = try await client.createUser(
     email: email,
     password: password
   )
-  
+
   if let oldUser = try? await client.createUserOrGetOAuth(
     requestUri: URL(string: "http://localhost")!,
     provider: .github(accessToken: githubToken)
@@ -222,7 +226,7 @@ func linkEmailToGitHubAccount() async throws {
     requestUri: URL(string: "http://localhost")!,
     provider: .github(accessToken: githubToken)
   )
-  
+
   try await client.unLink(
     idToken: githubAccount.idToken,
     deleteProviders: ["password"]

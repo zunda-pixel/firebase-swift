@@ -8,7 +8,7 @@ extension Auth {
     var password: String
     var returnSecureToken: Bool = true
   }
-  
+
   /// Sign in with email / password
   /// You can sign in a user with an email and password by issuing an HTTP POST request to the Auth verifyPassword endpoint.
   /// https://firebase.google.com/docs/reference/rest/auth#section-sign-in-email-password
@@ -23,7 +23,7 @@ extension Auth {
   ) async throws -> VerifyPasswordResponse {
     let path = "v3/relyingparty/verifyPassword"
     let endpoint =
-    baseUrl
+      baseUrl
       .appending(path: path)
       .appending(queryItems: [.init(name: "key", value: apiKey)])
 

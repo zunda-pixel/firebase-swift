@@ -15,7 +15,7 @@ extension Auth {
   public func user(idToken: String) async throws -> UserResponse {
     let path = "v3/relyingparty/getAccountInfo"
     let endpoint =
-    baseUrl
+      baseUrl
       .appending(path: path)
       .appending(queryItems: [.init(name: "key", value: apiKey)])
 

@@ -45,7 +45,7 @@ extension Auth {
   ) async throws -> CreateUserResponse {
     let path = "v3/relyingparty/signupNewUser"
     let endpoint =
-    baseUrl
+      baseUrl
       .appending(path: path)
       .appending(queryItems: [.init(name: "key", value: apiKey)])
 

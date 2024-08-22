@@ -6,7 +6,7 @@ extension RemoteConfig {
   public func realtimeRequest(
     lastKnownVersionNumber: Int? = nil
   ) -> (request: HTTPRequest, body: Data) {
-    let path = "/projects/\(self.projectId)/namespaces/firebase:streamFetchInvalidations"
+    let path = "v1/projects/\(self.projectId)/namespaces/firebase:streamFetchInvalidations"
     let endpoint =
       realtimeBaseUrl
       .appending(path: path)

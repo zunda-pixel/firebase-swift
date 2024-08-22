@@ -56,7 +56,7 @@ public struct UpdatePasswordResponse: Sendable, Hashable, Codable {
   public var expiresIn: Int
   public var passwordHash: String
   public var emailVerified: Bool
-  
+
   public init(from decoder: any Decoder) throws {
     let container = try decoder.container(keyedBy: CodingKeys.self)
     self.localId = try container.decode(String.self, forKey: .localId)

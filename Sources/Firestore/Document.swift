@@ -31,7 +31,7 @@ extension Firestore {
         debugDescription: "\(object) Value type dataCorrupted"
       )
     }
-    guard let documents = keyValueObject["documents"] as? [Any]  else {
+    guard let documents = keyValueObject["documents"] as? [Any] else {
       throw FirestoreDecodingError.dataCorrupted(
         [String: Any].self,
         debugDescription: "\(keyValueObject) Value type dataCorrupted"

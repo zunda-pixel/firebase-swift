@@ -16,7 +16,7 @@ extension Auth {
   public func refreshToken(refreshToken: String) async throws -> RefreshTokenResponse {
     let path = "v1/token"
     let endpoint =
-    baseUrlSecure
+      baseUrlSecure
       .appending(path: path)
       .appending(queryItems: [.init(name: "key", value: apiKey)])
 
