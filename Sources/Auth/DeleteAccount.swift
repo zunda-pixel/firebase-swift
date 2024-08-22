@@ -17,7 +17,7 @@ extension Auth {
   public func deleteAccount(idToken: String) async throws -> DeleteAccountResponse {
     let path = "v3/relyingparty/deleteAccount"
     let endpoint =
-      baseUrlV3
+      baseUrl
       .appending(path: path)
       .appending(queryItems: [.init(name: "key", value: apiKey)])
 

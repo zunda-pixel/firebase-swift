@@ -22,7 +22,7 @@ extension Auth {
   ) async throws -> SendEmailVerificationResponse {
     let path = "v3/relyingparty/getOobConfirmationCode"
     let endpoint =
-    baseUrlV3
+    baseUrl
       .appending(path: path)
       .appending(queryItems: [.init(name: "key", value: apiKey)])
 

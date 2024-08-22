@@ -15,7 +15,7 @@ extension Auth {
   public func createAnonymousUser() async throws -> AnonymousUser {
     let path = "v3/relyingparty/signupNewUser"
     let endpoint =
-    baseUrlV3
+    baseUrl
       .appending(path: path)
       .appending(queryItems: [.init(name: "key", value: apiKey)])
 

@@ -14,7 +14,7 @@ extension Auth {
     continueUrl: URL
   ) async throws {
     let endpoint =
-      baseUrlV3
+      baseUrl
       .appending(path: "v3/relyingparty/getOobConfirmationCode")
       .appending(queryItems: [.init(name: "key", value: apiKey)])
 

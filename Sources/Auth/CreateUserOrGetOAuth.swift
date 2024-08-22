@@ -79,7 +79,7 @@ extension Auth {
   ) async throws -> OAuthResponse {
     let path = "v3/relyingparty/verifyAssertion"
     let endpoint =
-      baseUrlV3
+      baseUrl
       .appending(path: path)
       .appending(queryItems: [.init(name: "key", value: apiKey)])
 

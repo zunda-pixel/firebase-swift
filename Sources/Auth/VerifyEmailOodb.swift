@@ -18,7 +18,7 @@ extension Auth {
   ) async throws -> VerifyEmailOodbCodeResponse {
     let path = "v3/relyingparty/resetPassword"
     let endpoint =
-      baseUrlV3
+      baseUrl
       .appending(path: path)
       .appending(queryItems: [.init(name: "key", value: apiKey)])
 
