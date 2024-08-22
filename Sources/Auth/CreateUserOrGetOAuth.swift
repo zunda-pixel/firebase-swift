@@ -4,6 +4,7 @@ import HTTPTypesFoundation
 
 extension Auth {
   private struct Body: Sendable, Hashable, Encodable {
+    var idToken: String?
     /// The URI to which the IDP redirects the user back.
     var requestUri: URL
     /// Contains the OAuth credential (an ID token or access token) and provider ID which issues the credential.
@@ -16,14 +17,16 @@ extension Auth {
       }
     }
 
-    var provider: OAuth2Provider
+    var provider: OAuthProvider
     /// Whether or not to return an ID and refresh token. Should always be true.
     var returnSecureToken = true
 
     /// Whether to force the return of the OAuth credential on the following errors: FEDERATED_USER_ID_ALREADY_LINKED and EMAIL_EXISTS.
     var returnIdpCredential: Bool
+    // autoCreate: Bool = true
 
     private enum CodingKeys: CodingKey {
+      case idToken
       case requestUri
       case postBody
       case returnSecureToken
@@ -32,13 +35,13 @@ extension Auth {
 
     func encode(to encoder: any Encoder) throws {
       var container = encoder.container(keyedBy: Body.CodingKeys.self)
+      try container.encodeIfPresent(self.idToken, forKey: .idToken)
       try container.encode(self.requestUri, forKey: .requestUri)
       try container.encode(self.postBody, forKey: .postBody)
       try container.encode(self.returnSecureToken, forKey: .returnSecureToken)
       try container.encode(self.returnIdpCredential, forKey: .returnIdpCredential)
     }
   }
-
   /// Sign in with OAuth credential
   /// You can sign in a user with an OAuth credential by issuing an HTTP POST request to the Auth verifyAssertion endpoint.
   /// https://firebase.google.com/docs/reference/rest/auth#section-sign-in-with-oauth-credential
@@ -46,19 +49,42 @@ extension Auth {
   ///   - requestUri: The URI to which the IDP redirects the user back.
   ///   - provider: The Provider ID which issues the credential.
   ///   - accessToken: Access Token
-  /// - Returns: ``SignInWithOAuth``
+  /// - Returns: ``OAuthResponse``
   @discardableResult
-  public func signInWithOAuth(
+  public func createUserOrGetOAuth(
     requestUri: URL,
-    provider: OAuth2Provider
-  ) async throws -> SignInWithOAuth {
-    let path = "accounts:signInWithIdp"
+    provider: OAuthProvider
+  ) async throws -> OAuthResponse {
+    try await self.createUserOrGetOAuth(
+      idToken: nil,
+      requestUri: requestUri,
+      provider: provider
+    )
+  }
+
+  /// Sign in with OAuth credential
+  /// You can sign in a user with an OAuth credential by issuing an HTTP POST request to the Auth verifyAssertion endpoint.
+  /// https://firebase.google.com/docs/reference/rest/auth#section-sign-in-with-oauth-credential
+  /// - Parameters:
+  ///   - idToken: The id token for linking existing user
+  ///   - requestUri: The URI to which the IDP redirects the user back.
+  ///   - provider: The Provider ID which issues the credential.
+  ///   - accessToken: Access Token
+  /// - Returns: ``OAuthResponse``
+  @discardableResult
+  internal func createUserOrGetOAuth(
+    idToken: String?,
+    requestUri: URL,
+    provider: OAuthProvider
+  ) async throws -> OAuthResponse {
+    let path = "v3/relyingparty/verifyAssertion"
     let endpoint =
-      baseUrlV1
+      baseUrl
       .appending(path: path)
       .appending(queryItems: [.init(name: "key", value: apiKey)])
 
     let body = Body(
+      idToken: idToken,
       requestUri: requestUri,
       provider: provider,
       returnSecureToken: true,
@@ -74,13 +100,13 @@ extension Auth {
 
     let (data, _) = try await self.httpClient.execute(for: request, from: bodyData)
 
-    let response = try self.decode(SignInWithOAuth.self, from: data)
+    let response = try self.decode(OAuthResponse.self, from: data)
 
     return response
   }
 }
 
-public enum OAuth2Provider: Sendable, Hashable, Codable {
+public enum OAuthProvider: Sendable, Hashable, Codable {
   case github(accessToken: String)
   case google(id_token: String)
 
@@ -92,7 +118,7 @@ public enum OAuth2Provider: Sendable, Hashable, Codable {
   }
 }
 
-public struct SignInWithOAuth: Sendable, Hashable, Codable {
+public struct OAuthResponse: Sendable, Hashable, Codable {
   public var federatedId: String
   public var providerId: String
   public var emailVerified: Bool

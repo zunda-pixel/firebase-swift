@@ -15,16 +15,23 @@ extension Auth {
   /// - Parameters:
   ///   - email: The email the user is signing in with.
   ///   - password: The password for the account.
-  /// - Returns: ``SignInResponse``
+  /// - Returns: ``VerifyPasswordResponse``
   @discardableResult
-  public func signIn(email: String, password: String) async throws -> SignInResponse {
-    let path = "accounts:signInWithPassword"
+  public func verifyPassword(
+    email: String,
+    password: String
+  ) async throws -> VerifyPasswordResponse {
+    let path = "v3/relyingparty/verifyPassword"
     let endpoint =
-      baseUrlV1
+      baseUrl
       .appending(path: path)
       .appending(queryItems: [.init(name: "key", value: apiKey)])
 
-    let body = Body(email: email, password: password)
+    let body = Body(
+      email: email,
+      password: password
+    )
+
     let bodyData = try! JSONEncoder().encode(body)
 
     let request = HTTPRequest(
@@ -35,13 +42,13 @@ extension Auth {
 
     let (data, _) = try await self.httpClient.execute(for: request, from: bodyData)
 
-    let response = try self.decode(SignInResponse.self, from: data)
+    let response = try self.decode(VerifyPasswordResponse.self, from: data)
 
     return response
   }
 }
 
-public struct SignInResponse: Sendable, Hashable, Codable {
+public struct VerifyPasswordResponse: Sendable, Hashable, Codable {
   public var idToken: String
   public var email: String
   public var expiresIn: Int
@@ -51,7 +58,7 @@ public struct SignInResponse: Sendable, Hashable, Codable {
   public var displayName: String
 
   public init(from decoder: any Decoder) throws {
-    let container = try decoder.container(keyedBy: SignInResponse.CodingKeys.self)
+    let container = try decoder.container(keyedBy: CodingKeys.self)
     self.idToken = try container.decode(String.self, forKey: .idToken)
     self.email = try container.decode(String.self, forKey: .email)
     let expiresInString = try container.decode(String.self, forKey: .expiresIn)

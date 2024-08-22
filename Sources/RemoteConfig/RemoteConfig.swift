@@ -4,11 +4,10 @@ import HTTPTypes
 import HTTPTypesFoundation
 
 public struct RemoteConfig<HTTPClient: HTTPClientProtocol>: Sendable, Hashable
-where HTTPClient.Data == Foundation.Data, HTTPClient: Sendable & Hashable {
+where HTTPClient: Sendable & Hashable {
   public var apiKey: String
-  public var baseUrl = URL(string: "https://firebaseremoteconfig.googleapis.com/v1")!
-  public var realtimeBaseUrl = URL(
-    string: "https://firebaseremoteconfigrealtime.googleapis.com/v1")!
+  public var baseUrl = URL(string: "https://firebaseremoteconfig.googleapis.com")!
+  public var realtimeBaseUrl = URL(string: "https://firebaseremoteconfigrealtime.googleapis.com")!
   public var projectId: String
   public var projectName: String
   public var appId: String

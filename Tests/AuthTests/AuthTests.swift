@@ -1,7 +1,6 @@
 import Auth
 import Foundation
 import HTTPClient
-import HTTPClientFoundation
 import HTTPTypes
 import Testing
 
@@ -24,6 +23,23 @@ let client = Auth(
 )
 
 @Test
+func sendEmailToUpdateEmail() async throws {
+  let oldEmail = "\(googleUserID)+\(UUID())@gmail.com"
+  let newEmail = "\(googleUserID)+\(UUID())@gmail.com"
+  let password = "password123"
+
+  let user = try await client.createUser(
+    email: oldEmail,
+    password: password
+  )
+
+  try await client.sendEmailToUpdateEmail(
+    idToken: user.idToken,
+    newEmail: newEmail
+  )
+}
+
+@Test
 func sendSignUpLinkForURL() async throws {
   let email = "\(googleUserID)+\(UUID())@gmail.com"
   let continueUrl = URL(string: "http://localhost")!
@@ -33,49 +49,33 @@ func sendSignUpLinkForURL() async throws {
   )
 }
 
-@Test(.enabled(if: emailRequired), .tags(.emailRequired))
-func signUpFromEmailLink() async throws {
-  let oobCode = "REOxFT0P8iTcBsnZIYT7fE4n0K8u53kidBKq3Q7PYggAAAGQ01XEQA"
-  let email = "\(googleUserID)+\(UUID())@gmail.com"
-  let newPassword = "password123"
-
-  try await client.verifyResetPasswordCode(
-    oobCode: oobCode
-  )
-
-  try await client.signUp(
-    email: email,
-    password: newPassword
-  )
+@Test
+func createAnonymousUser() async throws {
+  try await client.createAnonymousUser()
 }
 
 @Test
-func signUpAnonymous() async throws {
-  try await client.signUpAnonymous()
-}
-
-@Test
-func signUp() async throws {
+func createUser() async throws {
   let email = "\(googleUserID)+\(UUID())@gmail.com"
   let password = "password123"
 
-  try await client.signUp(
+  try await client.createUser(
     email: email,
     password: password
   )
 }
 
 @Test
-func signIn() async throws {
+func verifyPassword() async throws {
   let email = "\(googleUserID)+\(UUID())@gmail.com"
   let password = "password123"
 
-  try await client.signUp(
+  try await client.createUser(
     email: email,
     password: password
   )
 
-  try await client.signIn(
+  try await client.verifyPassword(
     email: email,
     password: password
   )
@@ -86,7 +86,7 @@ func refreshToken() async throws {
   let email = "\(googleUserID)+\(UUID())@gmail.com"
   let password = "password123"
 
-  let response = try await client.signUp(
+  let response = try await client.createUser(
     email: email,
     password: password
   )
@@ -101,13 +101,22 @@ func sendEmailVerification() async throws {
   let email = "\(googleUserID)+\(UUID())@gmail.com"
   let password = "password123"
 
-  let response = try await client.signUp(
+  let response = try await client.createUser(
     email: email,
     password: password
   )
 
   try await client.sendEmailVerification(
     idToken: response.idToken
+  )
+}
+
+@Test(.enabled(if: emailRequired), .tags(.emailRequired))
+func verifyEmailOobCode() async throws {
+  let oobCode = "ehxU1I1HKY9afhSfF2EA74AVfo4aaoUrPEJUVTJjXFIAAAGRZgrsZw"
+
+  try await client.verifyEmailOobCode(
+    oobCode: oobCode
   )
 }
 
@@ -116,50 +125,108 @@ func deleteAccount() async throws {
   let email = "\(googleUserID)+\(UUID())@gmail.com"
   let password = "password123"
 
-  let response1 = try await client.signUp(
+  let response = try await client.createUser(
     email: email,
     password: password
   )
 
   try await client.deleteAccount(
-    idToken: response1.idToken
+    idToken: response.idToken
   )
 }
 
 @Test
-func unLinkProvider() async throws {
+func linkEmailForAnonymousUser() async throws {
   let email = "\(googleUserID)+\(UUID())@gmail.com"
   let password = "password123"
 
-  let response1 = try await client.signUp(
+  let originalUser = try await client.createAnonymousUser()
+
+  let newUser = try await client.linkEmail(
+    idToken: originalUser.idToken,
     email: email,
     password: password
   )
 
-  try await client.unLinkEmail(
-    idToken: response1.idToken,
-    deleteProviders: ["password"]
-  )
+  #expect(originalUser.localId == newUser.localId)
 }
 
-@Test(.enabled(if: emailRequired), .tags(.emailRequired))
-func linkEmail() async throws {
+@Test
+func unLinkEmailProvider() async throws {
   let email = "\(googleUserID)+\(UUID())@gmail.com"
-  let response = try await client.signInWithOAuth(
-    requestUri: URL(string: "http://localhost")!,
-    provider: .github(accessToken: githubToken)
-  )
+  let password = "password123"
 
-  try await client.sendEmailVerification(
-    idToken: response.idToken
-  )
-
-  try await client.confirmEmailVerification(oobCode: "code")
+  let response = try await client.createAnonymousUser()
 
   try await client.linkEmail(
     idToken: response.idToken,
     email: email,
-    password: "password123"
+    password: password
+  )
+
+  let user = try await client.unLink(
+    idToken: response.idToken,
+    deleteProviders: ["password"]
+  )
+
+  let containsPasswordProvider = user.providerUserInfo.contains(where: {
+    $0.providerId == "password"
+  })
+  #expect(containsPasswordProvider == false)
+}
+
+@Test
+func unLinkGitHubProvider() async throws {
+  let email = "\(googleUserID)+\(UUID())@gmail.com"
+  let password = "password123"
+
+  let response = try await client.createUser(
+    email: email,
+    password: password
+  )
+
+  let user = try await client.unLink(
+    idToken: response.idToken,
+    deleteProviders: ["github.com"]
+  )
+
+  let containsPasswordProvider = user.providerUserInfo.contains(where: {
+    $0.providerId == "github.com"
+  })
+  #expect(containsPasswordProvider == false)
+}
+
+@Test(.enabled(if: emailRequired), .tags(.emailRequired))
+func linkGitHub() async throws {
+  let email = "\(googleUserID)+\(UUID())@gmail.com"
+  let password = "password123"
+
+  let user = try await client.createUser(
+    email: email,
+    password: password
+  )
+
+  try await client.linkProvider(
+    idToken: user.idToken,
+    requestUri: URL(string: "http://localhost")!,
+    provider: .github(accessToken: githubToken)
+  )
+}
+
+@Test(.enabled(if: emailRequired), .tags(.emailRequired))
+func linkEmailToGitHubAccount() async throws {
+  let githubAccount = try await client.createUserOrGetOAuth(
+    requestUri: URL(string: "http://localhost")!,
+    provider: .github(accessToken: githubToken)
+  )
+
+  let email = "\(googleUserID)+\(UUID())@gmail.com"
+  let password = "password123"
+
+  try await client.linkEmail(
+    idToken: githubAccount.idToken,
+    email: email,
+    password: password
   )
 }
 
@@ -168,7 +235,7 @@ func user() async throws {
   let email = "\(googleUserID)+\(UUID())@gmail.com"
   let password = "password123"
 
-  let response = try await client.signUp(
+  let response = try await client.createUser(
     email: email,
     password: password
   )
@@ -199,7 +266,7 @@ func updateProfile() async throws {
   let email = "\(googleUserID)+\(UUID())@gmail.com"
   let password = "password123"
 
-  let response = try await client.signUp(
+  let response = try await client.createUser(
     email: email,
     password: password
   )
@@ -225,7 +292,7 @@ func deleteDisplayName() async throws {
   let email = "\(googleUserID)+\(UUID())@gmail.com"
   let password = "password123"
 
-  let response = try await client.signUp(
+  let response = try await client.createUser(
     email: email,
     password: password
   )
@@ -247,7 +314,7 @@ func deletePhotoUrl() async throws {
   let email = "\(googleUserID)+\(UUID())@gmail.com"
   let password = "password123"
 
-  let response1 = try await client.signUp(
+  let response1 = try await client.createUser(
     email: email,
     password: password
   )
@@ -266,7 +333,7 @@ func deletePhotoUrl() async throws {
 
 @Test(.enabled(if: emailRequired), .tags(.emailRequired))
 func signInWithOAuthGitHub() async throws {
-  try await client.signInWithOAuth(
+  try await client.createUserOrGetOAuth(
     requestUri: URL(string: "http://localhost")!,
     provider: .github(accessToken: githubToken)
   )
@@ -277,7 +344,7 @@ func sendEmailToResetPassword() async throws {
   let email = "\(googleUserID)+\(UUID())@gmail.com"
   let password = "password123"
 
-  try await client.signUp(
+  try await client.createUser(
     email: email,
     password: password
   )
@@ -287,31 +354,30 @@ func sendEmailToResetPassword() async throws {
   )
 }
 
-@Test(.enabled(if: emailRequired), .tags(.emailRequired))
-func resetPassword() async throws {
-  let oobCode = "ywigG2AIRYIKQD6umz8mhWF1luMmjr33ykz_m-DITmsAAAGQsk4TNQ"
-  let newPassword = "password123"
+@Test
+func updatePassword() async throws {
+  let email = "\(googleUserID)+\(UUID())@gmail.com"
+  let password = "password123"
+  let newPassword = "password12345"
 
-  try await client.verifyResetPasswordCode(
-    oobCode: oobCode
+  let response = try await client.createUser(
+    email: email,
+    password: password
   )
 
-  let response = try await client.resetPassword(
-    oobCode: oobCode,
+  try await client.updatePassword(
+    idToken: response.idToken,
     newPassword: newPassword
-  )
-
-  try await client.signIn(
-    email: response.email,
-    password: newPassword
   )
 }
 
 @Test(.enabled(if: emailRequired), .tags(.emailRequired))
-func confirmEmailVerification() async throws {
-  let oobCode = "l_0qVS_wyHVK_mhY2qbQZSB3Te-Bzm4tWXN0cg1lrdcAAAGQsk4q_w"
+func resetPassword() async throws {
+  let oobCode = "weY70CQTC6SoUkNpe5GXd3oA"
+  let newPassword = "password12345"
 
-  try await client.confirmEmailVerification(
-    oobCode: oobCode
+  try await client.verifyCodeResetPassword(
+    oobCode: oobCode,
+    newPassword: newPassword
   )
 }

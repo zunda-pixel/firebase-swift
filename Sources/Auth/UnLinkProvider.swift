@@ -16,13 +16,13 @@ extension Auth {
   ///   - deleteProviders: The list of provider IDs to unlink, eg: 'google.com', 'password', etc.
   /// - Returns: ``UnLinkProviderResponse``
   @discardableResult
-  public func unLinkEmail(
+  public func unLink(
     idToken: String,
     deleteProviders: [String]
   ) async throws -> UnLinkProviderResponse {
-    let path = "accounts:update"
+    let path = "v3/relyingparty/setAccountInfo"
     let endpoint =
-      baseUrlV1
+      baseUrl
       .appending(path: path)
       .appending(queryItems: [.init(name: "key", value: apiKey)])
 

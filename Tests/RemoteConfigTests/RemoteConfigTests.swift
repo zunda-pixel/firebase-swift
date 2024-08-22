@@ -1,5 +1,5 @@
 import Foundation
-import HTTPClientFoundation
+import HTTPClient
 import RemoteConfig
 import Testing
 

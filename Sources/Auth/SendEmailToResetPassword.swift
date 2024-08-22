@@ -20,9 +20,9 @@ extension Auth {
     email: String,
     locale: String? = nil
   ) async throws -> SendEmailToResetPasswordResponse {
-    let path = "accounts:sendOobCode"
+    let path = "v3/relyingparty/getOobConfirmationCode"
     let endpoint =
-      baseUrlV1
+      baseUrl
       .appending(path: path)
       .appending(queryItems: [.init(name: "key", value: apiKey)])
 

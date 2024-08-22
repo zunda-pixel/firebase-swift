@@ -49,9 +49,9 @@ extension Auth {
     idToken: String,
     profile: UpdateProfile
   ) async throws -> UpdateProfileResponse {
-    let path = "accounts:update"
+    let path = "v3/relyingparty/setAccountInfo"
     let endpoint =
-      baseUrlV1
+      baseUrl
       .appending(path: path)
       .appending(queryItems: [.init(name: "key", value: apiKey)])
 

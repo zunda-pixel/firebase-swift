@@ -13,9 +13,9 @@ extension Auth {
   /// - Parameter idToken: The Firebase ID token of the account.
   /// - Returns: ``UserResponse``
   public func user(idToken: String) async throws -> UserResponse {
-    let path = "accounts:lookup"
+    let path = "v3/relyingparty/getAccountInfo"
     let endpoint =
-      baseUrlV1
+      baseUrl
       .appending(path: path)
       .appending(queryItems: [.init(name: "key", value: apiKey)])
 

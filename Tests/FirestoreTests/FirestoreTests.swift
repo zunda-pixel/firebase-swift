@@ -1,6 +1,5 @@
 import Foundation
 import HTTPClient
-import HTTPClientFoundation
 import HTTPTypes
 import Testing
 
@@ -93,9 +92,10 @@ func decodeNestModel() async throws {
     }
     """
 
-  let keyValues = try JSONSerialization.jsonObject(
-    with: Data(json.utf8)
-  ) as! [String: Any]
+  let keyValues =
+    try JSONSerialization.jsonObject(
+      with: Data(json.utf8)
+    ) as! [String: Any]
   let data = try FirestoreDataConverter.removeNestedValueKey(keyValues: keyValues)
 
   let book = try JSONDecoder().decode(Book.self, from: data)

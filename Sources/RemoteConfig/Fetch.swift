@@ -8,7 +8,7 @@ extension RemoteConfig {
     language: String? = nil,
     timezone: String? = nil
   ) async throws -> FetchResponse {
-    let path = "/projects/\(self.projectName)/namespaces/firebase:fetch"
+    let path = "v1/projects/\(self.projectName)/namespaces/firebase:fetch"
     let endpoint =
       baseUrl
       .appending(path: path)
