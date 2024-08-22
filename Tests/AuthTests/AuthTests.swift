@@ -196,7 +196,7 @@ func unLinkGitHubProvider() async throws {
   #expect(containsPasswordProvider == false)
 }
 
-@Test
+@Test(.enabled(if: emailRequired), .tags(.emailRequired))
 func linkGitHub() async throws {
   let email = "\(googleUserID)+\(UUID())@gmail.com"
   let password = "password123"
@@ -206,13 +206,6 @@ func linkGitHub() async throws {
     password: password
   )
 
-  if let oldUser = try? await client.createUserOrGetOAuth(
-    requestUri: URL(string: "http://localhost")!,
-    provider: .github(accessToken: githubToken)
-  ) {
-    try await client.deleteAccount(idToken: oldUser.idToken)
-  }
-
   try await client.linkProvider(
     idToken: user.idToken,
     requestUri: URL(string: "http://localhost")!,
@@ -220,16 +213,11 @@ func linkGitHub() async throws {
   )
 }
 
-@Test
+@Test(.enabled(if: emailRequired), .tags(.emailRequired))
 func linkEmailToGitHubAccount() async throws {
   let githubAccount = try await client.createUserOrGetOAuth(
     requestUri: URL(string: "http://localhost")!,
     provider: .github(accessToken: githubToken)
-  )
-
-  try await client.unLink(
-    idToken: githubAccount.idToken,
-    deleteProviders: ["password"]
   )
 
   let email = "\(googleUserID)+\(UUID())@gmail.com"
