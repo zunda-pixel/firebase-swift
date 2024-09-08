@@ -2,6 +2,10 @@ import Foundation
 import Storage
 import Testing
 
+#if canImport(FoundationNetworking)
+  import FoundationNetworking
+#endif
+
 let bucket = ProcessInfo.processInfo.environment["FIREBASE_STORAGE_BUCKET"]!
 let storage = Storage(httpClient: URLSession.shared)
 
