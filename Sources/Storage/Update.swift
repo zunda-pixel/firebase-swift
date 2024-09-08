@@ -8,7 +8,7 @@ private struct Body: Codable, Sendable, Hashable {
   var contentLanguage: String?
   var contentType: String?
   var customMetadata: [String: String]?
-  
+
   private enum CodingKeys: String, CodingKey {
     case cacheControl
     case contentDisposition
@@ -40,9 +40,9 @@ extension Storage {
       contentType: contentType,
       customMetadata: customMetadata
     )
-        
+
     let bodyData = try! JSONEncoder().encode(body)
-    
+
     let bucket = percentEncode(bucket)
     let filePath = percentEncode(filePath)
     let path = "v0/b/\(bucket)/o/\(filePath)"
@@ -57,11 +57,11 @@ extension Storage {
         .contentLength: bodyData.count.description,
       ]
     )
-    
+
     let (data, _) = try await httpClient.execute(for: request, from: bodyData)
 
     let item = try JSONDecoder().decode(Item.self, from: data)
-    
+
     return item
   }
 }

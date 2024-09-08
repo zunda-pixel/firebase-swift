@@ -23,7 +23,7 @@ public struct Item: Codable, Hashable, Sendable {
   public var etag: String
   public var downloadTokens: String
   public var customMetadata: [String: String]?
-  
+
   private enum CodingKeys: String, CodingKey {
     case name
     case bucket
@@ -51,18 +51,18 @@ public struct Item: Codable, Hashable, Sendable {
     self.bucket = try container.decode(String.self, forKey: .bucket)
     let generationString = try container.decode(String.self, forKey: .generation)
     let generation = TimeInterval(generationString)!
-    self.generation = Date(timeIntervalSince1970: generation / 1000000)
+    self.generation = Date(timeIntervalSince1970: generation / 1_000_000)
     let metagenerationString = try container.decode(String.self, forKey: .metageneration)
     self.metageneration = Int(metagenerationString)!
-    
+
     self.contentType = try container.decode(String.self, forKey: .contentType)
-    
+
     let dateFormatter = ISO8601DateFormatter()
     dateFormatter.formatOptions.insert(.withFractionalSeconds)
-    
+
     let timeCreated = try container.decode(String.self, forKey: .timeCreated)
     self.timeCreated = dateFormatter.date(from: timeCreated)!
-    
+
     let updated = try container.decode(String.self, forKey: .updated)
     self.updated = dateFormatter.date(from: updated)!
 
@@ -79,6 +79,7 @@ public struct Item: Codable, Hashable, Sendable {
     self.crc32c = try container.decode(String.self, forKey: .crc32c)
     self.etag = try container.decode(String.self, forKey: .etag)
     self.downloadTokens = try container.decode(String.self, forKey: .downloadTokens)
-    self.customMetadata = try container.decodeIfPresent([String: String].self, forKey: .customMetadata)
+    self.customMetadata = try container.decodeIfPresent(
+      [String: String].self, forKey: .customMetadata)
   }
 }

@@ -15,7 +15,8 @@ extension Storage {
       "uploadType": "resumable",
       "name": filePath,
     ]
-    let path = "v0/b/\(bucket)/o/\(filePath)?\(queries.map { [$0.key, $0.value].joined(separator: "=") }.joined(separator: "&"))"
+    let path =
+      "v0/b/\(bucket)/o/\(filePath)?\(queries.map { [$0.key, $0.value].joined(separator: "=") }.joined(separator: "&"))"
 
     let endpoint = URL(string: "\(baseUrl.absoluteString)\(path)")!
 
@@ -24,14 +25,14 @@ extension Storage {
       url: endpoint,
       headerFields: [
         .contentType: contentType,
-        .contentLength: data.count.description
+        .contentLength: data.count.description,
       ]
     )
-    
+
     let (data, _) = try await httpClient.execute(for: request, from: data)
 
     let item = try JSONDecoder().decode(Item.self, from: data)
-    
+
     return item
   }
 }

@@ -1,6 +1,6 @@
-import Testing
 import Foundation
 import Storage
+import Testing
 
 let bucket = ProcessInfo.processInfo.environment["FIREBASE_STORAGE_BUCKET"]!
 let storage = Storage(httpClient: URLSession.shared)
@@ -11,14 +11,14 @@ func uploadItem() async throws {
   let svgData = try Data(contentsOf: svgFilepath)
   let filePath = "images/swift/Swift_logo.svg"
   let contentType = "image/svg+xml"
-  
+
   let item = try await storage.upload(
     bucket: bucket,
     filePath: filePath,
     data: svgData,
     contentType: contentType
   )
-  
+
   #expect(item.bucket == bucket)
   #expect(item.name == filePath)
   #expect(item.contentType == contentType)
@@ -32,7 +32,7 @@ func getItem() async throws {
     data: Data("Hello".utf8),
     contentType: "text/plain"
   )
-  
+
   let item = try await storage.item(
     bucket: uploadedItem.bucket,
     filePath: uploadedItem.name
@@ -50,7 +50,7 @@ func contentUrl() async throws {
     data: Data("Hello".utf8),
     contentType: "text/plain"
   )
-  
+
   _ = storage.contentUrl(item: item)
 }
 
@@ -62,7 +62,7 @@ func updateItem() async throws {
     "key1": "value1",
     "key2": "value2",
   ]
-  
+
   let uploadedItem = try await storage.upload(
     bucket: bucket,
     filePath: "memos/\(UUID())",
@@ -79,7 +79,7 @@ func updateItem() async throws {
     contentType: value,
     customMetadata: customMetadata
   )
-  
+
   #expect(item.cacheControl == value)
   #expect(item.contentDisposition == value)
   #expect(item.contentEncoding == value)
@@ -102,22 +102,22 @@ func deleteItem() async throws {
 @Test
 func getList() async throws {
   let directoryPath = "images/"
-  
+
   let listResponse1 = try await storage.list(
     bucket: bucket,
     directoryPath: directoryPath,
     maxResults: 2
   )
-  
+
   for prefix in listResponse1.prefixes {
     _ = try await storage.list(
       bucket: bucket,
       directoryPath: prefix
     )
   }
-  
+
   let nextPageToken = try #require(listResponse1.nextPageToken)
-  
+
   _ = try await storage.list(
     bucket: bucket,
     directoryPath: directoryPath,

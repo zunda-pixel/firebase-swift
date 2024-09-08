@@ -22,10 +22,13 @@ extension Storage {
       "delimiter": "/",
       "prefix": directoryPath,
       "maxResults": maxResults?.description,
-      "pageToken": pageToken.map { $0.addingPercentEncoding(withAllowedCharacters: .alphanumerics)! }
+      "pageToken": pageToken.map {
+        $0.addingPercentEncoding(withAllowedCharacters: .alphanumerics)!
+      },
     ].compactMapValues { $0 }
 
-    let path: String = "v0/b/\(bucket)/o?\(queries.map { [$0, $1].joined(separator: "=") }.joined(separator: "&"))"
+    let path: String =
+      "v0/b/\(bucket)/o?\(queries.map { [$0, $1].joined(separator: "=") }.joined(separator: "&"))"
 
     let endpoint = URL(string: "\(baseUrl.absoluteString)\(path)")!
 
@@ -33,11 +36,11 @@ extension Storage {
       method: .get,
       url: endpoint
     )
-    
+
     let (data, _) = try await httpClient.execute(for: request, from: nil)
 
     let item = try JSONDecoder().decode(ListResponse.self, from: data)
-    
+
     return item
   }
 }
@@ -47,7 +50,7 @@ public struct ListResponse: Codable, Hashable, Sendable {
     public var bucket: String
     public var name: String
   }
-  
+
   public var prefixes: [String]
   public var items: [Item]
   public var nextPageToken: String?

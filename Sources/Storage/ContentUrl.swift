@@ -10,13 +10,14 @@ extension Storage {
     let filePath = self.percentEncode(filePath)
     let queries: [String: String] = [
       "alt": "media",
-      "token": downloadTokens
+      "token": downloadTokens,
     ]
-    let path = "v0/b/\(bucket)/o/\(filePath)?\(queries.map { [$0.key, $0.value].joined(separator: "=") }.joined(separator: "&"))"
-    
+    let path =
+      "v0/b/\(bucket)/o/\(filePath)?\(queries.map { [$0.key, $0.value].joined(separator: "=") }.joined(separator: "&"))"
+
     return URL(string: "\(baseUrl.absoluteString)\(path)")!
   }
-  
+
   public func contentUrl(item: Item) -> URL {
     return self.contentUrl(
       bucket: item.bucket,
