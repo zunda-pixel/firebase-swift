@@ -18,10 +18,6 @@ let package = Package(
       targets: ["RemoteConfig"]
     ),
     .library(
-      name: "Firestore",
-      targets: ["Firestore"]
-    ),
-    .library(
       name: "Storage",
       targets: ["Storage"]
     ),
@@ -60,20 +56,6 @@ let package = Package(
       name: "RemoteConfigTests",
       dependencies: [
         .target(name: "RemoteConfig"),
-        .product(name: "Testing", package: "swift-testing"),
-      ]
-    ),
-    .target(
-      name: "Firestore",
-      dependencies: [
-        .product(name: "HTTPClient", package: "http-client"),
-        .product(name: "HTTPTypes", package: "swift-http-types"),
-      ]
-    ),
-    .testTarget(
-      name: "FirestoreTests",
-      dependencies: [
-        .target(name: "Firestore"),
         .product(name: "Testing", package: "swift-testing"),
       ]
     ),
