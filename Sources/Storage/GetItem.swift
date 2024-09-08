@@ -19,7 +19,7 @@ extension Storage {
 
     let (data, _) = try await httpClient.execute(for: request, from: nil)
 
-    let item = try JSONDecoder().decode(Item.self, from: data)
+    let item = try self.decode(Item.self, from: data)
 
     return item
   }

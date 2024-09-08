@@ -20,7 +20,7 @@ extension Storage {
     let (data, response) = try await httpClient.execute(for: request, from: nil)
 
     if response.status.code != 204 {
-      let response = try JSONDecoder().decode(ErrorsResponse.self, from: data)
+      let response = try self.decode(ErrorsResponse.self, from: data)
       throw response.error
     }
   }
