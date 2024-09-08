@@ -89,6 +89,9 @@ let package = Package(
       dependencies: [
         .target(name: "Storage"),
         .product(name: "Testing", package: "swift-testing"),
+      ],
+      resources: [
+        .process("Resources")
       ]
     ),
   ]
