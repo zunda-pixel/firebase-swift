@@ -21,6 +21,10 @@ let package = Package(
       name: "Storage",
       targets: ["Storage"]
     ),
+    .library(
+      name: "Firestore",
+      targets: ["Firestore"]
+    ),
   ],
   dependencies: [
     .package(url: "https://github.com/apple/swift-http-types", from: "1.3.0"),
@@ -70,6 +74,20 @@ let package = Package(
       ],
       resources: [
         .process("Resources")
+      ]
+    ),
+    .target(
+      name: "Firestore",
+      dependencies: [
+        .product(name: "HTTPClient", package: "http-client"),
+        .product(name: "HTTPTypes", package: "swift-http-types"),
+      ]
+    ),
+    .testTarget(
+      name: "FirestoreTests",
+      dependencies: [
+        .target(name: "Firestore"),
+        .product(name: "Testing", package: "swift-testing"),
       ]
     ),
   ]
