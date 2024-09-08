@@ -18,6 +18,7 @@ jobs:
         FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
         FIREBASE_PROJECT_NAME: ${{ secrets.FIREBASE_PROJECT_NAME }}
         FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID }}
+        FIREBASE_STORAGE_BUCKET: ${{ secrets.FIREBASE_STORAGE_BUCKET }}
   lint:
     runs-on: ubuntu-latest
     container: swiftlang/swift:nightly-6.0-jammy
