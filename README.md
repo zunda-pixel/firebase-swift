@@ -66,4 +66,6 @@ let item = try await storage.upload(
   data: svgData,
   contentType: contentType
 )
+
+print(item)
 ```
