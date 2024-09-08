@@ -23,7 +23,7 @@ extension Storage {
   @discardableResult
   public func update(
     bucket: String,
-    filePath: String,
+    itemPath: String,
     md5Hash: String? = nil,
     cacheControl: String? = nil,
     contentDisposition: String? = nil,
@@ -44,8 +44,8 @@ extension Storage {
     let bodyData = try! JSONEncoder().encode(body)
 
     let bucket = percentEncode(bucket)
-    let filePath = percentEncode(filePath)
-    let path = "v0/b/\(bucket)/o/\(filePath)"
+    let itemPath = percentEncode(itemPath)
+    let path = "v0/b/\(bucket)/o/\(itemPath)"
 
     let endpoint = URL(string: "\(baseUrl.absoluteString)\(path)")!
 
@@ -80,7 +80,7 @@ extension Storage {
   ) async throws -> Item {
     try await self.update(
       bucket: item.bucket,
-      filePath: item.name,
+      itemPath: item.name,
       cacheControl: cacheControl,
       contentDisposition: contentDisposition,
       contentEncoding: contentEncoding,

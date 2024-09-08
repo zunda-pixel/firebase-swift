@@ -5,18 +5,18 @@ extension Storage {
   @discardableResult
   public func upload(
     bucket: String,
-    filePath: String,
+    path itemPath: String,
     data: Data,
     contentType: String
   ) async throws -> Item {
     let bucket = percentEncode(bucket)
-    let filePath = percentEncode(filePath)
+    let itemPath = percentEncode(itemPath)
     let queries = [
       "uploadType": "resumable",
-      "name": filePath,
+      "name": itemPath,
     ]
     let path =
-      "v0/b/\(bucket)/o/\(filePath)?\(queries.map { [$0.key, $0.value].joined(separator: "=") }.joined(separator: "&"))"
+      "v0/b/\(bucket)/o/\(itemPath)?\(queries.map { [$0.key, $0.value].joined(separator: "=") }.joined(separator: "&"))"
 
     let endpoint = URL(string: "\(baseUrl.absoluteString)\(path)")!
 

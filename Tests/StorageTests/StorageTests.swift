@@ -18,7 +18,7 @@ func uploadItem() async throws {
 
   let item = try await storage.upload(
     bucket: bucket,
-    filePath: filePath,
+    path: filePath,
     data: svgData,
     contentType: contentType
   )
@@ -32,14 +32,14 @@ func uploadItem() async throws {
 func getItem() async throws {
   let uploadedItem = try await storage.upload(
     bucket: bucket,
-    filePath: "memos/\(UUID())",
+    path: "memos/\(UUID())",
     data: Data("Hello".utf8),
     contentType: "text/plain"
   )
 
   let item = try await storage.item(
     bucket: uploadedItem.bucket,
-    filePath: uploadedItem.name
+    path: uploadedItem.name
   )
 
   #expect(item.bucket == uploadedItem.bucket)
@@ -50,7 +50,7 @@ func getItem() async throws {
 func contentUrl() async throws {
   let item = try await storage.upload(
     bucket: bucket,
-    filePath: "memos/\(UUID())",
+    path: "memos/\(UUID())",
     data: Data("Hello".utf8),
     contentType: "text/plain"
   )
@@ -69,7 +69,7 @@ func updateItem() async throws {
 
   let uploadedItem = try await storage.upload(
     bucket: bucket,
-    filePath: "memos/\(UUID())",
+    path: "memos/\(UUID())",
     data: Data("Hello".utf8),
     contentType: "text/plain"
   )
@@ -96,7 +96,7 @@ func updateItem() async throws {
 func deleteItem() async throws {
   let item = try await storage.upload(
     bucket: bucket,
-    filePath: "memos/\(UUID())",
+    path: "memos/\(UUID())",
     data: Data("Hello".utf8),
     contentType: "text/plain"
   )

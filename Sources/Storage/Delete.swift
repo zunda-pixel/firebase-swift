@@ -4,11 +4,11 @@ import HTTPTypes
 extension Storage {
   public func delete(
     bucket: String,
-    filePath: String
+    itemPath: String
   ) async throws {
     let bucket = percentEncode(bucket)
-    let filePath = percentEncode(filePath)
-    let path = "v0/b/\(bucket)/o/\(filePath)"
+    let itemPath = percentEncode(itemPath)
+    let path = "v0/b/\(bucket)/o/\(itemPath)"
 
     let endpoint = URL(string: "\(baseUrl.absoluteString)\(path)")!
 
@@ -30,7 +30,7 @@ extension Storage {
   public func delete(item: Item) async throws {
     try await self.delete(
       bucket: item.bucket,
-      filePath: item.name
+      itemPath: item.name
     )
   }
 }

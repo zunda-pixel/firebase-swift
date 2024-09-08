@@ -4,11 +4,11 @@ import HTTPTypes
 extension Storage {
   public func item(
     bucket: String,
-    filePath: String
+    path itemPath: String
   ) async throws -> Item {
     let bucket = percentEncode(bucket)
-    let filePath = percentEncode(filePath)
-    let path = "v0/b/\(bucket)/o/\(filePath)"
+    let itemPath = percentEncode(itemPath)
+    let path = "v0/b/\(bucket)/o/\(itemPath)"
 
     let endpoint = URL(string: "\(baseUrl.absoluteString)\(path)")!
 
