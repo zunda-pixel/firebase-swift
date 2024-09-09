@@ -1,6 +1,9 @@
 # firebase-swift
 
-Firebase API Client Swift
+Firebase client for Swift.
+
+[![](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fzunda-pixel%2Ffirebase-swift%2Fbadge%3Ftype%3Dswift-versions)](https://swiftpackageindex.com/zunda-pixel/firebase-swift)
+[![](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fzunda-pixel%2Ffirebase-swift%2Fbadge%3Ftype%3Dplatforms)](https://swiftpackageindex.com/zunda-pixel/firebase-swift)
 
 ### [Authentication](https://firebase.google.com/docs/auth)
 
@@ -58,12 +61,14 @@ print(config)
 - Update Item
 
 ```swift
-let storage = Storage(httpClient: .urlSession(.shared))
+let client = Storage(
+  httpClient: .urlSession(.shared)
+)
 
-let item = try await storage.upload(
+let item = try await client.upload(
   bucket: bucket,
-  path: filePath,
-  data: svgData,
+  path: itemPath,
+  data: data,
   contentType: contentType
 )
 
