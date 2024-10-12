@@ -24,7 +24,6 @@ let package = Package(
   ],
   dependencies: [
     .package(url: "https://github.com/apple/swift-http-types", from: "1.3.0"),
-    .package(url: "https://github.com/swiftlang/swift-testing", from: "0.12.0"),
     .package(url: "https://github.com/zunda-pixel/http-client", from: "0.3.0"),
   ],
   targets: [
@@ -39,7 +38,6 @@ let package = Package(
       name: "AuthTests",
       dependencies: [
         .target(name: "Auth"),
-        .product(name: "Testing", package: "swift-testing"),
       ]
     ),
     .target(
@@ -56,7 +54,6 @@ let package = Package(
       name: "RemoteConfigTests",
       dependencies: [
         .target(name: "RemoteConfig"),
-        .product(name: "Testing", package: "swift-testing"),
       ]
     ),
     .target(
@@ -70,7 +67,6 @@ let package = Package(
       name: "StorageTests",
       dependencies: [
         .target(name: "Storage"),
-        .product(name: "Testing", package: "swift-testing"),
       ],
       resources: [
         .process("Resources")
