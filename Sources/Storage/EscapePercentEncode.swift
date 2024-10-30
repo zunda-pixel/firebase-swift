@@ -6,9 +6,9 @@ extension Storage {
   /// - Parameter value: <#value description#>
   /// - Returns: <#description#>
   func percentEncode(_ value: String) -> String {
-    let GCSObjectAllowedCharacterSet =
+    let gcsObjectAllowedCharacterSet =
       "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~!$'()*,=:@"
-    let allowedCharacters = CharacterSet(charactersIn: GCSObjectAllowedCharacterSet)
+    let allowedCharacters = CharacterSet(charactersIn: gcsObjectAllowedCharacterSet)
     return value.addingPercentEncoding(withAllowedCharacters: allowedCharacters)!
   }
 }
