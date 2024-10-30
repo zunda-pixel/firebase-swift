@@ -37,7 +37,7 @@ let package = Package(
     .testTarget(
       name: "AuthTests",
       dependencies: [
-        .target(name: "Auth"),
+        .target(name: "Auth")
       ]
     ),
     .target(
@@ -53,7 +53,7 @@ let package = Package(
     .testTarget(
       name: "RemoteConfigTests",
       dependencies: [
-        .target(name: "RemoteConfig"),
+        .target(name: "RemoteConfig")
       ]
     ),
     .target(
@@ -66,7 +66,7 @@ let package = Package(
     .testTarget(
       name: "StorageTests",
       dependencies: [
-        .target(name: "Storage"),
+        .target(name: "Storage")
       ],
       resources: [
         .process("Resources")
