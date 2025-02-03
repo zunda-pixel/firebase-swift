@@ -9,11 +9,13 @@ public struct Analytics<HTTPClient: HTTPClientProtocol> {
   public var endpoint = URL(string: "https://app-analytics-services.com/a")!
   public var clientInformation: ClientInformation
   public var session: Session
-  public var userId: String?
 
   func log(payload: Payload) async throws {
     let payloadData = try ProtobufEncoder.encoding(NestedValue(value: payload))
+    try await log(bodyData: payloadData)
+  }
 
+  func log(bodyData: Data) async throws {
     let request = HTTPRequest(
       method: .post,
       url: endpoint,
@@ -26,16 +28,16 @@ public struct Analytics<HTTPClient: HTTPClientProtocol> {
         .init("Upload-Complete")!: "?1",
         .contentEncoding: "gzip",
         .acceptLanguage: "ja",
-        .contentLength: "\(payloadData.count)",
+        .contentLength: "\(bodyData.count)",
         .acceptEncoding: "gzip, deflate, br",
         .userAgent: "\(appName)/1 CFNetwork/3826.400.120 Darwin/24.3.0",
       ]
     )
-    print(payloadData.map({ String(format: "%02x", $0) }).joined())
-    let (data, response) = try await httpClient.execute(for: request, from: payloadData)
-    print(String(decoding: data, as: UTF8.self))
+    let (data, response) = try await httpClient.execute(for: request, from: bodyData)
 
-    print(response)
+    guard response.status.code == 204 else {
+      throw RequestError(request: request, body: bodyData, response: (data, response))
+    }
   }
 
   public func log(
