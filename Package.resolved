@@ -1,5 +1,5 @@
 {
-  "originHash" : "c72f289bff8502560efbe924ca3df49868bd7c2ef737d7aa8d92d6327643a9e1",
+  "originHash" : "f181f42737c7adbb1708f2f4962c289d2366de572946205f784aeff279c51622",
   "pins" : [
     {
       "identity" : "http-client",
@@ -15,8 +15,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/OpenSwiftUIProject/ProtobufKit",
       "state" : {
-        "branch" : "main",
-        "revision" : "937eae5426277bec040c7f99bc8e1498c30ed467"
+        "revision" : "937eae5426277bec040c7f99bc8e1498c30ed467",
+        "version" : "0.1.2"
       }
     },
     {

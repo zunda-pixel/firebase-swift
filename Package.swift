@@ -29,7 +29,7 @@ let package = Package(
   dependencies: [
     .package(url: "https://github.com/apple/swift-http-types", from: "1.3.0"),
     .package(url: "https://github.com/zunda-pixel/http-client", from: "0.3.0"),
-    .package(url: "https://github.com/OpenSwiftUIProject/ProtobufKit", branch: "main"),
+    .package(url: "https://github.com/OpenSwiftUIProject/ProtobufKit", from: "0.1.2"),
     .package(url: "https://github.com/zunda-pixel/swift-currency", from: "0.0.1"),
   ],
   targets: [
