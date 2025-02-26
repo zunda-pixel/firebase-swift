@@ -99,6 +99,9 @@ public struct UserResponse: Sendable, Hashable, Codable {
     }
     self.customAuth = try container.decodeIfPresent(Bool.self, forKey: .customAuth)
     let lastRefreshAt = try container.decode(String.self, forKey: .lastRefreshAt)
-    self.lastRefreshAt = try Date(lastRefreshAt, strategy: .iso8601.year().month().day().time(includingFractionalSeconds: true))
+    self.lastRefreshAt = try Date(
+      lastRefreshAt,
+      strategy: .iso8601.year().month().day().time(includingFractionalSeconds: true)
+    )
   }
 }

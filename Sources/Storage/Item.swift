@@ -57,13 +57,17 @@ public struct Item: Codable, Hashable, Sendable {
 
     self.contentType = try container.decode(String.self, forKey: .contentType)
 
-    let dateFormatStyle: Date.ISO8601FormatStyle = .iso8601.year().month().day().time(includingFractionalSeconds: true)
-
     let timeCreated = try container.decode(String.self, forKey: .timeCreated)
-    self.timeCreated = try Date(timeCreated, strategy: dateFormatStyle)
+    self.timeCreated = try Date(
+      timeCreated,
+      strategy: .iso8601.year().month().day().time(includingFractionalSeconds: true)
+    )
 
     let updated = try container.decode(String.self, forKey: .updated)
-    self.updated = try Date(updated, strategy: dateFormatStyle)
+    self.updated = try Date(
+      updated,
+      strategy: .iso8601.year().month().day().time(includingFractionalSeconds: true)
+    )
 
     self.storageClass = try container.decode(StorageClass.self, forKey: .storageClass)
 
@@ -79,6 +83,8 @@ public struct Item: Codable, Hashable, Sendable {
     self.etag = try container.decode(String.self, forKey: .etag)
     self.downloadTokens = try container.decode(String.self, forKey: .downloadTokens)
     self.customMetadata = try container.decodeIfPresent(
-      [String: String].self, forKey: .customMetadata)
+      [String: String].self,
+      forKey: .customMetadata
+    )
   }
 }
