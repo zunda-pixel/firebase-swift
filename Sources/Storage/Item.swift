@@ -60,13 +60,13 @@ public struct Item: Codable, Hashable, Sendable {
     let timeCreated = try container.decode(String.self, forKey: .timeCreated)
     self.timeCreated = try Date(
       timeCreated,
-      strategy: .iso8601.year().month().day().time(includingFractionalSeconds: true)
+      strategy: Date.ISO8601FormatStyle(includingFractionalSeconds: true)
     )
 
     let updated = try container.decode(String.self, forKey: .updated)
     self.updated = try Date(
       updated,
-      strategy: .iso8601.year().month().day().time(includingFractionalSeconds: true)
+      strategy: Date.ISO8601FormatStyle(includingFractionalSeconds: true)
     )
 
     self.storageClass = try container.decode(StorageClass.self, forKey: .storageClass)
