@@ -90,28 +90,13 @@ private struct InternalDocument: Decodable {
     let name = try container.decode(URL.self, forKey: .name)
     self.name = name.lastPathComponent
 
-    let formatter = ISO8601DateFormatter()
-    formatter.formatOptions.insert(.withFractionalSeconds)
+    let dateFormatStyle: Date.ISO8601FormatStyle = .iso8601.year().month().day().time(includingFractionalSeconds: true)
+
     let createTime = try container.decode(String.self, forKey: .createTime)
-    if let createTime = formatter.date(from: createTime) {
-      self.createTime = createTime
-    } else {
-      throw DecodingError.dataCorrupted(
-        .init(
-          codingPath: [CodingKeys.createTime],
-          debugDescription: "Invalid date format: \(createTime)"
-        ))
-    }
+    self.createTime = try Date(createTime, strategy: dateFormatStyle)
+
     let updateTime = try container.decode(String.self, forKey: .updateTime)
-    if let updateTime = formatter.date(from: updateTime) {
-      self.updateTime = updateTime
-    } else {
-      throw DecodingError.dataCorrupted(
-        .init(
-          codingPath: [CodingKeys.updateTime],
-          debugDescription: "Invalid date format: \(updateTime)"
-        ))
-    }
+    self.updateTime = try Date(updateTime, strategy: dateFormatStyle)
   }
 }
 

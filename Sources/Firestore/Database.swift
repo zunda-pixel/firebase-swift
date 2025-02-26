@@ -44,45 +44,22 @@ public struct Database: Sendable, Hashable, Codable {
   public var etag: String
 
   public init(from decoder: any Decoder) throws {
-    let formatter = ISO8601DateFormatter()
-    formatter.formatOptions.insert(.withFractionalSeconds)
     let container = try decoder.container(keyedBy: CodingKeys.self)
     self.name = try container.decode(String.self, forKey: .name)
     self.uid = try container.decode(UUID.self, forKey: .uid)
+
+    let dateFormatStyle: Date.ISO8601FormatStyle = .iso8601.year().month().day().time(includingFractionalSeconds: true)
     let createTime = try container.decode(String.self, forKey: .createTime)
-    if let createTime = formatter.date(from: createTime) {
-      self.createTime = createTime
-    } else {
-      throw DecodingError.dataCorrupted(
-        .init(
-          codingPath: [CodingKeys.createTime],
-          debugDescription: "Invalid date format: \(createTime)"
-        ))
-    }
+    self.createTime = try Date(createTime, strategy: dateFormatStyle)
     let updateTime = try container.decode(String.self, forKey: .updateTime)
-    if let updateTime = formatter.date(from: updateTime) {
-      self.updateTime = updateTime
-    } else {
-      throw DecodingError.dataCorrupted(
-        .init(
-          codingPath: [CodingKeys.updateTime],
-          debugDescription: "Invalid date format: \(updateTime)"
-        ))
-    }
+    self.updateTime = try Date(updateTime, strategy: dateFormatStyle)
+
     self.locationId = try container.decode(String.self, forKey: .locationId)
     self.type = try container.decode(String.self, forKey: .type)
     self.concurrencyMode = try container.decode(String.self, forKey: .concurrencyMode)
     self.versionRetentionPeriod = try container.decode(String.self, forKey: .versionRetentionPeriod)
     let earliestVersionTime = try container.decode(String.self, forKey: .earliestVersionTime)
-    if let earliestVersionTime = formatter.date(from: earliestVersionTime) {
-      self.earliestVersionTime = earliestVersionTime
-    } else {
-      throw DecodingError.dataCorrupted(
-        .init(
-          codingPath: [CodingKeys.earliestVersionTime],
-          debugDescription: "Invalid date format: \(earliestVersionTime)"
-        ))
-    }
+    self.earliestVersionTime = try Date(earliestVersionTime, strategy: dateFormatStyle)
     self.appEngineIntegrationMode = try container.decode(
       String.self,
       forKey: .appEngineIntegrationMode

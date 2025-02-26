@@ -26,14 +26,7 @@ enum FirestoreDataConverter {
           debugDescription: "\(value) Value type mismatch"
         )
       }
-      let formatter = ISO8601DateFormatter()
-      formatter.formatOptions.insert(.withFractionalSeconds)
-      guard let date = formatter.date(from: dateString) else {
-        throw FirestoreDecodingError.dataCorrupted(
-          Date.self,
-          debugDescription: "\(value) Value type dataCorrupted"
-        )
-      }
+      let date = try Date(dateString, strategy: .iso8601.year().month().day().time(includingFractionalSeconds: true))
       return date.timeIntervalSinceReferenceDate
     case .integerValue:
       guard let value = value as? String else {
