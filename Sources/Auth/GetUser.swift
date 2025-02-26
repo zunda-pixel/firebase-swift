@@ -98,17 +98,10 @@ public struct UserResponse: Sendable, Hashable, Codable {
         ))
     }
     self.customAuth = try container.decodeIfPresent(Bool.self, forKey: .customAuth)
-    let lastRefreshAtString = try container.decode(String.self, forKey: .lastRefreshAt)
-    let formatter = ISO8601DateFormatter()
-    formatter.formatOptions.insert(.withFractionalSeconds)
-    if let lastRefreshAt = formatter.date(from: lastRefreshAtString) {
-      self.lastRefreshAt = lastRefreshAt
-    } else {
-      throw DecodingError.dataCorrupted(
-        .init(
-          codingPath: [UserResponse.CodingKeys.lastRefreshAt],
-          debugDescription: "\(lastRefreshAtString) is not ISO8601Date format"
-        ))
-    }
+    let lastRefreshAt = try container.decode(String.self, forKey: .lastRefreshAt)
+    self.lastRefreshAt = try Date(
+      lastRefreshAt,
+      strategy: .iso8601.year().month().day().time(includingFractionalSeconds: true)
+    )
   }
 }
