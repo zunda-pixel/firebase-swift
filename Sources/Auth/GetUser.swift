@@ -101,7 +101,7 @@ public struct UserResponse: Sendable, Hashable, Codable {
     let lastRefreshAt = try container.decode(String.self, forKey: .lastRefreshAt)
     self.lastRefreshAt = try Date(
       lastRefreshAt,
-      strategy: .iso8601.year().month().day().time(includingFractionalSeconds: true)
+      strategy: Date.ISO8601FormatStyle(includingFractionalSeconds: true)
     )
   }
 }
