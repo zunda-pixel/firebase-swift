@@ -87,7 +87,6 @@ let package = Package(
       name: "FirestoreTests",
       dependencies: [
         .target(name: "Firestore"),
-        .product(name: "Testing", package: "swift-testing"),
       ]
     ),
   ]
