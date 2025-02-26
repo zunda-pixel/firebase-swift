@@ -57,14 +57,13 @@ public struct Item: Codable, Hashable, Sendable {
 
     self.contentType = try container.decode(String.self, forKey: .contentType)
 
-    let dateFormatter = ISO8601DateFormatter()
-    dateFormatter.formatOptions.insert(.withFractionalSeconds)
+    let dateFormatStyle: Date.ISO8601FormatStyle = .iso8601.year().month().day().time(includingFractionalSeconds: true)
 
     let timeCreated = try container.decode(String.self, forKey: .timeCreated)
-    self.timeCreated = dateFormatter.date(from: timeCreated)!
+    self.timeCreated = try Date(timeCreated, strategy: dateFormatStyle)
 
     let updated = try container.decode(String.self, forKey: .updated)
-    self.updated = dateFormatter.date(from: updated)!
+    self.updated = try Date(updated, strategy: dateFormatStyle)
 
     self.storageClass = try container.decode(StorageClass.self, forKey: .storageClass)
 
