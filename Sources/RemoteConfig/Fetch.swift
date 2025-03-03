@@ -65,11 +65,11 @@ public struct FetchResponse: Sendable, Hashable, Codable {
     if let templateVersion = Int(templateVersionString) {
       self.templateVersion = templateVersion
     } else {
-      throw DecodingError.dataCorrupted(
-        .init(
-          codingPath: [],
-          debugDescription: "\(templateVersionString) is not number"
-        ))
+      throw DecodingError.dataCorruptedError(
+        forKey: .templateVersion,
+        in: container,
+        debugDescription: "\(templateVersionString) is not number"
+      )
     }
   }
 }
