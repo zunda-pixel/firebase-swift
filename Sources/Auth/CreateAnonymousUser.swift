@@ -49,11 +49,11 @@ public struct AnonymousUser: Sendable, Hashable, Codable {
     if let expiresIn = Int(expiresInString) {
       self.expiresIn = expiresIn
     } else {
-      throw DecodingError.dataCorrupted(
-        .init(
-          codingPath: [CodingKeys.expiresIn],
-          debugDescription: "\(expiresInString) is not a valid Int."
-        ))
+      throw DecodingError.dataCorruptedError(
+        forKey: .expiresIn,
+        in: container,
+        debugDescription: "\(expiresInString) is not a valid Int."
+      )
     }
 
     self.refreshToken = try container.decode(String.self, forKey: .refreshToken)
