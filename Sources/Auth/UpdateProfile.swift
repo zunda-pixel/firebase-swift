@@ -30,7 +30,7 @@ public struct UpdateProfile: Sendable, Hashable, Codable {
   }
 }
 
-extension Auth {
+extension Client {
   private struct Body: Sendable, Hashable, Codable {
     var idToken: String
     var displayName: String?

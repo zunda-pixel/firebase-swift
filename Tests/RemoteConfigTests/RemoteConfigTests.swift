@@ -8,7 +8,7 @@ let projectId = ProcessInfo.processInfo.environment["FIREBASE_PROJECT_ID"]!
 let projectName = ProcessInfo.processInfo.environment["FIREBASE_PROJECT_NAME"]!
 let appId = ProcessInfo.processInfo.environment["FIREBASE_APP_ID"]!
 
-let client = RemoteConfig(
+let client = RemoteConfigClient(
   apiKey: apiKey,
   projectId: projectId,
   projectName: projectName,

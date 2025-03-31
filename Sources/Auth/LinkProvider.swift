@@ -2,7 +2,7 @@ import Foundation
 import HTTPTypes
 import HTTPTypesFoundation
 
-extension Auth {
+extension Client {
   /// Link Provider
   /// You can sign in a user with an OAuth credential by issuing an HTTP POST request to the Auth verifyAssertion endpoint.
   /// https://firebase.google.com/docs/reference/rest/auth#section-sign-in-with-oauth-credential

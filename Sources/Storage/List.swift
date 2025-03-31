@@ -1,7 +1,7 @@
 import Foundation
 import HTTPTypes
 
-extension Storage {
+extension Client {
   /// Get Lists
   /// - Parameters:
   ///   - bucket: Bucket Name

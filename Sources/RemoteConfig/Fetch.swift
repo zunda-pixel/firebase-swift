@@ -2,7 +2,7 @@ import Foundation
 import HTTPTypes
 import HTTPTypesFoundation
 
-extension RemoteConfig {
+extension Client {
   public func fetch(
     country: String? = nil,
     language: String? = nil,

@@ -1,7 +1,7 @@
 import Foundation
 import HTTPTypes
 
-extension Storage {
+extension Client {
   @discardableResult
   public func upload(
     bucket: String,

@@ -7,7 +7,7 @@ import Testing
 #endif
 
 let bucket = ProcessInfo.processInfo.environment["FIREBASE_STORAGE_BUCKET"]!
-let storage = Storage(httpClient: URLSession.shared)
+let storage = StorageClient(httpClient: URLSession.shared)
 
 @Test
 func uploadItem() async throws {

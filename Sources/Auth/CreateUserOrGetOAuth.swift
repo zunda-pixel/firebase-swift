@@ -2,7 +2,7 @@ import Foundation
 import HTTPTypes
 import HTTPTypesFoundation
 
-extension Auth {
+extension Client {
   private struct Body: Sendable, Hashable, Encodable {
     var idToken: String?
     /// The URI to which the IDP redirects the user back.

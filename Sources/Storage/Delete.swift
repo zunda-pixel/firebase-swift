@@ -1,7 +1,7 @@
 import Foundation
 import HTTPTypes
 
-extension Storage {
+extension Client {
   public func delete(
     bucket: String,
     itemPath: String
@@ -26,7 +26,7 @@ extension Storage {
   }
 }
 
-extension Storage {
+extension Client {
   public func delete(item: Item) async throws {
     try await self.delete(
       bucket: item.bucket,

@@ -3,7 +3,9 @@ import HTTPClient
 import HTTPTypes
 import HTTPTypesFoundation
 
-public struct Auth<HTTPClient: HTTPClientProtocol>: Sendable, Hashable
+public typealias AuthClient = Client
+
+public struct Client<HTTPClient: HTTPClientProtocol>: Sendable, Hashable
 where HTTPClient: Sendable & Hashable {
   public var apiKey: String
   public var baseUrl = URL(string: "https://www.googleapis.com/identitytoolkit")!

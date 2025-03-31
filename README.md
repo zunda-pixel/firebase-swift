@@ -20,7 +20,7 @@ Firebase client for Swift.
 - Verify Password
 
 ```swift
-let client = Auth(
+let client = AuthClient(
   apiKey: apiKey,
   httpClient: .urlSession(.shared)
 )
@@ -39,7 +39,7 @@ print(user)
 - Realtime Remote Config
 
 ```swift
-let client = RemoteConfig(
+let client = RemoteConfigClient(
   apiKey: apiKey,
   projectId: projectId,
   projectName: projectName,
@@ -61,7 +61,7 @@ print(config)
 - Update Item
 
 ```swift
-let client = Storage(
+let client = StorageClient(
   httpClient: .urlSession(.shared)
 )
 

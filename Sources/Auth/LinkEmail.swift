@@ -2,7 +2,7 @@ import Foundation
 import HTTPTypes
 import HTTPTypesFoundation
 
-extension Auth {
+extension Client {
   /// Link with email/password
   /// You can link an email/password to a current user by issuing an HTTP POST request to the Auth setAccountInfo endpoint.
   /// https://firebase.google.com/docs/reference/rest/auth#section-link-with-email-password
