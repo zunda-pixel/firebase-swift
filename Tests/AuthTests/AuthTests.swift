@@ -17,7 +17,7 @@ let googleUserID = ProcessInfo.processInfo.environment["GOOGLE_USER_ID"]!
 let githubToken = ProcessInfo.processInfo.environment["GITHUB_TOKEN"]!
 let emailRequired: Bool = ProcessInfo.processInfo.environment["EMAIL_REQUIRED"] != nil
 
-let client = Auth(
+let client = AuthClient(
   apiKey: apiKey,
   httpClient: .urlSession(.shared)
 )

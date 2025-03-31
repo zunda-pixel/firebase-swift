@@ -1,7 +1,7 @@
 import Foundation
 import HTTPTypes
 
-extension Storage {
+extension Client {
   public func item(
     bucket: String,
     path itemPath: String

@@ -2,7 +2,7 @@ import Foundation
 import HTTPTypes
 import HTTPTypesFoundation
 
-extension RemoteConfig {
+extension Client {
   public func realtimeRequest(
     lastKnownVersionNumber: Int? = nil
   ) -> (request: HTTPRequest, body: Data) {
@@ -35,7 +35,7 @@ extension RemoteConfig {
 }
 
 #if canImport(ObjectiveC)
-  extension RemoteConfig {
+  extension Client {
     public func realtimeStream(
       lastKnownVersionNumber: Int? = nil,
       sessionConfiguration: URLSessionConfiguration = .default

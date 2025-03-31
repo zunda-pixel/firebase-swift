@@ -1,6 +1,6 @@
 import Foundation
 
-extension RemoteConfig {
+extension Client {
   func decode<T>(_ type: T.Type, from data: Data) throws -> T where T: Decodable {
     let decoder = JSONDecoder()
     do {

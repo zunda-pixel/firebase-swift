@@ -2,7 +2,7 @@ import Foundation
 import HTTPTypes
 import HTTPTypesFoundation
 
-extension Auth {
+extension Client {
   private struct Body: Sendable, Hashable, Codable {
     var grantType: String = "refresh_token"
     var refreshToken: String

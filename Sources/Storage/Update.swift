@@ -19,7 +19,7 @@ private struct Body: Codable, Sendable, Hashable {
   }
 }
 
-extension Storage {
+extension Client {
   @discardableResult
   public func update(
     bucket: String,
@@ -66,7 +66,7 @@ extension Storage {
   }
 }
 
-extension Storage {
+extension Client {
   @discardableResult
   public func update(
     item: Item,

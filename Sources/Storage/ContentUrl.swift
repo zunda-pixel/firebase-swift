@@ -1,6 +1,6 @@
 import Foundation
 
-extension Storage {
+extension Client {
   public func contentUrl(
     bucket: String,
     itemPath: String,
