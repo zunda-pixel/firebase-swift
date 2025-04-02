@@ -67,10 +67,10 @@ extension Client {
       }
 
       continuation.onTermination = { @Sendable _ in
-        Task { await stream.task.cancel() }
+        stream.task.withLock { $0?.cancel() }
       }
 
-      Task { await stream.start() }
+      stream.start()
     }
   }
 }

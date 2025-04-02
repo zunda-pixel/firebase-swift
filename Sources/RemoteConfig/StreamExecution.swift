@@ -1,15 +1,16 @@
 import Foundation
 import HTTPTypes
+import Synchronization
 
 #if canImport(FoundationNetworking)
   import FoundationNetworking
 #endif
 
-actor StreamExecution: NSObject, URLSessionDataDelegate {
+final class StreamExecution: NSObject, URLSessionDataDelegate, Sendable {
   let handler: @Sendable (Data) -> Void
   let errorHandle: @Sendable (any Error) -> Void
 
-  var task: URLSessionDataTask!
+  let task: Mutex<URLSessionDataTask?> = .init(nil)
 
   init(
     for request: HTTPRequest,
@@ -32,14 +33,14 @@ actor StreamExecution: NSObject, URLSessionDataDelegate {
     let request = URLRequest(httpRequest: request)!
 
     if let body {
-      self.task = session.uploadTask(with: request, from: body)
+      self.task.withLock { $0 = session.uploadTask(with: request, from: body) }
     } else {
-      self.task = session.dataTask(with: request)
+      self.task.withLock { $0 = session.dataTask(with: request) }
     }
   }
 
   func start() {
-    task.resume()
+    task.withLock { $0?.resume() }
   }
 
   nonisolated func urlSession(
