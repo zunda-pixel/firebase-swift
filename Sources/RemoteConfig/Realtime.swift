@@ -2,6 +2,10 @@ import Foundation
 import HTTPTypes
 import HTTPTypesFoundation
 
+#if canImport(FoundationNetworking)
+  import FoundationNetworking
+#endif
+
 extension Client {
   public func realtimeRequest(
     lastKnownVersionNumber: Int? = nil
@@ -34,45 +38,43 @@ extension Client {
   }
 }
 
-#if canImport(ObjectiveC)
-  extension Client {
-    public func realtimeStream(
-      lastKnownVersionNumber: Int? = nil,
-      sessionConfiguration: URLSessionConfiguration = .default
-    ) -> AsyncThrowingStream<Result<RealtimeRemoteConfigResponse, any Error>, any Error> {
-      let (request, body) = self.realtimeRequest(
-        lastKnownVersionNumber: lastKnownVersionNumber
-      )
+extension Client {
+  public func realtimeStream(
+    lastKnownVersionNumber: Int? = nil,
+    sessionConfiguration: URLSessionConfiguration = .default
+  ) -> AsyncThrowingStream<Result<RealtimeRemoteConfigResponse, any Error>, any Error> {
+    let (request, body) = self.realtimeRequest(
+      lastKnownVersionNumber: lastKnownVersionNumber
+    )
 
-      return AsyncThrowingStream { continuation in
-        let stream = StreamExecution(
-          for: request, from: body, sessionConfiguration: sessionConfiguration
-        ) { data in
-          do {
-            var stringData = String(decoding: data, as: UTF8.self)
-            stringData.removeFirst()  // Firebase Bug: remove "[" as first
-            let response = try self.decode(
-              RealtimeRemoteConfigResponse.self,
-              from: Data(stringData.utf8)
-            )
-            continuation.yield(.success(response))
-          } catch {
-            continuation.yield(.failure(error))
-          }
-        } errorHandler: { error in
-          continuation.finish(throwing: error)
+    return AsyncThrowingStream { continuation in
+      let stream = StreamExecution(
+        for: request, from: body, sessionConfiguration: sessionConfiguration
+      ) { data in
+        do {
+          var stringData = String(decoding: data, as: UTF8.self)
+          stringData.removeFirst()  // Firebase Bug: remove "[" as first
+          let response = try self.decode(
+            RealtimeRemoteConfigResponse.self,
+            from: Data(stringData.utf8)
+          )
+          continuation.yield(.success(response))
+        } catch {
+          continuation.yield(.failure(error))
         }
-
-        continuation.onTermination = { @Sendable _ in
-          Task { await stream.task.cancel() }
-        }
-
-        Task { await stream.start() }
+      } errorHandler: { error in
+        continuation.finish(throwing: error)
       }
+
+      continuation.onTermination = { @Sendable _ in
+        stream.task.withLock { $0?.cancel() }
+      }
+
+      stream.start()
     }
   }
+}
 
-  public struct RealtimeRemoteConfigResponse: Sendable, Hashable, Codable {
-    public var latestTemplateVersionNumber: String
-  }
-#endif
+public struct RealtimeRemoteConfigResponse: Sendable, Hashable, Codable {
+  public var latestTemplateVersionNumber: String
+}
