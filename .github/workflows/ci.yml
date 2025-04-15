@@ -4,7 +4,7 @@ on: pull_request
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04-arm
     container: swift:latest
     steps:
     - uses: actions/checkout@v4
@@ -19,7 +19,7 @@ jobs:
         FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID }}
         FIREBASE_STORAGE_BUCKET: ${{ secrets.FIREBASE_STORAGE_BUCKET }}
   lint:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04-arm
     container: swift:latest
     steps:
       - uses: actions/checkout@v4
