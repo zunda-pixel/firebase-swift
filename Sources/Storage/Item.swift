@@ -50,11 +50,26 @@ public struct Item: Codable, Hashable, Sendable {
     self.name = try container.decode(String.self, forKey: .name)
     self.bucket = try container.decode(String.self, forKey: .bucket)
     let generationString = try container.decode(String.self, forKey: .generation)
-    let generation = TimeInterval(generationString)!
-    self.generation = Date(timeIntervalSince1970: generation / 1_000_000)
-    let metagenerationString = try container.decode(String.self, forKey: .metageneration)
-    self.metageneration = Int(metagenerationString)!
+    if let generation = TimeInterval(generationString) {
+      self.generation = Date(timeIntervalSince1970: generation / 1_000_000)
+    } else {
+      throw DecodingError.dataCorruptedError(
+        forKey: .generation,
+        in: container,
+        debugDescription: "generation: \(generationString) is not a valid Date(TimeInterval)"
+      )
+    }
 
+    let metagenerationString = try container.decode(String.self, forKey: .metageneration)
+    if let metageneration = Int(metagenerationString) {
+      self.metageneration = metageneration
+    } else {
+      throw DecodingError.dataCorruptedError(
+        forKey: .metageneration,
+        in: container,
+        debugDescription: "metageneration: \(metagenerationString) is not a valid Int"
+      )
+    }
     self.contentType = try container.decode(String.self, forKey: .contentType)
 
     let timeCreated = try container.decode(String.self, forKey: .timeCreated)
@@ -72,7 +87,15 @@ public struct Item: Codable, Hashable, Sendable {
     self.storageClass = try container.decode(StorageClass.self, forKey: .storageClass)
 
     let sizeString = try container.decode(String.self, forKey: .size)
-    self.size = Int(sizeString)!
+    if let size = Int(sizeString) {
+      self.size = size
+    } else {
+      throw DecodingError.dataCorruptedError(
+        forKey: .size,
+        in: container,
+        debugDescription: "size: \(sizeString) is not a valid Int"
+      )
+    }
 
     self.md5Hash = try container.decode(String.self, forKey: .md5Hash)
     self.contentEncoding = try container.decode(String.self, forKey: .contentEncoding)

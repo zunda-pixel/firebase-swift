@@ -146,7 +146,15 @@ public struct OAuthResponse: Sendable, Hashable, Codable {
     self.oauthAccessToken = try container.decode(String.self, forKey: .oauthAccessToken)
     self.refreshToken = try container.decode(String.self, forKey: .refreshToken)
     let expiresInString = try container.decode(String.self, forKey: .expiresIn)
-    self.expiresIn = Int(expiresInString)!
+    if let expireIn = Int(expiresInString) {
+      self.expiresIn = expireIn
+    } else {
+      throw DecodingError.dataCorruptedError(
+        forKey: .expiresIn,
+        in: container,
+        debugDescription: "expiresIn:\(expiresInString) is not an Int"
+      )
+    }
     self.screenName = try container.decode(String.self, forKey: .screenName)
     self.isNewUser = try container.decodeIfPresent(Bool.self, forKey: .isNewUser) ?? false
   }

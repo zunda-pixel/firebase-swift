@@ -55,9 +55,17 @@ public struct RefreshTokenResponse: Sendable, Hashable, Codable {
   }
 
   public init(from decoder: any Decoder) throws {
-    let container = try decoder.container(keyedBy: RefreshTokenResponse.CodingKeys.self)
+    let container = try decoder.container(keyedBy: CodingKeys.self)
     let expiresInString = try container.decode(String.self, forKey: .expiresIn)
-    self.expiresIn = Int(expiresInString)!
+    if let expireIn = Int(expiresInString) {
+      self.expiresIn = expireIn
+    } else {
+      throw DecodingError.dataCorruptedError(
+        forKey: .expiresIn,
+        in: container,
+        debugDescription: "expiresIn: \(expiresInString) is not a valid Int"
+      )
+    }
     self.tokenType = try container.decode(String.self, forKey: .tokenType)
     self.refreshToken = try container.decode(String.self, forKey: .refreshToken)
     self.idToken = try container.decode(String.self, forKey: .idToken)
