@@ -59,7 +59,7 @@ public struct Item: Codable, Hashable, Sendable {
         debugDescription: "generation: \(generationString) is not a valid Date(TimeInterval)"
       )
     }
-    
+
     let metagenerationString = try container.decode(String.self, forKey: .metageneration)
     if let metageneration = Int(metagenerationString) {
       self.metageneration = metageneration
