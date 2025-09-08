@@ -73,7 +73,7 @@ public struct UserResponse: Sendable, Hashable, Codable {
       throw DecodingError.dataCorruptedError(
         forKey: .validSince,
         in: container,
-        debugDescription: "\(validSinceString) is not TimeInterval format"
+        debugDescription: "validSince: \(validSinceString) is not TimeInterval format"
       )
     }
     self.disabled = try container.decodeIfPresent(Bool.self, forKey: .disabled)
@@ -84,7 +84,7 @@ public struct UserResponse: Sendable, Hashable, Codable {
       throw DecodingError.dataCorruptedError(
         forKey: .lastLoginAt,
         in: container,
-        debugDescription: "\(lastLoginAtString) is not TimeInterval format"
+        debugDescription: "lastLoginAt: \(lastLoginAtString) is not TimeInterval format"
       )
     }
     let createdAtString = try container.decode(String.self, forKey: .createdAt)
@@ -94,7 +94,7 @@ public struct UserResponse: Sendable, Hashable, Codable {
       throw DecodingError.dataCorruptedError(
         forKey: .createdAt,
         in: container,
-        debugDescription: "\(createdAtString) is not TimeInterval format"
+        debugDescription: "cereateAt: \(createdAtString) is not TimeInterval format"
       )
     }
     self.customAuth = try container.decodeIfPresent(Bool.self, forKey: .customAuth)

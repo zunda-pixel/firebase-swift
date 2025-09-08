@@ -50,7 +50,15 @@ public struct VerifyCustomTokenResponse: Sendable, Hashable, Codable {
     let container = try decoder.container(keyedBy: CodingKeys.self)
     self.idToken = try container.decode(String.self, forKey: .idToken)
     let expiresInString = try container.decode(String.self, forKey: .expiresIn)
-    self.expiresIn = Int(expiresInString)!
+    if let expireIn = Int(expiresInString) {
+      self.expiresIn = expireIn
+    } else {
+      throw DecodingError.dataCorruptedError(
+        forKey: .expiresIn,
+        in: container,
+        debugDescription: "expiresIn: \(expiresInString) is not a valid Int"
+      )
+    }
     self.refreshToken = try container.decode(String.self, forKey: .refreshToken)
   }
 }

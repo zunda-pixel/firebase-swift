@@ -62,7 +62,15 @@ public struct VerifyPasswordResponse: Sendable, Hashable, Codable {
     self.idToken = try container.decode(String.self, forKey: .idToken)
     self.email = try container.decode(String.self, forKey: .email)
     let expiresInString = try container.decode(String.self, forKey: .expiresIn)
-    self.expiresIn = Int(expiresInString)!
+    if let expireIn = Int(expiresInString) {
+      self.expiresIn = expireIn
+    } else {
+      throw DecodingError.dataCorruptedError(
+        forKey: .expiresIn,
+        in: container,
+        debugDescription: "expiresIn: \(expiresInString) is not a valid Int"
+      )
+    }
     self.refreshToken = try container.decode(String.self, forKey: .refreshToken)
     self.localId = try container.decode(String.self, forKey: .localId)
     self.registered = try container.decode(Bool.self, forKey: .registered)

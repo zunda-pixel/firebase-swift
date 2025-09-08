@@ -52,7 +52,7 @@ public struct AnonymousUser: Sendable, Hashable, Codable {
       throw DecodingError.dataCorruptedError(
         forKey: .expiresIn,
         in: container,
-        debugDescription: "\(expiresInString) is not a valid Int."
+        debugDescription: "expiresIn:\(expiresInString) is not a valid Int."
       )
     }
 

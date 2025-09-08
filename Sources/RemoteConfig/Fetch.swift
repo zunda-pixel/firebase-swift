@@ -68,7 +68,7 @@ public struct FetchResponse: Sendable, Hashable, Codable {
       throw DecodingError.dataCorruptedError(
         forKey: .templateVersion,
         in: container,
-        debugDescription: "\(templateVersionString) is not number"
+        debugDescription: "templateVersion: \(templateVersionString) is not number"
       )
     }
   }
