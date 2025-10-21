@@ -144,7 +144,7 @@ struct AuthTests {
 
   @Test
   func linkEmailForAnonymousUser() async throws {
-    let email = "\(Self.googleUserID)+\(UUID())@gmail.com"
+    let email = "\(googleUserID)+\(UUID())@gmail.com"
     let password = "password123"
 
     let originalUser = try await client.createAnonymousUser()
@@ -318,7 +318,7 @@ struct AuthTests {
 
   @Test
   func deletePhotoUrl() async throws {
-    let email = "\(Self.googleUserID)+\(UUID())@gmail.com"
+    let email = "\(googleUserID)+\(UUID())@gmail.com"
     let password = "password123"
 
     let response1 = try await client.createUser(
