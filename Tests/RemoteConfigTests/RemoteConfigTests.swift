@@ -3,6 +3,10 @@ import HTTPClient
 import RemoteConfig
 import Testing
 
+#if canImport(FoundationNetworking)
+  import FoundationNetworking
+#endif
+
 @Suite
 struct RemoteConfigTests {
   let client: RemoteConfigClient<URLSession>
